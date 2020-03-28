@@ -1,5 +1,7 @@
 package com.bd2.backend.entities;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 
@@ -28,6 +30,7 @@ public class User {
     @ManyToOne
     private Role role;
 
+    @Type(type="yes_no")
     private Boolean active;
 
     public String getName() {
