@@ -1,16 +1,18 @@
 package com.bd2.backend.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.bd2.backend.security.Roles;
+
+import javax.persistence.*;
 
 @Entity
 public class Role {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private Roles role;
 
     public int getId() {
         return id;
@@ -20,11 +22,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getRole() {
+    public Roles getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Roles role) {
         this.role = role;
     }
 }
