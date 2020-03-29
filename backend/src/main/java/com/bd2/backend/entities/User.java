@@ -33,6 +33,19 @@ public class User {
     @Type(type="yes_no")
     private Boolean active;
 
+    public User(){
+    }
+
+    public User(String username, String password, String email, String name,
+         String lastName, Boolean active) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+        this.lastName = lastName;
+        this.active = active;
+    }
+
     public String getName() {
         return name;
     }
