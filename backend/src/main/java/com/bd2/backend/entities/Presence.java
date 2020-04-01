@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import java.util.Date;
 
 @Entity
-public class Precense {
+public class Presence {
 
     @Id
     @GeneratedValue
