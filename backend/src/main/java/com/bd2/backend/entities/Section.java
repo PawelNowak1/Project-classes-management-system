@@ -12,8 +12,10 @@ public class Section {
 
     private String state; // change to ENUM or dictionary?
 
+    private Integer sectionLimit;
+
     @ManyToOne
-    private Subject subject;
+    private Topic topic;
 
     @ManyToOne
     private Semester semester;

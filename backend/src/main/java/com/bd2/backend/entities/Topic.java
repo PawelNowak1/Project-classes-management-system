@@ -3,7 +3,7 @@ package com.bd2.backend.entities;
 import javax.persistence.*;
 
 @Entity
-public class Subject {
+public class Topic {
 
     @Id
     @GeneratedValue
