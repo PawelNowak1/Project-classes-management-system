@@ -1,8 +1,6 @@
 package com.bd2.backend.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Teacher {
@@ -12,4 +10,8 @@ public class Teacher {
     private Long id;
     private String firstName;
     private String lastName;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @MapsId
+    private User user;
 }

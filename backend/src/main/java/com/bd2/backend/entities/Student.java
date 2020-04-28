@@ -19,4 +19,8 @@ public class Student {
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "semester_id"))
     Set<Semester> semesters;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @MapsId
+    private User user;
 }
