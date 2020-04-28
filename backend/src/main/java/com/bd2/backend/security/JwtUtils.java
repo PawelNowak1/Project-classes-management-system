@@ -12,9 +12,9 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    private final String jwtSecret = "JWT_SECRET_KEY";
+    private final String JWT_SECRET = "JWT_SECRET_KEY";
 
-    private final int jwtExpiration = 60 * 60 * 1000;
+    private final int JWT_EXPIRATION = 60 * 60 * 1000;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
@@ -24,19 +24,19 @@ public class JwtUtils {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + jwtExpiration))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .setExpiration(new Date(new Date().getTime() + JWT_EXPIRATION))
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
 
     }
 
     public String getUsernameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwtToken(String token) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token);
             return true;
         } catch(SignatureException e) {
             logger.error("Invalid JWT signature: " + e.getMessage());
