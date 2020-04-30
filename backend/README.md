@@ -74,6 +74,30 @@ When you try to send request without your token in 'Authorization' header
 
 ```
 
+* `GET /token/verify/{token}` - available for all users
+
+This endpoint allows you to verify JSON Web Token. If token is valid and already not expired, in response to made request it will return username, for which token is signed and information, that token is valid, otherwise information indicating that token is not valid anymore (for example expired or malformed).
+
+Sample usage of this endpoint:
+```
+curl localhost:8080/token/verify/some_token
+
+```
+If token is valid and not expired you will receive this response (for user admin in this example):
+```
+{
+  "username": "admin",
+  "valid": "yes"
+}
+```
+Otherwise endpoint will return this response:
+```
+{
+  "valid": "no"
+}
+```
+
+
 Tech Stack:
 * Spring Boot
 * Spring security
