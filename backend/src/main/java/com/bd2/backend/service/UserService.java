@@ -4,6 +4,8 @@ import com.bd2.backend.entities.User;
 import com.bd2.backend.repository.RoleRepository;
 import com.bd2.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +35,9 @@ public class UserService {
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
         user.setRole(roleRepository.findByRole(user.getRole().getRole()));
         return userRepository.save(user);
+    }
+
+    public Page<User> findAdmins(int page, int size, String username) {
+        return userRepository.findUserPaginated(username, PageRequest.of(page, size));
     }
 }

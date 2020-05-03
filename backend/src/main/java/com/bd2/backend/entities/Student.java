@@ -1,8 +1,11 @@
 package com.bd2.backend.entities;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Set;
 
+@Data
 @Entity
 public class Student {
     @Id
@@ -19,4 +22,17 @@ public class Student {
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "semester_id"))
     Set<Semester> semesters;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @MapsId
+    private User user;
+
+    public Student() {
+    }
+
+    public Student(String firstName, String lastName, User user) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.user = user;
+    }
 }

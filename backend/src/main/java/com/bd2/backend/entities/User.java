@@ -1,5 +1,6 @@
 package com.bd2.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -18,14 +19,9 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String lastName;
 
     @ManyToOne
     private Role role;
@@ -36,18 +32,11 @@ public class User {
     public User(){
     }
 
-    public User(String username, String password, String email, String name,
-         String lastName, Boolean active) {
+    public User(String username, String password, String email, Boolean active) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.name = name;
-        this.lastName = lastName;
         this.active = active;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Long getId() {
@@ -80,18 +69,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public Role getRole() {

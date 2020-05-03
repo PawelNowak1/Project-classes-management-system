@@ -13,7 +13,7 @@ INSERT INTO role(id, role) VALUES
 ON DUPLICATE KEY UPDATE
     id = VALUES(id), role = VALUES(role);
 
-INSERT INTO user(id, username, password, role_id, email, name, last_name, active) VALUES
-    (1, "admin", "$2a$10$xNe0e6W/6nwCYlyMrMimCe6wZqKjZ.fSvgiOzP5vrdUfxMT11sqIK", 1, "admin@admin.com", "Administrator", "Administrator", "Y")
+INSERT INTO user(id, username, password, role_id, email, active) VALUES
+    (1, "admin", "$2a$10$xNe0e6W/6nwCYlyMrMimCe6wZqKjZ.fSvgiOzP5vrdUfxMT11sqIK", 1, "admin@admin.com", "Y")
 ON DUPLICATE KEY UPDATE
     username = VALUES(username), password = VALUES(password);

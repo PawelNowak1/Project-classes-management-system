@@ -1,15 +1,30 @@
 package com.bd2.backend.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import lombok.Data;
 
+import javax.persistence.*;
+
+@Data
 @Entity
 public class Teacher {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String firstName;
     private String lastName;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @MapsId
+    private User user;
+
+    public Teacher() {
+
+    }
+
+    public Teacher(String firstName, String lastName, User user) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.user = user;
+    }
 }
