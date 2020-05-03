@@ -1,8 +1,11 @@
 package com.bd2.backend.entities;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Set;
 
+@Data
 @Entity
 public class Student {
     @Id
@@ -23,4 +26,13 @@ public class Student {
     @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     private User user;
+
+    public Student() {
+    }
+
+    public Student(String firstName, String lastName, User user) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.user = user;
+    }
 }

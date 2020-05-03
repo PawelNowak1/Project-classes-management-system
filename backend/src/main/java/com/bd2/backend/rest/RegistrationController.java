@@ -1,8 +1,12 @@
 package com.bd2.backend.rest;
 
 import com.bd2.backend.entities.Role;
+import com.bd2.backend.entities.Student;
+import com.bd2.backend.entities.Teacher;
 import com.bd2.backend.entities.User;
 import com.bd2.backend.repository.RoleRepository;
+import com.bd2.backend.repository.StudentRepository;
+import com.bd2.backend.repository.TeacherRepository;
 import com.bd2.backend.repository.UserRepository;
 import com.bd2.backend.request.RegistrationRequest;
 import com.bd2.backend.security.JwtUtils;
@@ -33,6 +37,12 @@ public class RegistrationController {
     RoleRepository roleRepository;
 
     @Autowired
+    TeacherRepository teacherRepository;
+
+    @Autowired
+    StudentRepository studentRepository;
+
+    @Autowired
     PasswordEncoder encoder;
 
     @Autowired
@@ -51,8 +61,6 @@ public class RegistrationController {
                 registrationRequest.getUsername(),
                 encoder.encode(registrationRequest.getPassword()),
                 registrationRequest.getEmail(),
-                registrationRequest.getName(),
-                registrationRequest.getLastName(),
                 registrationRequest.getActive()
         );
 
@@ -75,7 +83,10 @@ public class RegistrationController {
 
         user.setRole(userRole);
         userRepository.save(user);
-
+        if (userRole.getRole().equals(Roles.ROLE_TEACHER))
+            teacherRepository.save(new Teacher(registrationRequest.getName(), registrationRequest.getLastName(), user));
+        if (userRole.getRole().equals(Roles.ROLE_STUDENT))
+            studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user));
         return ResponseEntity.ok("User " + user.getUsername() + " registered successfully!");
     }
 }
