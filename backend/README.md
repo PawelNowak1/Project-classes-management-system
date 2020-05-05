@@ -97,6 +97,42 @@ Otherwise endpoint will return this response:
 }
 ```
 
+* `POST /file/upload` - available only for users with `ROLE_STUDENT`
+
+This endpoint allows students to upload files (like reports or images)
+
+Sample usage of this endpoint:
+
+```
+curl -XPOST localhost:8080/file/upload \
+-H 'Authorization: Bearer $students_token' \
+-F 'file=@test.png' -F 'description=test file upload' -F 'studentId=1' -F 'sectionId=1'
+```
+
+If file was uploaded successfully, this respons will be received:
+
+```
+{
+  "file_id": "1",
+  "file_name": "test.png",
+  "file_type": "image/png",
+  "insert_date": "Tue May 05 22:22:28 CEST 2020",
+  "file_size": "1292965"
+}
+```
+
+* `GET /file/download/{fileId}` - available only for users with `ROLE_STUDENT`
+
+This endpoint allows students to get files stored in database
+
+Sample usage of this endpoint:
+
+```
+curl localhost:8080/file/download/2 \
+-H 'Authorization: Bearer $students_token'\
+ --output test.png
+```
+If everything was successful, your file will be now saved in file passed as --output argument (test.png in this case).
 
 Tech Stack:
 * Spring Boot
