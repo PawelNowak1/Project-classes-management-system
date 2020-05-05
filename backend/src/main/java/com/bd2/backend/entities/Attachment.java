@@ -9,15 +9,68 @@ public class Attachment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String content; // change to blob
+    @Column(length = 100)
+    private String fileName;
+
+    @Column(length = 50)
+    private String fileType;
 
     private Date insertDate;
 
-    private String description;
+    @ManyToOne
+    private Student student;
 
     @ManyToOne
     private Section section;
 
-    @ManyToOne
-    private Student student;
+    @Column(length = 100)
+    private String description;
+
+    @Lob
+    private byte[] content;
+
+    public Attachment() {
+    }
+
+    public Attachment(String fileName, String fileType, Student student, Section section, String description, byte[] content) {
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.insertDate = new Date();
+        this.student = student;
+        this.section = section;
+        this.description = description;
+        this.content = content;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public Date getInsertDate() {
+        return insertDate;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public Section getSection() {
+        return section;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
 }
