@@ -38,7 +38,8 @@ public class AttachmentService {
         return null;
     }
 
-    public Attachment getFile(Long fileId) {
-        return this.attachmentRepository.findById(fileId).orElse(null);
+    public Attachment getFile(Long fileId) throws Exception {
+        return this.attachmentRepository.findById(fileId)
+                .orElseThrow(() -> new Exception("Attachment with id " + fileId + " not found!"));
     }
 }
