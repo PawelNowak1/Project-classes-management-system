@@ -1,5 +1,7 @@
 package com.bd2.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -27,6 +29,7 @@ public class Attachment {
     private String description;
 
     @Lob
+    @JsonIgnore
     private byte[] content;
 
     public Attachment() {
