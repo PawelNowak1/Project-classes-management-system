@@ -1,12 +1,13 @@
 package com.bd2.backend.rest;
 
 import com.bd2.backend.entities.Attachment;
+import com.bd2.backend.entities.Section;
+import com.bd2.backend.entities.Student;
 import com.bd2.backend.repository.SectionRepository;
 import com.bd2.backend.repository.StudentRepository;
 import com.bd2.backend.service.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/file")
@@ -38,11 +40,19 @@ public class FileUploadController {
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("description") String description,
                                         @RequestParam("studentId") Long studentId, @RequestParam("sectionId") Long sectionId) {
-        Attachment attachment = this.attachmentService.saveAttachment(
+
+        Optional<Section> section = this.sectionRepository.findById(sectionId);
+        Optional<Student> student = this.studentRepository.findById(studentId);
+        if (!section.isPresent() || !student.isPresent()) {
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("error", "section or student does not exist"));
+        }
+        Attachment attachment;
+        attachment = this.attachmentService.saveAttachment(
                 file,
                 description,
-                sectionRepository.findById(sectionId).get(),
-                studentRepository.findById(studentId).get()
+                section.get(),
+                student.get()
         );
 
         if (attachment != null) {
@@ -56,22 +66,33 @@ public class FileUploadController {
             return ResponseEntity.ok(response);
         }
         return ResponseEntity.badRequest()
-                .body(Collections.singletonList("Failed to upload file " + file.getName()));
+                .body(Collections.singletonMap("error", "Failed to upload file " + file.getName()));
     }
 
     @GetMapping("/download/{fileId}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable("fileId") String fileId) {
-        Attachment attachment = this.attachmentService.getFile(Long.valueOf(fileId));
-
-        if (attachment != null) {
+    public ResponseEntity<?> downloadFile(@PathVariable("fileId") Long fileId) {
+        try {
+            Attachment attachment = this.attachmentService.getFile(fileId);
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(attachment.getFileType()))
+                    .contentLength(attachment.getContent().length)
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachment.getFileName() + "\"")
                     .body(new ByteArrayResource(attachment.getContent()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("error", e.getMessage()));
         }
+    }
 
-        return ResponseEntity.badRequest()
-                .body(null);
-
+    @GetMapping("/info/{fileId}")
+    public ResponseEntity<?> getFileInfo(@PathVariable("fileId") Long fileId) {
+        try {
+            Attachment attachment = this.attachmentService.getFile(fileId);
+            return ResponseEntity.ok()
+                    .body(attachment);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 }
