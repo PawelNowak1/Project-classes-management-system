@@ -8,6 +8,8 @@ Default user with `ROLE_ADMIN` is defined with username **admin** and password *
 
 ### Endpoints:
 
+All endpoints have CORS disabled with max age = 1 hour
+
 * `POST /login` - available for all users
 
 Sample usage of this endpoint:
@@ -76,19 +78,30 @@ When you try to send request without your token in 'Authorization' header
 
 * `GET /token/verify/{token}` - available for all users
 
-This endpoint allows you to verify JSON Web Token. If token is valid and already not expired, in response to made request it will return username, for which token is signed and information, that token is valid, otherwise information indicating that token is not valid anymore (for example expired or malformed).
+This endpoint allows you to verify JSON Web Token. If token is valid and already not expired and also user, for which token is associated with still exists in database, in response to made request it will return all details about this user, otherwise information indicating that token is not valid anymore (for example expired or malformed).
 
 Sample usage of this endpoint:
 ```
 curl localhost:8080/token/verify/some_token
 
 ```
-If token is valid and not expired you will receive this response (for user admin in this example):
+If token is valid and not expired and also user for which token belongs to still exists, you will receive this response (for user with `ROLE_ADMIN` role in this example):
 ```
 {
+  "id": 1,
   "username": "admin",
-  "valid": "yes"
+  "email": "admin@admin.com",
+  "role": {
+    "id": 1,
+    "role": "ROLE_ADMIN"
+  },
+  "active": true
 }
+```
+If token is valid, but user for which token was generated doesn't exist anymore, you will receive this response:
+
+```
+Token is valid, but user associated with token doesn't exist!
 ```
 Otherwise endpoint will return this response:
 ```
@@ -97,6 +110,86 @@ Otherwise endpoint will return this response:
 }
 ```
 
+* `POST /file/upload` - available only for users with `ROLE_STUDENT`
+
+This endpoint allows students to upload files (like reports or images)
+
+Sample usage of this endpoint:
+
+```
+curl -XPOST localhost:8080/file/upload \
+-H 'Authorization: Bearer $students_token' \
+-F 'file=@test.png' -F 'description=test file upload' -F 'studentId=1' -F 'sectionId=1'
+```
+
+If file was uploaded successfully, this respons will be received:
+
+```
+{
+  "file_id": "1",
+  "file_name": "test.png",
+  "file_type": "image/png",
+  "insert_date": "Tue May 05 22:22:28 CEST 2020",
+  "file_size": "1292965"
+}
+```
+
+* `GET /file/download/{fileId}` - available only for users with `ROLE_STUDENT`
+
+This endpoint allows students to get files stored in database
+
+Sample usage of this endpoint:
+
+```
+curl localhost:8080/file/download/2 \
+-H 'Authorization: Bearer $students_token'\
+ --output test.png
+```
+If everything was successful, your file will be now saved in file passed as --output argument (test.png in this case).
+
+* `GET /file/info/{fileId}` - available only for users with `ROLE_STUDENT`
+
+This endpoint allows students to get all details about file stored in database
+
+Sample usage of this endpoint:
+
+```
+curl localhost:8080/file/info/1 -H 'Authorization: Bearer $students_token'
+```
+
+You will receive this response, if file exists in database:
+```
+{
+  "id": 1,
+  "fileName": "test.png",
+  "fileType": "image/png",
+  "insertDate": "2020-05-12T12:49:32.398+0000",
+  "student": {
+    "id": 2,
+    "firstName": "student",
+    "lastName": "student",
+    "semesters": [],
+    "user": {
+      "id": 2,
+      "username": "student",
+      "email": "nie",
+      "role": {
+        "id": 3,
+        "role": "ROLE_STUDENT"
+      },
+      "active": true
+    }
+  },
+  "section": {},
+  "description": "test file upload"
+}
+```
+Otherwise, you will receive:
+```
+{
+  "error": "Attachment with id 2 not found!"
+}
+```
 
 Tech Stack:
 * Spring Boot
