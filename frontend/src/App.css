@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url("./assets/Gilroy.otf");
+}
+
+*{
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 0.3px;
+}
+a{
+  text-decoration: none;
+  color: inherit;
+}
 .App {
   text-align: center;
 }
@@ -34,5 +52,30 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes showModal {
+  0% {
+    opacity: 0;
+    display: block;
+    visibility: visible;
+    z-index: 998;
+  }
+  100% {
+    opacity: 1;
+    z-index: 998;
+  }
+}
+
+@keyframes hideModal {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+    visibility: hidden;
+    z-index: -1;
   }
 }

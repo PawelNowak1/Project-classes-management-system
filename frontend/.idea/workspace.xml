@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a22c7601-73e0-4c90-9528-3a3956cc6336" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/Gilroy.otf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/button.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/dashboard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/input.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/protectedRoute.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/search.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/select.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/subtitle.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/title.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configureStore.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/background.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/redux/actions/auth.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/redux/actions/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/redux/reducers/auth.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/redux/reducers/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/theme/constans.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/theme/cookies.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/theme/data.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/theme/styledComponents.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/theme/theme.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/home.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/login/login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/admin/content/students/modals/addStudent.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/admin/content/students/students.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/admin/content/teachers/modals/addTeacher.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/admin/content/teachers/teachers.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/admin/navigation/navigation.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/panel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1aLtWGyaVEGSMl720I9XZAlOHs8" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/views/panel/admin/content/students/modals" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/views/panel/admin/content/students/modals" />
+      <recent name="$PROJECT_DIR$/src/views/panel/admin/content" />
+      <recent name="$PROJECT_DIR$/src/views/panel/content/contracts" />
+      <recent name="$PROJECT_DIR$/src/views/panel/content/clients/modals" />
+      <recent name="$PROJECT_DIR$/src/views/panel/content/clients" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/views/panel" />
+      <recent name="$PROJECT_DIR$/src/views/panel/content" />
+      <recent name="$PROJECT_DIR$/src/views/panel/content/admin" />
+      <recent name="$PROJECT_DIR$/src/images" />
+      <recent name="$PROJECT_DIR$/src/views/panel/content/clients/modals" />
+    </key>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a22c7601-73e0-4c90-9528-3a3956cc6336" name="Default Changelist" comment="" />
+      <created>1586526732099</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1586526732099</updated>
+      <workItem from="1586526736019" duration="15123000" />
+      <workItem from="1586617896681" duration="29763000" />
+      <workItem from="1586851787947" duration="476000" />
+      <workItem from="1587738245777" duration="2883000" />
+      <workItem from="1588154147144" duration="3923000" />
+      <workItem from="1589023482827" duration="9529000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="360" y="222" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589280879524">
+      <screen x="0" y="0" width="1792" height="1120" />
+    </state>
+    <state x="360" y="222" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1792.1120@0.0.1792.1120" timestamp="1589280879524" />
+    <state x="634" y="314" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1589286092999">
+      <screen x="0" y="0" width="1792" height="1120" />
+    </state>
+    <state x="634" y="314" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1792.1120@0.0.1792.1120" timestamp="1589286092999" />
+    <state x="561" y="251" width="670" height="676" key="search.everywhere.popup" timestamp="1587739876491">
+      <screen x="0" y="0" width="1792" height="1120" />
+    </state>
+    <state x="561" y="251" width="670" height="676" key="search.everywhere.popup/0.0.1792.1120@0.0.1792.1120" timestamp="1587739876491" />
+  </component>
+</project>
