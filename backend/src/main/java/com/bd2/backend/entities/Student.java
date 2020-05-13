@@ -3,7 +3,7 @@ package com.bd2.backend.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -34,5 +34,12 @@ public class Student {
         this.firstName = firstName;
         this.lastName = lastName;
         this.user = user;
+    }
+
+    public Student(String firstName, String lastName, User user, Semester semester) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.user = user;
+        this.semesters = new HashSet<>(Collections.singletonList(semester));
     }
 }

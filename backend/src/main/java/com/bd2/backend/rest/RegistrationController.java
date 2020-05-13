@@ -1,13 +1,7 @@
 package com.bd2.backend.rest;
 
-import com.bd2.backend.entities.Role;
-import com.bd2.backend.entities.Student;
-import com.bd2.backend.entities.Teacher;
-import com.bd2.backend.entities.User;
-import com.bd2.backend.repository.RoleRepository;
-import com.bd2.backend.repository.StudentRepository;
-import com.bd2.backend.repository.TeacherRepository;
-import com.bd2.backend.repository.UserRepository;
+import com.bd2.backend.entities.*;
+import com.bd2.backend.repository.*;
 import com.bd2.backend.request.RegistrationRequest;
 import com.bd2.backend.security.JwtUtils;
 import com.bd2.backend.security.Roles;
@@ -23,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
@@ -43,6 +38,9 @@ public class RegistrationController {
 
     @Autowired
     StudentRepository studentRepository;
+
+    @Autowired
+    SemesterRepository semesterRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -87,8 +85,13 @@ public class RegistrationController {
         userRepository.save(user);
         if (userRole.getRole().equals(Roles.ROLE_TEACHER))
             teacherRepository.save(new Teacher(registrationRequest.getName(), registrationRequest.getLastName(), user));
-        if (userRole.getRole().equals(Roles.ROLE_STUDENT))
-            studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user));
+        if (userRole.getRole().equals(Roles.ROLE_STUDENT)) {
+            Optional<Semester> semesterContext = semesterRepository.findById(registrationRequest.getSemesterId());
+            if (semesterContext.isPresent())
+                studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user, semesterContext.get()));
+            else
+                studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user));
+        }
         return ResponseEntity.ok("User " + user.getUsername() + " registered successfully!");
     }
 }
