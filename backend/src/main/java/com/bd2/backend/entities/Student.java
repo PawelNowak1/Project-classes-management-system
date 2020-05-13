@@ -1,6 +1,7 @@
 package com.bd2.backend.entities;
 
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.*;
@@ -23,7 +24,7 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "semester_id"))
     Set<Semester> semesters;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @MapsId
     private User user;
 

@@ -11,10 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -93,5 +90,15 @@ public class RegistrationController {
                 studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user));
         }
         return ResponseEntity.ok("User " + user.getUsername() + " registered successfully!");
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> registerUser(@PathVariable("id") Long userId) {
+        Optional<Student> student = studentRepository.findById(userId);
+        student.ifPresent(value -> studentRepository.delete(value));
+        Optional<Teacher> teacher = teacherRepository.findById(userId);
+        teacher.ifPresent(value -> teacherRepository.delete(value));
+        return ResponseEntity.ok("User deleted successfully!");
     }
 }
