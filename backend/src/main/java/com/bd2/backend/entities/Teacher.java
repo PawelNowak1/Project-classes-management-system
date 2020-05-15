@@ -14,7 +14,7 @@ public class Teacher {
     private String firstName;
     private String lastName;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @MapsId
     private User user;
 
