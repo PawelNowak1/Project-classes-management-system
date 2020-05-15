@@ -8,8 +8,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface TeacherRepository extends PagingAndSortingRepository<Teacher, Long> {
 
-    @Query(value = "select t from Teacher t where (?1 is null or t.lastName like %?1%) and (?2 is null or t.firstName like %?2%)",
-            countQuery = "select count (t) from Teacher t where (?1 is null or t.lastName like %?1%) and (?2 is null or t.firstName like %?2%)",
+    @Query(value = "select t from Teacher t where (?1 is null or t.lastName like %?1% or t.firstName like %?1% or t.user.id like %?1%)",
+            countQuery = "select count (t) from Teacher t where (?1 is null or t.lastName like %?1% or t.firstName like %?1% or t.user.id like %?1%)",
             nativeQuery = false)
-    Page<Teacher> findTeacherPaginated(String lastName, String firstName, Pageable pageable);
+    Page<Teacher> findTeacherPaginated(String name, Pageable pageable);
 }

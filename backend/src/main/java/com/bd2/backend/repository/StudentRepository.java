@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface StudentRepository extends PagingAndSortingRepository<Student, Long> {
 
-    @Query(value = "select s from Student s where (?1 is null or s.lastName like %?1%) and (?2 is null or s.firstName like %?2%)",
-            countQuery = "select count (s) from Student s where (?1 is null or s.lastName like %?1%) and (?2 is null or s.firstName like %?2%)",
+    @Query(value = "select s from Student s where (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%)",
+            countQuery = "select count (s) from Student s where (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%)",
             nativeQuery = false)
-    Page<Student> findStudentsPaginated(String lastName, String firstName, Pageable pageable);
+    Page<Student> findStudentsPaginated(String name, Pageable pageable);
 }
