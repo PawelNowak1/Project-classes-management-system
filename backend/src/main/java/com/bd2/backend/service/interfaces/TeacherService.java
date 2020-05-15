@@ -4,5 +4,5 @@ import com.bd2.backend.entities.Teacher;
 import org.springframework.data.domain.Page;
 
 public interface TeacherService {
-    Page<Teacher> findTeachers(int page, int size, String firstName, String lastName);
+    Page<Teacher> findTeachers(int page, int size, String name);
 }

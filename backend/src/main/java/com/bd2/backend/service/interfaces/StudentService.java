@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 
 public interface StudentService {
 
-    Page<Student> findStudents(int page, int size, String firstName, String lastName);
+    Page<Student> findStudents(int page, int size, String name);
 }
