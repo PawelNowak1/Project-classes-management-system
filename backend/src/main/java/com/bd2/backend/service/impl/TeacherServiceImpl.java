@@ -17,7 +17,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Page<Teacher> findTeachers(int page, int size, String firstName, String lastName) {
-        return teacherRepository.findTeacherPaginated(lastName, firstName, PageRequest.of(page, size));
+    public Page<Teacher> findTeachers(int page, int size, String name) {
+        return teacherRepository.findTeacherPaginated(name, PageRequest.of(page, size));
     }
 }

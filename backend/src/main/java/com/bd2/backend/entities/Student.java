@@ -1,9 +1,10 @@
 package com.bd2.backend.entities;
 
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -23,7 +24,7 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "semester_id"))
     Set<Semester> semesters;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @MapsId
     private User user;
 
@@ -34,5 +35,12 @@ public class Student {
         this.firstName = firstName;
         this.lastName = lastName;
         this.user = user;
+    }
+
+    public Student(String firstName, String lastName, User user, Semester semester) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.user = user;
+        this.semesters = new HashSet<>(Collections.singletonList(semester));
     }
 }

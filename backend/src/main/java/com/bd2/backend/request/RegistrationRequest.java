@@ -16,6 +16,8 @@ public class RegistrationRequest {
 
     private Boolean active;
 
+    private Long semesterId;
+
     public String getUsername() {
         return username;
     }
@@ -57,4 +59,11 @@ public class RegistrationRequest {
         return active;
     }
 
+    public Long getSemesterId() {
+        return semesterId;
+    }
+
+    public void setSemesterId(Long semesterId) {
+        this.semesterId = semesterId;
+    }
 }

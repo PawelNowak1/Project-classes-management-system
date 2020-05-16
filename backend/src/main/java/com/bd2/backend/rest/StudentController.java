@@ -21,8 +21,7 @@ public class StudentController {
     @RequestMapping(path = "/paginated", method = RequestMethod.GET)
     public ResponseEntity<Page<Student>> findStudents(@RequestParam(defaultValue = "0") Integer pageNo,
                                                    @RequestParam(defaultValue = "10") Integer pageSize,
-                                                   @RequestParam(required = false) String firstName,
-                                                   @RequestParam(required = false) String lastName) {
-        return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, firstName, lastName));
+                                                   @RequestParam(required = false) String name) {
+        return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, name));
     }
 }

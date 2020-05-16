@@ -17,7 +17,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Page<Student> findStudents(int page, int size, String firstName, String lastName) {
-        return studentRepository.findStudentsPaginated(lastName, firstName, PageRequest.of(page, size));
+    public Page<Student> findStudents(int page, int size, String name) {
+        return studentRepository.findStudentsPaginated(name, PageRequest.of(page, size));
     }
 }
