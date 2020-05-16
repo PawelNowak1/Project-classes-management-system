@@ -1,13 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Route} from "react-router-dom";
-import Students from "./admin/content/students/students";
 import Admin from "./admin/admin";
+import {connect} from "react-redux";
+import Teacher from "./teacher/teacher";
 
-function Panel () {
+function Panel ({user}) {
+    let component;
+
+    if(user.role === 'ROLE_ADMIN'){
+        component = Admin;
+    } else {
+        component = Teacher;
+    }
     return(
         <>
-                <Route path = '/panel' component={Admin} />
+                <Route path = '/panel' component={component} />
         </>
     )
 };
@@ -15,4 +23,9 @@ function Panel () {
 Panel.propTypes = {
 };
 
-export default Panel;
+function mapStateToProps(state) {
+    return {
+        user: state.auth.user,
+    };
+}
+export default connect(mapStateToProps)(Panel);

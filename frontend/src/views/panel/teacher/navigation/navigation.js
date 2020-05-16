@@ -4,7 +4,14 @@ import styled from 'styled-components'
 import LOGO from '../../../../images/logo.png'
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFileContract, faHeadset, faPlus, faSignOutAlt, faUsers} from "@fortawesome/free-solid-svg-icons";
+import {
+    faFileContract,
+    faHeadset,
+    faPlus,
+    faPlusCircle,
+    faSignOutAlt,
+    faUsers
+} from "@fortawesome/free-solid-svg-icons";
 import {logoutUser} from "../../../../redux/actions";
 function Navigation ({dispatch}) {
     return(
@@ -12,11 +19,8 @@ function Navigation ({dispatch}) {
             <div>
                 <Logo><img src={LOGO}/></Logo>
                 <NavLinksWrapper>
-                    <StyledNavLink exact to="/panel/students">
-                        <FontAwesomeIcon icon={faUsers}/> Studenci
-                    </StyledNavLink>
-                    <StyledNavLink exact to="/panel/teachers">
-                        <FontAwesomeIcon icon={faUsers}/> Nauczyciele
+                    <StyledNavLink exact to="/panel/add">
+                        <FontAwesomeIcon icon={faPlusCircle}/> Dodaj sekcje
                     </StyledNavLink>
                 </NavLinksWrapper>
             </div>

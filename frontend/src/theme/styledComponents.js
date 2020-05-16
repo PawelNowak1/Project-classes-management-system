@@ -72,3 +72,15 @@ export const ModalBackground = styled.div`
         animation: hideModal 0.1s forwards;
     }
 `;
+
+export const StyledErrorMessage = styled.div`
+  width: 100%;
+  padding: 10px;
+  color: ${({theme}) => theme.red};
+  font-size: ${({theme}) => theme.font.XS};
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-weight: 700;
+  background: ${({theme}) => theme.redBackground};
+  border-radius: 5px;
+`;

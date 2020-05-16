@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
 
-function Search () {
+function Search (props) {
     return(
         <Wrapper>
             <FontAwesomeIcon icon={faSearch}/>
-            <Input placeholder="Imię / Nazwisko / Numer studenta"/>
+            <Input placeholder="Imię / Nazwisko / Numer studenta" value={props.value} onChange={props.onChange}/>
         </Wrapper>
     )
 };

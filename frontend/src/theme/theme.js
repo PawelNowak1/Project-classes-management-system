@@ -11,6 +11,8 @@ export const theme = {
   blueBackground:'rgba(214,237,251,0.6)',
   yellow:'rgb(245,180,64)',
   yellowBackground:'rgb(253,242,217)',
+  red:'#cc0000',
+  redBackground:'rgba(204, 0, 0,0.2)',
 
   font:{
     XXS:'12px',

@@ -8,26 +8,23 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
 import Dashboard from "../../../components/dashboard";
 import {Redirect, Route} from "react-router-dom";
-import Students from "./content/students/students";
-import Teachers from "./content/teachers/teachers";
 
-function Admin (props) {
+function Teacher (props) {
     const { dispatch,user } = props;
 
     return(
         <Dashboard>
             <Navigation dispatch={dispatch}/>
             <div style={{flex:'1 1',background:'rgb(240,240,240)',padding:'30px'}}>
-                <Route path = '/panel/students' component={Students} />
-                <Route path = '/panel/teachers' component={Teachers} />
+                {/*<Route path = '/panel/add' component={Students} />*/}
 
-                <Route render={() => <Redirect to="/panel/students" />} />
+                {/*<Route render={() => <Redirect to="/panel/students" />} />*/}
             </div>
         </Dashboard>
     )
 };
 
-Admin.propTypes = {
+Teacher.propTypes = {
 };
 
 function mapStateToProps(state) {
@@ -37,4 +34,4 @@ function mapStateToProps(state) {
         user:state.auth.user
     };
 }
-export default connect(mapStateToProps)(Admin);
+export default connect(mapStateToProps)(Teacher);

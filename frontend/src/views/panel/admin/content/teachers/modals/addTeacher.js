@@ -1,7 +1,13 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components'
-import {Flex, InputRow, ModalBackground, ModalContent} from "../../../../../../theme/styledComponents";
+import {
+    Flex,
+    InputRow,
+    ModalBackground,
+    ModalContent,
+    StyledErrorMessage
+} from "../../../../../../theme/styledComponents";
 import Title from "../../../../../../components/title";
 import Input from "../../../../../../components/input";
 import SubTitle from "../../../../../../components/subtitle";
@@ -16,7 +22,7 @@ import {getCookie} from "../../../../../../theme/cookies";
 
 function AddTeacher (props) {
     const history = useHistory();
-    const {user} = props;
+    const {user,refresh,setRefresh} = props;
 
     const [loading,setLoading] = useState();
     const [error,setError] = useState();
@@ -44,10 +50,12 @@ function AddTeacher (props) {
         })
         .then(res => {
             setLoading(false);
+            setRefresh(!refresh);
             history.push('/panel/teachers');
         })
         .catch(err => {
             setError(err);
+            setLoading(false);
         })
     };
 
@@ -69,7 +77,14 @@ function AddTeacher (props) {
                         </div>
                     </Flex>
                     <Content>
-                        <SubTitle>Dane studenta</SubTitle>
+                        {
+                            error &&
+                            <StyledErrorMessage>
+                                Nie udało się dodać użytkownika. Spróbuj podać inne dane
+                            </StyledErrorMessage>
+
+                        }
+                        <SubTitle>Dane nauczyciela</SubTitle>
                         <InputRow gtc="1fr">
                             <Input label="Imię" name="name" value={state.name} onChange={onChange}/>
                             <Input label="Nazwisko" name="surname" value={state.surname} onChange={onChange}/>
@@ -99,6 +114,7 @@ function mapStateToProps(state) {
     };
 }
 export default connect(mapStateToProps)(AddTeacher);
+
 
 const DownloadInfo = styled.div`
   display: flex;

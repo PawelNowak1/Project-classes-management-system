@@ -20,13 +20,17 @@ import Search from "../../../../../components/search";
 import {Link, Route} from "react-router-dom";
 import {API_URL} from "../../../../../theme/constans";
 import {getCookie} from "../../../../../theme/cookies";
+import AddTeacher from "../teachers/modals/addTeacher";
 
 function Students (props) {
     const {user} = props;
 
+    const [search,setSearch] = useState('');
     const [addClient,setAddClient] = useState(false);
 
     const [loading,setLoading] = useState(false);
+    const [refresh,setRefresh] = useState(false);
+
     const [pageSettings,setPageSettings] = useState({
         activePage:0,
         totalPages:0,
@@ -35,7 +39,7 @@ function Students (props) {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`${API_URL}/student/paginated`,{
+        axios.get(`${API_URL}/student/paginated${search !== '' ? '?name='+search : ''}`,{
             headers:{
                 'Authorization': 'Bearer ' + getCookie('token')
             }
@@ -48,23 +52,38 @@ function Students (props) {
                 totalPages:res.data.totalPages,
             })
         });
-    },[user]);
+    },[user,refresh,search]);
+
+    const onDelete = (email,id) => {
+        if(window.confirm(`Czy chcesz usunąć użytkownika o emailu: ${email} ?`)){
+            setLoading(true);
+            axios.delete(`${API_URL}/registration/${id}`,{
+                headers:{
+                    'Authorization': 'Bearer ' + getCookie('token')
+                }
+            })
+            .then(res => {
+                setRefresh(!refresh);
+                setLoading(false);
+            });
+        }
+    };
 
     return(
         <>
         <Wrapper>
             <ContentHeader>
                 <Title>Wszyscy studenci</Title>
-                <Link to="/panel/students/add-student"><Button><FontAwesomeIcon icon={faPlusCircle}/>Dodaj studenta</Button></Link>
             </ContentHeader>
             <ContentBody>
                 <FiltersWrapper>
                     <div>
-                        <Select label="Kierunek" options={['Informtyka','Elektronika']}/>
-                        <Select label="Semestr" options={['1','2','3','4','5']}/>
+                        {/*<Select label="Kierunek" options={['Informtyka','Elektronika']}/>*/}
+                        {/*<Select label="Semestr" options={['1','2','3','4','5']}/>*/}
+                        <Search value={search} onChange={(e) => setSearch(e.target.value)}/>
                     </div>
                     <div>
-                        <Search/>
+                        <Link to="/panel/students/add-student"><Button><FontAwesomeIcon icon={faPlusCircle}/>Dodaj studenta</Button></Link>
                     </div>
                 </FiltersWrapper>
                 <ContentTable cellspacing="0" cellpadding="0">
@@ -84,7 +103,7 @@ function Students (props) {
                                 <td>{student.user.email}</td>
                                 {/*<td>{client.mail}</td>*/}
                                 {/*<td className="patron"><span>{client.patron.substr(0,2)}</span></td>*/}
-                                <td className="trash"><FontAwesomeIcon icon={faTrash}/></td>
+                                <td className="trash"><FontAwesomeIcon icon={faTrash} onClick={() => onDelete(student.user.email,student.id)}/></td>
                             </tr>
                         )
                     }
@@ -107,7 +126,7 @@ function Students (props) {
 
 
 
-            <Route path="/panel/students/add-student" component={AddStudent}/>
+            <Route path="/panel/students/add-student" component={() => <AddStudent refresh={refresh} setRefresh={setRefresh}/>}/>
         </>
     )
 };

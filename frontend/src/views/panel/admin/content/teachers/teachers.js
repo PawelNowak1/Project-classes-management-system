@@ -24,9 +24,12 @@ import {getCookie} from "../../../../../theme/cookies";
 function Teachers (props) {
     const {user} = props;
 
+    const [search,setSearch] = useState('');
     const [addClient,setAddClient] = useState(false);
 
     const [loading,setLoading] = useState(false);
+    const [refresh,setRefresh] = useState(false);
+
     const [pageSettings,setPageSettings] = useState({
         activePage:0,
         totalPages:0,
@@ -36,7 +39,7 @@ function Teachers (props) {
     useEffect(() => {
         setLoading(true);
         console.log(getCookie('token'));
-        axios.get(`${API_URL}/teacher/paginated`,{
+        axios.get(`${API_URL}/teacher/paginated${search !== '' ? '?name='+search : ''}`,{
             headers:{
                 'Authorization': 'Bearer ' + getCookie('token')
             }
@@ -52,23 +55,38 @@ function Teachers (props) {
             })
         })
         .catch(err => console.log(err));
-    },[user]);
+    },[user,refresh,search]);
+
+    const onDelete = (email,id) => {
+        if(window.confirm(`Czy chcesz usunąć użytkownika o emailu: ${email} ?`)){
+            setLoading(true);
+            axios.delete(`${API_URL}/registration/${id}`,{
+                headers:{
+                    'Authorization': 'Bearer ' + getCookie('token')
+                }
+            })
+                .then(res => {
+                    setRefresh(!refresh);
+                    setLoading(false);
+                });
+        }
+    };
 
     return(
         <>
         <Wrapper>
             <ContentHeader>
                 <Title>Wszyscy nauczyciele</Title>
-                <Link to="/panel/teachers/add-teacher"><Button><FontAwesomeIcon icon={faPlusCircle}/>Dodaj nauczyciela</Button></Link>
             </ContentHeader>
             <ContentBody>
                 <FiltersWrapper>
                     <div>
-                        <Select label="Kierunek" options={['Informtyka','Elektronika']}/>
-                        <Select label="Semestr" options={['1','2','3','4','5']}/>
+                        {/*<Select label="Kierunek" options={['Informtyka','Elektronika']}/>*/}
+                        {/*<Select label="Semestr" options={['1','2','3','4','5']}/>*/}
+                        <Search value={search} onChange={(e) => setSearch(e.target.value)}/>
                     </div>
                     <div>
-                        <Search/>
+                        <Link to="/panel/teachers/add-teacher"><Button><FontAwesomeIcon icon={faPlusCircle}/>Dodaj nauczyciela</Button></Link>
                     </div>
                 </FiltersWrapper>
                 <ContentTable cellspacing="0" cellpadding="0">
@@ -88,7 +106,7 @@ function Teachers (props) {
                                 <td>{teacher.user.email}</td>
                                 {/*<td>{client.mail}</td>*/}
                                 {/*<td className="patron"><span>{client.patron.substr(0,2)}</span></td>*/}
-                                <td className="trash"><FontAwesomeIcon icon={faTrash}/></td>
+                                <td className="trash"><FontAwesomeIcon icon={faTrash} onClick={() => onDelete(teacher.user.email,teacher.id)}/></td>
                             </tr>
                         )
                     }
@@ -108,7 +126,7 @@ function Teachers (props) {
             </ContentBody>
         </Wrapper>
 
-            <Route path="/panel/teachers/add-teacher" component={AddTeacher}/>
+            <Route path="/panel/teachers/add-teacher" component={() => <AddTeacher refresh={refresh} setRefresh={setRefresh}/>}/>
         </>
     )
 };
