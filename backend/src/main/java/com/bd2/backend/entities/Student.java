@@ -26,6 +26,7 @@ public class Student {
             name = "student_semester",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "semester_id"))
+    @JsonIgnore
     List<Semester> semesters;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

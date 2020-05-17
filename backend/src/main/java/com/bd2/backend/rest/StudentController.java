@@ -24,4 +24,12 @@ public class StudentController {
                                                    @RequestParam(required = false) String name) {
         return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, name));
     }
+
+    @RequestMapping(path = "/{semesterId}/paginated", method = RequestMethod.GET)
+    public ResponseEntity<?> findStudents(@PathVariable("semesterId") Long semesterId,
+                                          @RequestParam(defaultValue = "0") Integer pageNo,
+                                          @RequestParam(defaultValue = "10") Integer pageSize,
+                                          @RequestParam(required = false) String name) {
+        return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, semesterId, name));
+    }
 }
