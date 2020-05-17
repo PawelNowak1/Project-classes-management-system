@@ -96,9 +96,9 @@ public class RegistrationController {
         return ResponseEntity.ok("User " + user.getUsername() + " registered successfully!");
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> registerUser(@PathVariable("id") Long userId) {
+    public ResponseEntity<?> registerUser(@PathVariable("userId") Long userId) {
         Optional<Student> student = studentRepository.findById(userId);
         student.ifPresent(value -> studentRepository.delete(value));
         Optional<Teacher> teacher = teacherRepository.findById(userId);

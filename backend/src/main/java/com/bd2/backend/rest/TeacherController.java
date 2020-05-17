@@ -22,7 +22,7 @@ public class TeacherController {
     }
 
     @RequestMapping(path = "/paginated", method = RequestMethod.GET)
-    public ResponseEntity<Page<Teacher>> findStudents(@RequestParam(defaultValue = "0") Integer pageNo,
+    public ResponseEntity<Page<Teacher>> findTeachers(@RequestParam(defaultValue = "0") Integer pageNo,
                                                       @RequestParam(defaultValue = "10") Integer pageSize,
                                                       @RequestParam(required = false) String name) {
         return ResponseEntity.ok(teacherService.findTeachers(pageNo, pageSize, name));
