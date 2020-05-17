@@ -83,9 +83,13 @@ public class RegistrationController {
         if (userRole.getRole().equals(Roles.ROLE_TEACHER))
             teacherRepository.save(new Teacher(registrationRequest.getName(), registrationRequest.getLastName(), user));
         if (userRole.getRole().equals(Roles.ROLE_STUDENT)) {
-            Optional<Semester> semesterContext = semesterRepository.findById(registrationRequest.getSemesterId());
-            if (semesterContext.isPresent())
-                studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user, semesterContext.get()));
+            if (registrationRequest.getSemesterId() != null) {
+                Optional<Semester> semesterContext = semesterRepository.findById(registrationRequest.getSemesterId());
+                if (semesterContext.isPresent())
+                    studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user, semesterContext.get()));
+                else
+                    studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user));
+            }
             else
                 studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user));
         }

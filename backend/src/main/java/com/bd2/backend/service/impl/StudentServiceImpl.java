@@ -20,4 +20,10 @@ public class StudentServiceImpl implements StudentService {
     public Page<Student> findStudents(int page, int size, String name) {
         return studentRepository.findStudentsPaginated(name, PageRequest.of(page, size));
     }
+
+    @Override
+    public Page<Student> findStudents(int page, int size, Long semesterId, String name) {
+        return studentRepository.findStudentsPaginated(name, semesterId, PageRequest.of(page, size));
+    }
+
 }
