@@ -1,38 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components'
-import LOGO from '../../../../images/logo.png'
-import {NavLink} from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import styled from 'styled-components';
+import LOGO from '../../../../images/logo.png';
+import { NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faFileContract,
     faHeadset,
     faPlus,
     faPlusCircle,
     faSignOutAlt,
-    faUsers
-} from "@fortawesome/free-solid-svg-icons";
-import {logoutUser} from "../../../../redux/actions";
-function Navigation ({dispatch}) {
-    return(
+    faUsers,
+} from '@fortawesome/free-solid-svg-icons';
+import { logoutUser } from '../../../../redux/actions';
+function Navigation({ dispatch }) {
+    return (
         <Wrapper>
             <div>
-                <Logo><img src={LOGO}/></Logo>
+                <Logo>
+                    <img src={LOGO} />
+                </Logo>
                 <NavLinksWrapper>
-                    <StyledNavLink exact to="/panel/add">
-                        <FontAwesomeIcon icon={faPlusCircle}/> Dodaj sekcje
+                    <StyledNavLink exact to="/panel/sections">
+                        <FontAwesomeIcon icon={faUsers} /> Sekcje
                     </StyledNavLink>
                 </NavLinksWrapper>
             </div>
             <StyledLogout onClick={() => dispatch(logoutUser())}>
-                <FontAwesomeIcon icon={faSignOutAlt}/> Wyloguj się
+                <FontAwesomeIcon icon={faSignOutAlt} /> Wyloguj się
             </StyledLogout>
         </Wrapper>
-    )
-};
+    );
+}
 
-Navigation.propTypes = {
-};
+Navigation.propTypes = {};
 
 export default Navigation;
 
@@ -43,10 +44,10 @@ const StyledLogout = styled.button`
   padding: 8px;
   padding-left: 20px;
   border-radius: 5px;
-  // background: ${({theme}) => theme.primaryBackground};
-  color: ${({theme}) => theme.thirdColor};
-  font-size: ${({theme}) => theme.font.M};
-  font-weight: ${({theme}) => theme.font.Regular};
+  // background: ${({ theme }) => theme.primaryBackground};
+  color: ${({ theme }) => theme.thirdColor};
+  font-size: ${({ theme }) => theme.font.M};
+  font-weight: ${({ theme }) => theme.font.Regular};
   position: relative;
   margin-bottom: 10px;
   transition: all 0.3s;
@@ -68,10 +69,10 @@ const StyledNavLink = styled(NavLink)`
   padding: 8px;
   padding-left: 20px;
   border-radius: 5px;
-  // background: ${({theme}) => theme.primaryBackground};
-  color: ${({theme}) => theme.thirdColor};
-  font-size: ${({theme}) => theme.font.M};
-  font-weight: ${({theme}) => theme.font.Regular};
+  // background: ${({ theme }) => theme.primaryBackground};
+  color: ${({ theme }) => theme.thirdColor};
+  font-size: ${({ theme }) => theme.font.M};
+  font-weight: ${({ theme }) => theme.font.Regular};
   position: relative;
   margin-bottom: 10px;
   transition: all 0.3s;
@@ -83,7 +84,7 @@ const StyledNavLink = styled(NavLink)`
   }
   a{
     font-size: 13px;
-    background: ${({theme}) => theme.primaryColor};
+    background: ${({ theme }) => theme.primaryColor};
     color: white;
     display: block;
     height: 22px;
@@ -101,39 +102,37 @@ const StyledNavLink = styled(NavLink)`
     }
   }
   &:hover{
-     color:${({theme}) => theme.secondColor};
+     color:${({ theme }) => theme.secondColor};
   }
   
   &.active{
-    background: ${({theme}) => theme.primaryBackground};
-    color:${({theme}) => theme.primaryColor};
+    background: ${({ theme }) => theme.primaryBackground};
+    color:${({ theme }) => theme.primaryColor};
   }
   
 `;
 
-const NavLinksWrapper = styled.div`
-
-`;
+const NavLinksWrapper = styled.div``;
 
 const Logo = styled.div`
-  margin-top: 40px;
-  padding: 0 20px;
-  margin-bottom: 40px;
-  img{
-    max-height: 50px;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
+    margin-top: 40px;
+    padding: 0 20px;
+    margin-bottom: 40px;
+    img {
+        max-height: 50px;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
 `;
 
 const Wrapper = styled.div`
-  background: white;
-  height: 100%;
-  min-width: 300px;
-  max-width: 300px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  padding-bottom: 20px;
+    background: white;
+    height: 100%;
+    min-width: 300px;
+    max-width: 300px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding-bottom: 20px;
 `;
