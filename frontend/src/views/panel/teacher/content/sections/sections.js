@@ -20,6 +20,7 @@ import Search from '../../../../../components/search';
 import { Link, Route } from 'react-router-dom';
 import { API_URL } from '../../../../../theme/constans';
 import { getCookie } from '../../../../../theme/cookies';
+import AddSection from './modals/addSection';
 
 function Sections(props) {
     const { user } = props;
@@ -92,7 +93,7 @@ function Sections(props) {
                             />
                         </div>
                         <div>
-                            <Link to="/panel/sections/create">
+                            <Link to="/panel/sections/add-section">
                                 <Button>
                                     <FontAwesomeIcon icon={faPlusCircle} />
                                     Dodaj sekcję
@@ -142,6 +143,13 @@ function Sections(props) {
                     </Pagination>
                 </ContentBody>
             </Wrapper>
+
+            <Route
+                path="/panel/sections/add-section"
+                component={() => (
+                    <AddSection refresh={refresh} setRefresh={setRefresh} />
+                )}
+            />
             {/* 
             <Route
                 path="/panel/students/add-student"
