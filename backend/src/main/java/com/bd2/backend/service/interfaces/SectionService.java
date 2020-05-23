@@ -5,4 +5,5 @@ import com.bd2.backend.entities.Section;
 public interface SectionService {
     void createSection(Section section);
     void deleteSection(Long sectionId);
+    Iterable<Section> findAllSections(Long semesterId);
 }

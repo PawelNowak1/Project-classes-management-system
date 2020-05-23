@@ -23,4 +23,9 @@ public class SectionServiceImpl implements SectionService {
     public void deleteSection(Long sectionId) {
         sectionRepository.deleteById(sectionId);
     }
+
+    @Override
+    public Iterable<Section> findAllSections(Long semesterId) {
+        return sectionRepository.findAllBySemesterId(semesterId);
+    }
 }

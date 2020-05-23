@@ -27,4 +27,10 @@ public class SectionController {
         sectionService.deleteSection(sectionId);
         return ResponseEntity.ok("usunięto sekcje");
     }
+
+    @RequestMapping(path = "/all", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Section>> getAllSections(@RequestParam(required = false) Long semesterId) {
+        return ResponseEntity.ok(sectionService.findAllSections(semesterId));
+    }
+
 }
