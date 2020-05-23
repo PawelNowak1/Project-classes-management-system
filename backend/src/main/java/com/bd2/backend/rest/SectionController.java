@@ -26,6 +26,12 @@ public class SectionController {
         return ResponseEntity.ok("dodano sekcje");
     }
 
+    @RequestMapping(path = "/status", method = RequestMethod.POST)
+    public ResponseEntity<?> changeSectionState(@RequestParam String state, @RequestParam Long sectionId) {
+        sectionService.changeSectionState(state, sectionId);
+        return ResponseEntity.ok("Zmieniono status");
+    }
+
     @RequestMapping(path = "/delete/{sectionId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteSection(@PathVariable("sectionId") Long sectionId) {
         sectionService.deleteSection(sectionId);
@@ -64,5 +70,11 @@ public class SectionController {
     public ResponseEntity<Iterable<StudentSection>> findStudentSections(@RequestParam(required = false) Long semesterId,
                                                                @RequestParam(required = false) Long sectiondId) {
         return ResponseEntity.ok(sectionService.findStudentSection(semesterId, sectiondId));
+    }
+
+    @RequestMapping(path = "/mark", method = RequestMethod.POST)
+    public ResponseEntity<?> setMarkToStudent(@RequestParam Integer mark, @RequestParam Long studentSectionId) {
+        sectionService.setMarkToStudent(mark, studentSectionId);
+        return ResponseEntity.ok("Wystawiono ocene");
     }
 }

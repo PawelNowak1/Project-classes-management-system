@@ -13,4 +13,8 @@ public interface SectionService {
     Iterable<StudentSection> findStudentSection(Long semesterId, Long sectionId);
 
     void deleteStudentFromSection(Long studentSectionId);
+
+    void changeSectionState(String state, Long sectionId);
+
+    void setMarkToStudent(Integer mark, Long studentSectionId);
 }

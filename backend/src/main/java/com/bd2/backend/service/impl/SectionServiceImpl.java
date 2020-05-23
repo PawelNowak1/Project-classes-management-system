@@ -7,6 +7,8 @@ import com.bd2.backend.repository.StudentSectionRepository;
 import com.bd2.backend.service.interfaces.SectionService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class SectionServiceImpl implements SectionService {
 
@@ -46,5 +48,25 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public void deleteStudentFromSection(Long studentSectionId) {
         studentSectionRepository.deleteById(studentSectionId);
+    }
+
+    @Override
+    public void changeSectionState(String state, Long sectionId) {
+        Optional<Section> optionalSection = sectionRepository.findById(sectionId);
+        if (optionalSection.isPresent()) {
+            Section section = optionalSection.get();
+            section.setState(state);
+            sectionRepository.save(section);
+        }
+    }
+
+    @Override
+    public void setMarkToStudent(Integer mark, Long studentSectionId) {
+        Optional<StudentSection> optionalSection = studentSectionRepository.findById(studentSectionId);
+        if (optionalSection.isPresent()) {
+            StudentSection studentSection = optionalSection.get();
+            studentSection.setMark(mark);
+            studentSectionRepository.save(studentSection);
+        }
     }
 }
