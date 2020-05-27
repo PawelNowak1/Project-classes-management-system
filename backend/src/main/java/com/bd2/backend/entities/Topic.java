@@ -1,8 +1,11 @@
 package com.bd2.backend.entities;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
+@Data
 public class Topic {
 
     @Id
