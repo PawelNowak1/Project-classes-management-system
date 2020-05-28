@@ -21,6 +21,7 @@ import { Link, Route } from 'react-router-dom';
 import { API_URL } from '../../../../../theme/constans';
 import { getCookie } from '../../../../../theme/cookies';
 import AddSection from './modals/addSection';
+import { sectionStates } from './sectionStates';
 
 function Sections(props) {
     const { user } = props;
@@ -40,23 +41,14 @@ function Sections(props) {
     useEffect(() => {
         setLoading(true);
         axios
-            .get(
-                `${API_URL}/student/paginated${
-                    search !== '' ? '?name=' + search : ''
-                }`,
-                {
-                    headers: {
-                        Authorization: 'Bearer ' + getCookie('token'),
-                    },
-                }
-            )
+            .get(`${API_URL}/sections/all`, {
+                headers: {
+                    Authorization: 'Bearer ' + getCookie('token'),
+                },
+            })
             .then((res) => {
                 setLoading(false);
-                setSections(res.data.content);
-                setPageSettings({
-                    activePage: res.data.pageable.pageNumber,
-                    totalPages: res.data.totalPages,
-                });
+                setSections(res.data);
             });
     }, [user, refresh, search]);
 
@@ -73,6 +65,41 @@ function Sections(props) {
                     setRefresh(!refresh);
                     setLoading(false);
                 });
+        }
+    };
+
+    const displayTeacherName = (section) => {
+        if (section.topic) {
+            if (section.topic.teacher) {
+                return (
+                    section.topic.teacher.firstName +
+                    ' ' +
+                    section.topic.teacher.lastName
+                );
+            }
+        }
+
+        return '-';
+    };
+
+    const displayTopicName = (section) => {
+        return section.topic ? section.topic.name : '-';
+    };
+
+    const displayState = (section) => {
+        switch (section.state) {
+            case sectionStates.registered:
+                return 'Zarejestrowana';
+            case sectionStates.open:
+                return 'Otwarta';
+            case sectionStates.cancelled:
+                return 'Odwołona';
+            case sectionStates.closed:
+                return 'Zamknięta';
+            case sectionStates.finished:
+                return 'Zakończona';
+            default:
+                return '-';
         }
     };
 
@@ -102,35 +129,31 @@ function Sections(props) {
                         </div>
                     </FiltersWrapper>
                     <ContentTable cellspacing="0" cellpadding="0">
-                        <tr>
-                            <th>Numer</th>
-                            <th>Nazwa</th>
-                            <th>Temat</th>
-                            <th>Prowadzący</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                        {sections.map((student) => (
+                        <tbody>
                             <tr>
-                                <td>#{student.id}</td>
-                                <td>{student.firstName}</td>
-                                <td className="name">{student.lastName}</td>
-                                <td>{student.user.email}</td>
-                                {/*<td>{client.mail}</td>*/}
-                                {/*<td className="patron"><span>{client.patron.substr(0,2)}</span></td>*/}
-                                <td className="trash">
-                                    <FontAwesomeIcon
-                                        icon={faTrash}
-                                        onClick={() =>
-                                            onDelete(
-                                                student.user.email,
-                                                student.id
-                                            )
-                                        }
-                                    />
-                                </td>
+                                <th>Numer</th>
+                                <th>Nazwa</th>
+                                <th>Temat</th>
+                                <th>Prowadzący</th>
+                                <th>Status</th>
+                                <th></th>
                             </tr>
-                        ))}
+                            {sections.map((section) => (
+                                <tr>
+                                    <td>#{section.id}</td>
+                                    <td className="name">{section.name}</td>
+                                    <td>{displayTopicName(section)}</td>
+                                    <td>{displayTeacherName(section)}</td>
+                                    <td>{displayState(section)}</td>
+                                    <td className="trash">
+                                        <FontAwesomeIcon
+                                            icon={faTrash}
+                                            onClick={() => onDelete(section.id)}
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
                     </ContentTable>
                     {loading && <div>Loading ...</div>}
                     <Pagination>
@@ -152,9 +175,9 @@ function Sections(props) {
             />
             {/* 
             <Route
-                path="/panel/students/add-student"
+                path="/panel/sections/add-section"
                 component={() => (
-                    <AddStudent refresh={refresh} setRefresh={setRefresh} />
+                    <Addsection refresh={refresh} setRefresh={setRefresh} />
                 )}
             /> */}
         </>

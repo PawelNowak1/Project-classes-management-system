@@ -1,7 +1,7 @@
 export const sectionStates = {
-    registered: 'REG',
-    open: 'OPEN',
-    cancelled: 'CANCEL',
-    closed: 'CLOSE',
-    finished: 'FIN',
+    registered: 'reg',
+    open: 'open',
+    cancelled: 'cancel',
+    closed: 'close',
+    finished: 'fin',
 };
