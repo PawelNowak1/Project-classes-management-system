@@ -21,10 +21,10 @@ import { Link, Route } from 'react-router-dom';
 import { API_URL } from '../../../../../theme/constans';
 import { getCookie } from '../../../../../theme/cookies';
 import AddSection from './modals/addSection';
-import { sectionStates } from './sectionStates';
+import { getStateName } from './sectionStates';
 
 function Sections(props) {
-    const { user } = props;
+    const { user, context } = props;
 
     const [search, setSearch] = useState('');
     const [addClient, setAddClient] = useState(false);
@@ -37,8 +37,11 @@ function Sections(props) {
         totalPages: 0,
     });
     const [sections, setSections] = useState([]);
+    const [topics, setTopics] = useState([]);
 
     useEffect(() => {
+        console.log(user);
+        console.log(context);
         setLoading(true);
         axios
             .get(`${API_URL}/sections/all`, {
@@ -50,7 +53,17 @@ function Sections(props) {
                 setLoading(false);
                 setSections(res.data);
             });
-    }, [user, refresh, search]);
+
+        axios
+            .get(`${API_URL}/topic/all`, {
+                headers: {
+                    Authorization: 'Bearer ' + getCookie('token'),
+                },
+            })
+            .then((res) => {
+                setTopics(res.data);
+            });
+    }, [user, refresh, search, context]);
 
     const onDelete = (id) => {
         if (window.confirm(`Czy chcesz usunąć sekcję o id: ${id} ?`)) {
@@ -84,23 +97,6 @@ function Sections(props) {
 
     const displayTopicName = (section) => {
         return section.topic ? section.topic.name : '-';
-    };
-
-    const displayState = (section) => {
-        switch (section.state) {
-            case sectionStates.registered:
-                return 'Zarejestrowana';
-            case sectionStates.open:
-                return 'Otwarta';
-            case sectionStates.cancelled:
-                return 'Odwołona';
-            case sectionStates.closed:
-                return 'Zamknięta';
-            case sectionStates.finished:
-                return 'Zakończona';
-            default:
-                return '-';
-        }
     };
 
     return (
@@ -144,7 +140,7 @@ function Sections(props) {
                                     <td className="name">{section.name}</td>
                                     <td>{displayTopicName(section)}</td>
                                     <td>{displayTeacherName(section)}</td>
-                                    <td>{displayState(section)}</td>
+                                    <td>{getStateName(section.state)}</td>
                                     <td className="trash">
                                         <FontAwesomeIcon
                                             icon={faTrash}
@@ -170,7 +166,12 @@ function Sections(props) {
             <Route
                 path="/panel/sections/add-section"
                 component={() => (
-                    <AddSection refresh={refresh} setRefresh={setRefresh} />
+                    <AddSection
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        context={context}
+                        topics={topics}
+                    />
                 )}
             />
             {/* 
@@ -189,6 +190,7 @@ Sections.propTypes = {};
 function mapStateToProps(state) {
     return {
         user: state.auth.user,
+        context: state.context.current,
     };
 }
 export default connect(mapStateToProps)(Sections);

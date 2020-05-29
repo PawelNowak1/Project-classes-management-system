@@ -10,6 +10,7 @@ import {
 } from '../../../../../../theme/styledComponents';
 import Title from '../../../../../../components/title';
 import Input from '../../../../../../components/input';
+import Select from '../../../../../../components/select';
 import SubTitle from '../../../../../../components/subtitle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
@@ -19,35 +20,37 @@ import axios from 'axios';
 import { API_URL } from '../../../../../../theme/constans';
 import { connect } from 'react-redux';
 import { getCookie } from '../../../../../../theme/cookies';
-
-const tempSections = [{}];
+import { sectionStates, getStateName, getStateCode } from '../sectionStates';
 
 function AddSection(props) {
     const history = useHistory();
-    const { user, refresh, setRefresh } = props;
+    const { user, refresh, setRefresh, context, topics } = props;
 
     const [loading, setLoading] = useState();
     const [error, setError] = useState();
 
     const [state, setState] = useState({
         name: '',
-        surname: '',
-        password: '',
+        limit: '',
+        sectionState: '',
+        topicId: 0,
     });
 
     const onSubmit = () => {
         setLoading(true);
         axios
             .post(
-                `${API_URL}/registration`,
+                `${API_URL}/sections/create`,
                 {
-                    username: `${state.name.toLowerCase()}.${state.surname.toLowerCase()}@student.polsl.pl`,
-                    password: state.password,
-                    email: `${state.name.toLowerCase()}.${state.surname.toLowerCase()}@student.polsl.pl`,
                     name: state.name,
-                    lastName: state.surname,
-                    role: 'student',
-                    active: true,
+                    state: state.sectionState,
+                    sectionLimit: parseInt(state.limit),
+                    topic: {
+                        id: state.topicId,
+                    },
+                    semester: {
+                        id: context.id,
+                    },
                 },
                 {
                     headers: {
@@ -95,7 +98,8 @@ function AddSection(props) {
                                 dane.
                             </StyledErrorMessage>
                         )}
-                        <InputRow gtc="1fr">
+                        <SubTitle>Właściwości sekcji</SubTitle>
+                        <InputRow gtc="3fr">
                             <Input
                                 label="Nazwa"
                                 name="name"
@@ -103,22 +107,54 @@ function AddSection(props) {
                                 onChange={onChange}
                             />
                         </InputRow>
-                        <SubTitle>Dane prowadzącego</SubTitle>
-                        <InputRow gtc="1fr">
+                        <InputRow gtc="3fr">
                             <Input
-                                label="Imię"
-                                name="leaderName"
-                                value={state.leaderName}
-                                onChange={onChange}
-                            />
-                            <Input
-                                label="Nazwisko"
-                                name="leaderSurname"
-                                value={state.leaderSurname}
+                                label="Limit"
+                                name="limit"
+                                value={state.sectionLimit}
                                 onChange={onChange}
                             />
                         </InputRow>
+                        <InputRow>
+                            <Select
+                                label="Stan"
+                                name="sectionState"
+                                options={[
+                                    getStateName(sectionStates.open),
+                                    getStateName(sectionStates.closed),
+                                    getStateName(sectionStates.cancelled),
+                                    getStateName(sectionStates.finished),
+                                    getStateName(sectionStates.registered),
+                                ]}
+                                onChange={(e) => {
+                                    setState({
+                                        ...state,
+                                        sectionState: getStateCode(
+                                            e.target.value
+                                        ),
+                                    });
+                                }}
+                            />
+                        </InputRow>
                         <SubTitle>Temat</SubTitle>
+                        <InputRow gtc="1fr">
+                            <Select
+                                label="Dostępne"
+                                name="topicId"
+                                options={topics.map((x) => x.name)}
+                                onChange={(e) => {
+                                    var t = topics.find(
+                                        (topic) => topic.name === e.target.value
+                                    );
+
+                                    setState({
+                                        ...state,
+                                        topicId: t.id,
+                                    });
+                                }}
+                            />
+                        </InputRow>
+                        {/* <SubTitle>Temat</SubTitle>
                         <InputRow gtc="1fr">
                             <Input
                                 label="Rok"
@@ -153,7 +189,7 @@ function AddSection(props) {
                                 value={state.year}
                                 onChange={onChange}
                             />
-                        </InputRow>
+                        </InputRow> */}
                         <Button
                             big
                             style={{ marginTop: '30px' }}
