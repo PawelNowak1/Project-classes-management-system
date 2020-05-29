@@ -4,6 +4,7 @@ import com.bd2.backend.entities.User;
 import com.bd2.backend.repository.StudentRepository;
 import com.bd2.backend.repository.TeacherRepository;
 import com.bd2.backend.repository.UserRepository;
+import com.bd2.backend.response.JwtResponse;
 import com.bd2.backend.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,15 @@ public class TokenVerificationController {
     @GetMapping("/verify/{token}")
     public ResponseEntity<?> verifyToken(@PathVariable("token") String token) {
         if (jwtUtils.validateJwtToken(token)) {
-            return ResponseEntity.ok(this.userRepository.findByUsername(jwtUtils.getUsernameFromJwtToken(token)));
+            User user = this.userRepository.findByUsername(jwtUtils.getUsernameFromJwtToken(token));
+
+            return ResponseEntity.ok(new JwtResponse(
+                    token,
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getRole().getRole().toString()
+            ));
         } else {
             return ResponseEntity.ok(Collections.singletonMap("valid", "no"));
         }
