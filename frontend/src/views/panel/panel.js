@@ -9,9 +9,9 @@ function Panel({ user }) {
     let component;
     console.log(user);
 
-    if (user.user.role.role === 'ROLE_ADMIN') {
+    if (user.role === 'ROLE_ADMIN') {
         component = Admin;
-    } else if (user.user.role.role === 'ROLE_TEACHER') {
+    } else if (user.role === 'ROLE_TEACHER') {
         component = Teacher;
     }
 
