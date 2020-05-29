@@ -37,19 +37,7 @@ public class TokenVerificationController {
     @GetMapping("/verify/{token}")
     public ResponseEntity<?> verifyToken(@PathVariable("token") String token) {
         if (jwtUtils.validateJwtToken(token)) {
-            User user = this.userRepository.findByUsername(jwtUtils.getUsernameFromJwtToken(token));
-            if (user != null) {
-                switch (user.getRole().getRole()) {
-                    case ROLE_TEACHER:
-                        return ResponseEntity.ok(this.teacherRepository.findById(user.getId()).get());
-                    case ROLE_STUDENT:
-                        return ResponseEntity.ok(this.studentRepository.findById(user.getId()).get());
-                    case ROLE_ADMIN:
-                        return ResponseEntity.ok(user);
-                }
-            }
-            return ResponseEntity.badRequest()
-                    .body("Token is valid, but user associated with token doesn't exist!\n");
+            return ResponseEntity.ok(this.userRepository.findByUsername(jwtUtils.getUsernameFromJwtToken(token)));
         } else {
             return ResponseEntity.ok(Collections.singletonMap("valid", "no"));
         }
