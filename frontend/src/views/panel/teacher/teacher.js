@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Navigation from './navigation/navigation';
 import { connect } from 'react-redux';
-import { logoutUser } from '../../../redux/actions';
+import { getAllContexts, logoutUser } from '../../../redux/actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from '../../../components/dashboard';
 import { Redirect, Route } from 'react-router-dom';
 import Sections from './content/sections/sections';
+import { API_URL } from '../../../theme/constans';
+import { getCookie } from '../../../theme/cookies';
 
 function Teacher(props) {
     const { dispatch, user } = props;
+
+    useEffect(() => {
+        dispatch(getAllContexts());
+    }, []);
 
     return (
         <Dashboard>
@@ -26,7 +32,7 @@ function Teacher(props) {
                 <Route path="/panel/sections" component={Sections} />
                 {/*<Route path = '/panel/add' component={Students} />*/}
 
-                {/*<Route render={() => <Redirect to="/panel/students" />} />*/}
+                <Route render={() => <Redirect to="/panel/sections" />} />
             </div>
         </Dashboard>
     );

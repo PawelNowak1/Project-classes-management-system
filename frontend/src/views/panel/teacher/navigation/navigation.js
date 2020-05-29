@@ -13,6 +13,8 @@ import {
     faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { logoutUser } from '../../../../redux/actions';
+import SelectContext from '../../../../components/selectContext';
+
 function Navigation({ dispatch }) {
     return (
         <Wrapper>
@@ -21,6 +23,7 @@ function Navigation({ dispatch }) {
                     <img src={LOGO} />
                 </Logo>
                 <NavLinksWrapper>
+                    <SelectContext />
                     <StyledNavLink exact to="/panel/sections">
                         <FontAwesomeIcon icon={faUsers} /> Sekcje
                     </StyledNavLink>
