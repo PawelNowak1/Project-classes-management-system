@@ -8,11 +8,13 @@ import Teacher from "./teacher/teacher";
 function Panel ({user}) {
     let component;
 
-    if(user.role === 'ROLE_ADMIN'){
+    if(user.role.role === 'ROLE_ADMIN'){
         component = Admin;
-    } else {
+    }
+    else if(user.role.role === 'ROLE_TEACHER') {
         component = Teacher;
     }
+
     return(
         <>
                 <Route path = '/panel' component={component} />

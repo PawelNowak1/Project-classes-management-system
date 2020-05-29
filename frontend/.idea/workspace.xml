@@ -10,14 +10,17 @@
       <change afterPath="$PROJECT_DIR$/src/components/protectedRoute.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/search.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/select.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/selectContext.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/subtitle.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/title.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/configureStore.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/images/background.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/images/logo.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/redux/actions/auth.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/redux/actions/context.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/redux/actions/index.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/redux/reducers/auth.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/redux/reducers/context.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/redux/reducers/index.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/theme/constans.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/theme/cookies.js" afterDir="false" />
@@ -67,24 +70,24 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/views/panel/admin/content/students/modals" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/views/panel/admin/content/students/modals" />
-      <recent name="$PROJECT_DIR$/src/views/panel/admin/content" />
-      <recent name="$PROJECT_DIR$/src/views/panel/content/contracts" />
-      <recent name="$PROJECT_DIR$/src/views/panel/content/clients/modals" />
-      <recent name="$PROJECT_DIR$/src/views/panel/content/clients" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/views/panel" />
       <recent name="$PROJECT_DIR$/src/views/panel/content" />
       <recent name="$PROJECT_DIR$/src/views/panel/content/admin" />
       <recent name="$PROJECT_DIR$/src/images" />
       <recent name="$PROJECT_DIR$/src/views/panel/content/clients/modals" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components" />
+      <recent name="$PROJECT_DIR$/src/redux/reducers" />
+      <recent name="$PROJECT_DIR$/src/redux/actions" />
+      <recent name="$PROJECT_DIR$/src/views/panel/admin/content/students/modals" />
+      <recent name="$PROJECT_DIR$/src/views/panel/admin/content" />
     </key>
   </component>
   <component name="ServiceViewManager">
@@ -115,6 +118,7 @@
       <workItem from="1587738245777" duration="2883000" />
       <workItem from="1588154147144" duration="3923000" />
       <workItem from="1589023482827" duration="9529000" />
+      <workItem from="1590745026792" duration="4015000" />
     </task>
     <servers />
   </component>

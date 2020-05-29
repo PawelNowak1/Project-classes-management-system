@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components'
 import LOGO from '../../../../images/logo.png'
@@ -6,12 +6,20 @@ import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faFileContract, faHeadset, faPlus, faSignOutAlt, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {logoutUser} from "../../../../redux/actions";
+import Select from "../../../../components/select";
+import axios from "axios";
+import {API_URL} from "../../../../theme/constans";
+import {getCookie} from "../../../../theme/cookies";
+import SelectContext from "../../../../components/selectContext";
 function Navigation ({dispatch}) {
+
     return(
         <Wrapper>
             <div>
                 <Logo><img src={LOGO}/></Logo>
                 <NavLinksWrapper>
+                    <SelectContext/>
+
                     <StyledNavLink exact to="/panel/students">
                         <FontAwesomeIcon icon={faUsers}/> Studenci
                     </StyledNavLink>

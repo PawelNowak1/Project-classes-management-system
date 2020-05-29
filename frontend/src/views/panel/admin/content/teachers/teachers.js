@@ -22,7 +22,7 @@ import {API_URL} from "../../../../../theme/constans";
 import {getCookie} from "../../../../../theme/cookies";
 
 function Teachers (props) {
-    const {user} = props;
+    const {user,context} = props;
 
     const [search,setSearch] = useState('');
     const [addClient,setAddClient] = useState(false);
@@ -136,7 +136,8 @@ Teachers.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        user:state.auth.user
+        user:state.auth.user,
+        context:state.context.current.id
     };
 }
 export default connect(mapStateToProps)(Teachers);

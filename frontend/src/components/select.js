@@ -25,9 +25,9 @@ function Select ({label,options}) {
                     {/*<MenuItem value="">*/}
                     {/*    <em>None</em>*/}
                     {/*</MenuItem>*/}
-                    <MenuItem value="" disabled>
-                        Dowolne
-                    </MenuItem>
+                    {/*<MenuItem value="" disabled>*/}
+                    {/*    Dowolne*/}
+                    {/*</MenuItem>*/}
                     {
                         options.map(option => <StyledMenuItem value={option}>{option}</StyledMenuItem>)
                     }

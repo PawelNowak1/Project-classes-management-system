@@ -23,7 +23,7 @@ import {getCookie} from "../../../../../theme/cookies";
 import AddTeacher from "../teachers/modals/addTeacher";
 
 function Students (props) {
-    const {user} = props;
+    const {user,context} = props;
 
     const [search,setSearch] = useState('');
     const [addClient,setAddClient] = useState(false);
@@ -39,7 +39,7 @@ function Students (props) {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`${API_URL}/student/paginated${search !== '' ? '?name='+search : ''}`,{
+        axios.get(`${API_URL}/student/${context}/paginated${search !== '' ? '?name='+search : ''}`,{
             headers:{
                 'Authorization': 'Bearer ' + getCookie('token')
             }
@@ -52,7 +52,7 @@ function Students (props) {
                 totalPages:res.data.totalPages,
             })
         });
-    },[user,refresh,search]);
+    },[user,refresh,search,context]);
 
     const onDelete = (email,id) => {
         if(window.confirm(`Czy chcesz usunąć użytkownika o emailu: ${email} ?`)){
@@ -126,7 +126,7 @@ function Students (props) {
 
 
 
-            <Route path="/panel/students/add-student" component={() => <AddStudent refresh={refresh} setRefresh={setRefresh}/>}/>
+            <Route path="/panel/students/add-student" component={() => <AddStudent refresh={refresh} setRefresh={setRefresh} context={context}/>}/>
         </>
     )
 };
@@ -136,7 +136,8 @@ Students.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        user:state.auth.user
+        user:state.auth.user,
+        context:state.context.current.id
     };
 }
 export default connect(mapStateToProps)(Students);

@@ -41,6 +41,7 @@ function AddStudent (props) {
                 email: `${state.name.toLowerCase()}.${state.surname.toLowerCase()}@student.polsl.pl`,
                 name: state.name,
                 lastName: state.surname,
+                semesterId:props.context,
                 role: "student",
                 active: true
             },{
