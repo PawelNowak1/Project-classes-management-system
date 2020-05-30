@@ -52,6 +52,7 @@ function Sections(props) {
             .then((res) => {
                 setLoading(false);
                 setSections(res.data);
+                console.log(res.data);
             });
 
         axios
@@ -99,6 +100,15 @@ function Sections(props) {
         return section.topic ? section.topic.name : '-';
     };
 
+    const filterSections = (section) => {
+        return (
+            !search.length ||
+            section.name.toLowerCase().includes(search) ||
+            (section.topic &&
+                section.topic.name.toLowerCase().includes(search))
+        );
+    };
+
     return (
         <>
             <Wrapper>
@@ -108,11 +118,10 @@ function Sections(props) {
                 <ContentBody>
                     <FiltersWrapper>
                         <div>
-                            {/*<Select label="Kierunek" options={['Informtyka','Elektronika']}/>*/}
-                            {/*<Select label="Semestr" options={['1','2','3','4','5']}/>*/}
                             <Search
+                                placeHolder={'Nazwa / Temat sekcji'}
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={(e) => setSearch(e.target.value.toLowerCase())}
                             />
                         </div>
                         <div>
@@ -134,21 +143,32 @@ function Sections(props) {
                                 <th>Status</th>
                                 <th></th>
                             </tr>
-                            {sections.map((section) => (
-                                <tr>
-                                    <td>#{section.id}</td>
-                                    <td className="name">{section.name}</td>
-                                    <td>{displayTopicName(section)}</td>
-                                    <td>{displayTeacherName(section)}</td>
-                                    <td>{getStateName(section.state)}</td>
-                                    <td className="trash">
-                                        <FontAwesomeIcon
-                                            icon={faTrash}
-                                            onClick={() => onDelete(section.id)}
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
+                            {sections.map(
+                                (section) =>
+                                    filterSections(section) && (
+                                        <tr>
+                                            <td>#{section.id}</td>
+                                            <td className="name">
+                                                {section.name}
+                                            </td>
+                                            <td>{displayTopicName(section)}</td>
+                                            <td>
+                                                {displayTeacherName(section)}
+                                            </td>
+                                            <td>
+                                                {getStateName(section.state)}
+                                            </td>
+                                            <td className="trash">
+                                                <FontAwesomeIcon
+                                                    icon={faTrash}
+                                                    onClick={() =>
+                                                        onDelete(section.id)
+                                                    }
+                                                />
+                                            </td>
+                                        </tr>
+                                    )
+                            )}
                         </tbody>
                     </ContentTable>
                     {loading && <div>Loading ...</div>}
