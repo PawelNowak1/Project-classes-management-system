@@ -83,7 +83,7 @@ function Teachers (props) {
                     <div>
                         {/*<Select label="Kierunek" options={['Informtyka','Elektronika']}/>*/}
                         {/*<Select label="Semestr" options={['1','2','3','4','5']}/>*/}
-                        <Search value={search} onChange={(e) => setSearch(e.target.value)}/>
+                <Search placeHolder={"Imię / Nazwisko / Numer nauczyciela"}value={search} onChange={(e) => setSearch(e.target.value)}/>
                     </div>
                     <div>
                         <Link to="/panel/teachers/add-teacher"><Button><FontAwesomeIcon icon={faPlusCircle}/>Dodaj nauczyciela</Button></Link>

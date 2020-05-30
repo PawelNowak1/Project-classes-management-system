@@ -80,7 +80,7 @@ function Students (props) {
                     <div>
                         {/*<Select label="Kierunek" options={['Informtyka','Elektronika']}/>*/}
                         {/*<Select label="Semestr" options={['1','2','3','4','5']}/>*/}
-                        <Search value={search} onChange={(e) => setSearch(e.target.value)}/>
+                    <Search placeHolder={"Imię / Nazwisko / Numer studenta"} value={search} onChange={(e) => setSearch(e.target.value)}/>
                     </div>
                     <div>
                         <Link to="/panel/students/add-student"><Button><FontAwesomeIcon icon={faPlusCircle}/>Dodaj studenta</Button></Link>

@@ -8,7 +8,7 @@ function Search (props) {
     return(
         <Wrapper>
             <FontAwesomeIcon icon={faSearch}/>
-            <Input placeholder="Imię / Nazwisko / Numer studenta" value={props.value} onChange={props.onChange}/>
+            <Input placeholder={props.placeHolder} value={props.value} onChange={props.onChange}/>
         </Wrapper>
     )
 };
