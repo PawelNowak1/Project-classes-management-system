@@ -7,10 +7,11 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import { Select as MUSelect } from '@material-ui/core';
 
-function Select({ label, options, onChange }) {
+function Select({ label, options, onChange, value }) {
     return (
         <Wrapper>
             <StyledLabel>{label}:</StyledLabel>
+            <StyledLabel>{value}</StyledLabel>
             <StyledFormControl variant="filled">
                 <MUSelect
                     labelId="demo-simple-select-filled-label"
@@ -19,12 +20,6 @@ function Select({ label, options, onChange }) {
                     value={''}
                     onChange={onChange}
                 >
-                    {/*<MenuItem value="">*/}
-                    {/*    <em>None</em>*/}
-                    {/*</MenuItem>*/}
-                    {/*<MenuItem value="" disabled>*/}
-                    {/*    Dowolne*/}
-                    {/*</MenuItem>*/}
                     {options.map((option) => (
                         <StyledMenuItem value={option}>{option}</StyledMenuItem>
                     ))}

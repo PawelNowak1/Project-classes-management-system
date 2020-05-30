@@ -32,8 +32,10 @@ function AddSection(props) {
     const [state, setState] = useState({
         name: '',
         limit: '',
-        sectionState: '',
+        sectionStateCode: '',
+        sectionStateName: '',
         topicId: 0,
+        topicName: '',
     });
 
     const onSubmit = () => {
@@ -43,7 +45,7 @@ function AddSection(props) {
                 `${API_URL}/sections/create`,
                 {
                     name: state.name,
-                    state: state.sectionState,
+                    state: state.sectionStateCode,
                     sectionLimit: parseInt(state.limit),
                     topic: {
                         id: state.topicId,
@@ -129,11 +131,13 @@ function AddSection(props) {
                                 onChange={(e) => {
                                     setState({
                                         ...state,
-                                        sectionState: getStateCode(
+                                        sectionStateCode: getStateCode(
                                             e.target.value
                                         ),
+                                        sectionStateName: e.target.value,
                                     });
                                 }}
+                                value={state.sectionStateName}
                             />
                         </InputRow>
                         <SubTitle>Temat</SubTitle>
@@ -150,46 +154,12 @@ function AddSection(props) {
                                     setState({
                                         ...state,
                                         topicId: t.id,
+                                        topicName: t.name,
                                     });
                                 }}
+                                value={state.topicName}
                             />
                         </InputRow>
-                        {/* <SubTitle>Temat</SubTitle>
-                        <InputRow gtc="1fr">
-                            <Input
-                                label="Rok"
-                                name="year"
-                                value={state.year}
-                                onChange={onChange}
-                            />
-                            <Input
-                                label="Nazwisko"
-                                name="leaderSurname"
-                                value={state.leaderSurname}
-                                onChange={onChange}
-                            />
-                        </InputRow>
-                        <SubTitle>Semestr</SubTitle>
-                        <InputRow gtc="1fr">
-                            <Input
-                                label="Kierunek"
-                                name="course"
-                                value={state.course}
-                                onChange={onChange}
-                            />
-                            <Input
-                                label="Numer semestru"
-                                name="semesterNumber"
-                                value={state.semesterNumber}
-                                onChange={onChange}
-                            />
-                            <Input
-                                label="Rok akademicki"
-                                name="year"
-                                value={state.year}
-                                onChange={onChange}
-                            />
-                        </InputRow> */}
                         <Button
                             big
                             style={{ marginTop: '30px' }}
