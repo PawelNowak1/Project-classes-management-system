@@ -44,7 +44,7 @@ function Sections(props) {
         console.log(context);
         setLoading(true);
         axios
-            .get(`${API_URL}/sections/all`, {
+            .get(`${API_URL}/sections/all/?semesterId=${context.id}`, {
                 headers: {
                     Authorization: 'Bearer ' + getCookie('token'),
                 },
