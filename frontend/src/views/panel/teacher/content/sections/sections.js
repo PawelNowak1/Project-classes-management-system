@@ -41,9 +41,9 @@ function Sections(props) {
     const [teachers, setTeachers] = useState([]);
 
     useEffect(() => {
-        console.log(user);
-        console.log(context);
         setLoading(true);
+        console.log(context);
+
         axios
             .get(`${API_URL}/sections/all/?semesterId=${context.id}`, {
                 headers: {
@@ -192,8 +192,7 @@ function Sections(props) {
                         </tbody>
                     </ContentTable>
                     {loading && <div>Loading ...</div>}
-                    <Pagination>
-                    </Pagination>
+                    <Pagination></Pagination>
                 </ContentBody>
             </Wrapper>
 

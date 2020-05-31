@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
     Flex,
@@ -21,11 +20,10 @@ import { API_URL } from '../../../../../../../theme/constans';
 import { connect } from 'react-redux';
 import { getCookie } from '../../../../../../../theme/cookies';
 import { sectionStates, getStateName, getStateCode } from '../../sectionStates';
-import AddTopic from './addTopic';
 
 function AddSection(props) {
     const history = useHistory();
-    const { user, refresh, setRefresh, context, topics, teachers } = props;
+    const { refresh, setRefresh, context, topics } = props;
 
     const [loading, setLoading] = useState();
     const [loadingTopic, setLoadingTopic] = useState();
@@ -123,8 +121,6 @@ function AddSection(props) {
     };
 
     const onChange = (e) => {
-        console.log(state);
-        console.log(topic);
         setState({
             ...state,
             [e.target.name]: e.target.value,
@@ -132,8 +128,6 @@ function AddSection(props) {
     };
 
     const onChangeTopic = (e) => {
-        console.log(state);
-        console.log(topic);
         setTopic({
             ...topic,
             [e.target.name]: e.target.value,
@@ -148,9 +142,6 @@ function AddSection(props) {
             topicId: t.id,
             topicName: t.name,
         });
-
-        console.log(state);
-        console.log(topic);
     };
 
     const checkIfAddingNewResource = (e) => {
@@ -190,7 +181,7 @@ function AddSection(props) {
                 onClick={() => history.push('/panel/sections')}
             >
                 <ModalContent
-                    maxWidth="450px"
+                    maxWidth="550px"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <Flex jc="space-between">
@@ -223,29 +214,27 @@ function AddSection(props) {
                                 onChange={onChange}
                             />
                         </InputRow>
-                        <InputRow>
-                            <Select
-                                label="Stan"
-                                name="sectionState"
-                                options={[
-                                    getStateName(sectionStates.open),
-                                    getStateName(sectionStates.closed),
-                                    getStateName(sectionStates.cancelled),
-                                    getStateName(sectionStates.finished),
-                                    getStateName(sectionStates.registered),
-                                ]}
-                                onChange={(e) => {
-                                    setState({
-                                        ...state,
-                                        sectionStateCode: getStateCode(
-                                            e.target.value
-                                        ),
-                                        sectionStateName: e.target.value,
-                                    });
-                                }}
-                                value={state.sectionStateName}
-                            />
-                        </InputRow>
+                        <Select
+                            label="Stan"
+                            name="sectionState"
+                            options={[
+                                getStateName(sectionStates.open),
+                                getStateName(sectionStates.closed),
+                                getStateName(sectionStates.cancelled),
+                                getStateName(sectionStates.finished),
+                                getStateName(sectionStates.registered),
+                            ]}
+                            onChange={(e) => {
+                                setState({
+                                    ...state,
+                                    sectionStateCode: getStateCode(
+                                        e.target.value
+                                    ),
+                                    sectionStateName: e.target.value,
+                                });
+                            }}
+                            value={state.sectionStateName}
+                        />
                         <SubTitle>Temat</SubTitle>
                         <InputRow gtc="1fr">
                             <Select
@@ -257,52 +246,53 @@ function AddSection(props) {
                                 value={state.topicName}
                             />
                         </InputRow>
-                        {/* <AddTopic
-                            visibility={newTopic}
-                            setTopic={setTopic}
-                            teachers={teachers}
-                        /> */}
-                        {newTopic && (
-                            <>
-                                <Title secondary>Dodawanie tematu</Title>
-                                <SubTitle>Dane tematu</SubTitle>
-                                <InputRow gtc="3fr">
-                                    <Input
-                                        label="Nazwa"
-                                        name="topicName"
-                                        onChange={onChangeTopic}
-                                    />
-                                    <Input
-                                        label="Opis"
-                                        name="topicDescription"
-                                        onChange={onChangeTopic}
-                                    />
-                                    <Input
-                                        label="Status"
-                                        name="topicStatus"
-                                        onChange={onChangeTopic}
-                                    />
-                                    <Select
-                                        label="Nauczyciel"
-                                        name="teacher"
-                                        options={props.teachers.map((x) =>
-                                            createTeacherName(x)
-                                        )}
-                                        value={state.teacher}
-                                        onChange={findTeacherInData}
-                                    />
-                                </InputRow>
-                                <Button
-                                    big
-                                    style={{ marginTop: '30px' }}
-                                    onClick={onSubmitTopic}
-                                >
-                                    {loadingTopic
-                                        ? 'Loading ...'
-                                        : 'Dodaj temat'}
-                                </Button>
-                            </>
-                        )}
+                        <div>
+                            {newTopic && (
+                                <>
+                                    <Border>
+                                        <Title secondary>
+                                            Dodawanie tematu
+                                        </Title>
+                                        <SubTitle>Dane tematu</SubTitle>
+                                        <InputRow gtc="3fr">
+                                            <Input
+                                                label="Nazwa"
+                                                name="topicName"
+                                                onChange={onChangeTopic}
+                                            />
+                                            <Input
+                                                label="Opis"
+                                                name="topicDescription"
+                                                onChange={onChangeTopic}
+                                            />
+                                            <Input
+                                                label="Status"
+                                                name="topicStatus"
+                                                onChange={onChangeTopic}
+                                            />
+                                            <Select
+                                                label="Nauczyciel"
+                                                name="teacher"
+                                                options={props.teachers.map(
+                                                    (x) => createTeacherName(x)
+                                                )}
+                                                value={state.teacher}
+                                                onChange={findTeacherInData}
+                                            />
+                                        </InputRow>
+                                        <Button
+                                            big
+                                            style={{ marginTop: '30px' }}
+                                            onClick={onSubmitTopic}
+                                        >
+                                            {loadingTopic
+                                                ? 'Loading ...'
+                                                : 'Dodaj temat'}
+                                        </Button>
+                                    </Border>
+                                </>
+                            )}
+                        </div>
                         <Button
                             big
                             style={{ marginTop: '30px' }}
@@ -325,6 +315,15 @@ function mapStateToProps(state) {
     };
 }
 export default connect(mapStateToProps)(AddSection);
+
+const Border = styled.div`
+    border-style: solid;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    border-color: grey;
+    border-width: 2px;
+`;
 
 const DownloadInfo = styled.div`
     display: flex;

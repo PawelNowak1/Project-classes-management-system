@@ -34,9 +34,9 @@ export const ModalContent = styled.div`
   width: 90%;
   max-width: ${({maxWidth}) => maxWidth || '800px'};
   margin: 0 auto;
-  margin-top: 90px;
+  margin-top: 70px;
   border-radius: 5px;
-  max-height: calc(100vh - 90px - 90px);
+  max-height: calc(100vh - 70px - 70px);
   overflow: hidden;
   position: relative;
   display: flex;
