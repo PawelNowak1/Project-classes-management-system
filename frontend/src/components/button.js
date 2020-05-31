@@ -40,7 +40,7 @@ const Button = styled.button`
   `}
    
   ${({disabled}) => disabled && css`
-    color: black;
+    color: gray;
     cursor: not-allowed;
   `}
 
