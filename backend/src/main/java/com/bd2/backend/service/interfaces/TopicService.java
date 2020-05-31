@@ -5,5 +5,5 @@ import com.bd2.backend.entities.Topic;
 public interface TopicService {
     Iterable<Topic> findAllTopics(Long teacherId);
 
-    void createTopic(Topic topic);
+    Long createTopic(Topic topic);
 }

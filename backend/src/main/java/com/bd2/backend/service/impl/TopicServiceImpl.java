@@ -20,7 +20,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public void createTopic(Topic topic) {
-        topicRepository.save(topic);
+    public Long createTopic(Topic topic) {
+        return topicRepository.save(topic).getId();
     }
 }
