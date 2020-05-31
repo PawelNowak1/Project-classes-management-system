@@ -76,6 +76,7 @@ function TeacherSections(props) {
             .then((res) => {
                 setTeachers(res.data.content);
             });
+
     }, [user, refresh, search, context]);
 
     const onDelete = (id) => {
@@ -147,7 +148,7 @@ function TeacherSections(props) {
                         </div>
                         <div>
                             <Link to="/panel/sections/add-section">
-                                <Button onClick={addTeacherOption()}>
+                                <Button onClick={addTeacherOption()} disabled={loading}>
                                     <FontAwesomeIcon icon={faPlusCircle} />
                                     Dodaj sekcję
                                 </Button>

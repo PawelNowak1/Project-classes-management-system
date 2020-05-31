@@ -39,6 +39,11 @@ const Button = styled.button`
     }
   `}
    
+  ${({disabled}) => disabled && css`
+    color: black;
+    cursor: not-allowed;
+  `}
+
   ${({big}) => big && css`
     width: 100%;
     line-height: ${({theme}) => theme.font.XL};

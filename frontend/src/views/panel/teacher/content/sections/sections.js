@@ -14,7 +14,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Select from '../../../../../components/select';
 import Search from '../../../../../components/search';
 import { Link, Route } from 'react-router-dom';
 import { API_URL } from '../../../../../theme/constans';
@@ -30,7 +29,6 @@ function Sections(props) {
     const [loading, setLoading] = useState(false);
     const [refresh, setRefresh] = useState(false);
 
-  
     const [sections, setSections] = useState([]);
     const [topics, setTopics] = useState([]);
     const [teachers, setTeachers] = useState([]);
@@ -141,7 +139,10 @@ function Sections(props) {
                         </div>
                         <div>
                             <Link to="/panel/sections/add-section">
-                                <Button onClick={addTeacherOption()}>
+                                <Button
+                                    onClick={addTeacherOption()}
+                                    disabled={loading}
+                                >
                                     <FontAwesomeIcon icon={faPlusCircle} />
                                     Dodaj sekcję
                                 </Button>
