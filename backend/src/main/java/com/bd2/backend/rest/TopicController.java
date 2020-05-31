@@ -23,8 +23,7 @@ public class TopicController {
     }
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
-    public ResponseEntity<?> findTopics(@RequestBody Topic topic) {
-        topicService.createTopic(topic);
-        return ResponseEntity.ok("Utworzono temat");
+    public ResponseEntity<Long> findTopics(@RequestBody Topic topic) {
+        return ResponseEntity.ok(topicService.createTopic(topic));
     }
 }

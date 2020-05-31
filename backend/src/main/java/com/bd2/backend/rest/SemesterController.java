@@ -26,7 +26,7 @@ public class SemesterController {
     }
 
     @RequestMapping(path = "/all", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Semester>> findStudents() {
+    public ResponseEntity<Iterable<Semester>> findSemesters() {
         return ResponseEntity.ok(semesterService.findAllSemesters());
     }
 }

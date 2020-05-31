@@ -4,6 +4,7 @@ import com.bd2.backend.entities.User;
 import com.bd2.backend.repository.StudentRepository;
 import com.bd2.backend.repository.TeacherRepository;
 import com.bd2.backend.repository.UserRepository;
+import com.bd2.backend.response.JwtResponse;
 import com.bd2.backend.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,18 +39,14 @@ public class TokenVerificationController {
     public ResponseEntity<?> verifyToken(@PathVariable("token") String token) {
         if (jwtUtils.validateJwtToken(token)) {
             User user = this.userRepository.findByUsername(jwtUtils.getUsernameFromJwtToken(token));
-            if (user != null) {
-                switch (user.getRole().getRole()) {
-                    case ROLE_TEACHER:
-                        return ResponseEntity.ok(this.teacherRepository.findById(user.getId()).get());
-                    case ROLE_STUDENT:
-                        return ResponseEntity.ok(this.studentRepository.findById(user.getId()).get());
-                    case ROLE_ADMIN:
-                        return ResponseEntity.ok(user);
-                }
-            }
-            return ResponseEntity.badRequest()
-                    .body("Token is valid, but user associated with token doesn't exist!\n");
+
+            return ResponseEntity.ok(new JwtResponse(
+                    token,
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getRole().getRole().toString()
+            ));
         } else {
             return ResponseEntity.ok(Collections.singletonMap("valid", "no"));
         }
