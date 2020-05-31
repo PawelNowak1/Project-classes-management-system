@@ -24,8 +24,11 @@ function Navigation({ dispatch }) {
                 </Logo>
                 <NavLinksWrapper>
                     <SelectContext />
+                    <StyledNavLink exact to="/panel/yoursections">
+                        <FontAwesomeIcon icon={faUsers} /> Twoje Sekcje
+                    </StyledNavLink>
                     <StyledNavLink exact to="/panel/sections">
-                        <FontAwesomeIcon icon={faUsers} /> Sekcje
+                        <FontAwesomeIcon icon={faUsers} /> Wszystkie Sekcje
                     </StyledNavLink>
                 </NavLinksWrapper>
             </div>

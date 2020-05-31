@@ -9,6 +9,7 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from '../../../components/dashboard';
 import { Redirect, Route } from 'react-router-dom';
 import Sections from './content/sections/sections';
+import TeacherSections from './content/sections/teacherSections';
 import { API_URL } from '../../../theme/constans';
 import { getCookie } from '../../../theme/cookies';
 
@@ -30,9 +31,10 @@ function Teacher(props) {
                 }}
             >
                 <Route path="/panel/sections" component={Sections} />
+                <Route path="/panel/yoursections" component={TeacherSections} />
                 {/*<Route path = '/panel/add' component={Students} />*/}
 
-                <Route render={() => <Redirect to="/panel/sections" />} />
+                <Route render={() => <Redirect to="/panel/yoursections" />} />
             </div>
         </Dashboard>
     );

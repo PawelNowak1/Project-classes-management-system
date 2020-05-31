@@ -11,6 +11,7 @@ import {
     faEllipsisH,
     faPlusCircle,
     faTrash,
+    faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -22,7 +23,7 @@ import { getCookie } from '../../../../../theme/cookies';
 import AddSection from './modals/addSection/addSection';
 import { getStateName } from './sectionStates';
 
-function Sections(props) {
+function TeacherSections(props) {
     const { user, context } = props;
 
     const [search, setSearch] = useState('');
@@ -30,15 +31,12 @@ function Sections(props) {
     const [loading, setLoading] = useState(false);
     const [refresh, setRefresh] = useState(false);
 
-  
     const [sections, setSections] = useState([]);
     const [topics, setTopics] = useState([]);
     const [teachers, setTeachers] = useState([]);
 
     useEffect(() => {
         setLoading(true);
-        console.log(context);
-
         axios
             .get(`${API_URL}/sections/all/?semesterId=${context.id}`, {
                 headers: {
@@ -47,8 +45,16 @@ function Sections(props) {
             })
             .then((res) => {
                 setLoading(false);
-                setSections(res.data);
-                console.log(res.data);
+
+                var filteredSections = res.data.filter((x) => {
+                    return (
+                        x.topic &&
+                        x.topic.teacher &&
+                        x.topic.teacher.id === user.id
+                    );
+                });
+
+                setSections(filteredSections);
             });
 
         axios
@@ -203,18 +209,11 @@ function Sections(props) {
                     />
                 )}
             />
-            {/* 
-            <Route
-                path="/panel/sections/add-section"
-                component={() => (
-                    <Addsection refresh={refresh} setRefresh={setRefresh} />
-                )}
-            /> */}
         </>
     );
 }
 
-Sections.propTypes = {};
+TeacherSections.propTypes = {};
 
 function mapStateToProps(state) {
     return {
@@ -222,7 +221,7 @@ function mapStateToProps(state) {
         context: state.context.current,
     };
 }
-export default connect(mapStateToProps)(Sections);
+export default connect(mapStateToProps)(TeacherSections);
 
 const Pagination = styled.div`
     display: flex;
