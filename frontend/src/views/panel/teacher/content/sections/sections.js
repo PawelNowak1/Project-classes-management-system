@@ -20,7 +20,7 @@ import Search from '../../../../../components/search';
 import { Link, Route } from 'react-router-dom';
 import { API_URL } from '../../../../../theme/constans';
 import { getCookie } from '../../../../../theme/cookies';
-import AddSection from './modals/addSection';
+import AddSection from './modals/addSection/addSection';
 import { getStateName } from './sectionStates';
 
 function Sections(props) {
@@ -38,6 +38,7 @@ function Sections(props) {
     });
     const [sections, setSections] = useState([]);
     const [topics, setTopics] = useState([]);
+    const [teachers, setTeachers] = useState([]);
 
     useEffect(() => {
         console.log(user);
@@ -63,6 +64,16 @@ function Sections(props) {
             })
             .then((res) => {
                 setTopics(res.data);
+            });
+
+        axios
+            .get(`${API_URL}/teacher/paginated`, {
+                headers: {
+                    Authorization: 'Bearer ' + getCookie('token'),
+                },
+            })
+            .then((res) => {
+                setTeachers(res.data.content);
             });
     }, [user, refresh, search, context]);
 
@@ -104,9 +115,16 @@ function Sections(props) {
         return (
             !search.length ||
             section.name.toLowerCase().includes(search) ||
-            (section.topic &&
-                section.topic.name.toLowerCase().includes(search))
+            (section.topic && section.topic.name.toLowerCase().includes(search))
         );
+    };
+
+    const addTeacherOption = () => {
+        if (!topics.find((x) => x.id === -1))
+            topics.push({
+                id: -1,
+                name: 'Dodaj nowy...',
+            });
     };
 
     return (
@@ -121,12 +139,14 @@ function Sections(props) {
                             <Search
                                 placeHolder={'Nazwa / Temat sekcji'}
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value.toLowerCase())}
+                                onChange={(e) =>
+                                    setSearch(e.target.value.toLowerCase())
+                                }
                             />
                         </div>
                         <div>
                             <Link to="/panel/sections/add-section">
-                                <Button>
+                                <Button onClick={addTeacherOption()}>
                                     <FontAwesomeIcon icon={faPlusCircle} />
                                     Dodaj sekcję
                                 </Button>
@@ -173,12 +193,6 @@ function Sections(props) {
                     </ContentTable>
                     {loading && <div>Loading ...</div>}
                     <Pagination>
-                        {/*<span><FontAwesomeIcon icon={faChevronLeft}/></span>*/}
-                        {/*<span>1</span>*/}
-                        {/*<span className="active">2</span>*/}
-                        {/*<span>3</span>*/}
-                        {/*<span>4</span>*/}
-                        {/*<span><FontAwesomeIcon icon={faChevronRight}/></span>*/}
                     </Pagination>
                 </ContentBody>
             </Wrapper>
@@ -191,6 +205,7 @@ function Sections(props) {
                         setRefresh={setRefresh}
                         context={context}
                         topics={topics}
+                        teachers={teachers}
                     />
                 )}
             />
