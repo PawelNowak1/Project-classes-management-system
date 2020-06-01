@@ -1,5 +1,5 @@
-# System wspomagający zarządzanie prowadzeniem zajęć projektowych
- 
+# System wspomagający zarządzanie prowadzeniem zajęć projektowych ![GitHub language count](https://img.shields.io/github/languages/count/PawelNowak1/projektBD2) ![GitHub top language](https://img.shields.io/github/languages/top/PawelNowak1/projektBD2) ![GitHub contributors](https://img.shields.io/github/contributors/PawelNowak1/projektBD2) ![GitHub last commit](https://img.shields.io/github/last-commit/PawelNowak1/projektBD2)
+  
 Uczelniany projekt systemu mającego usprawnić prowadzenie zajęć projektowych.
 
 |Panel| Funkcjonalność |
