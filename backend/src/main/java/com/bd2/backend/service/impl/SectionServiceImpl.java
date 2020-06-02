@@ -7,6 +7,9 @@ import com.bd2.backend.repository.StudentSectionRepository;
 import com.bd2.backend.service.interfaces.SectionService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,8 +24,8 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public void createSection(Section section) {
-        sectionRepository.save(section);
+    public Long createSection(Section section) {
+        return sectionRepository.save(section).getId();
     }
 
     @Override
@@ -66,7 +69,40 @@ public class SectionServiceImpl implements SectionService {
         if (optionalSection.isPresent()) {
             StudentSection studentSection = optionalSection.get();
             studentSection.setMark(mark);
+            studentSection.setDate(Timestamp.valueOf(LocalDateTime.now()));
             studentSectionRepository.save(studentSection);
         }
+    }
+
+    @Override
+    public Integer getSectionLimit(Long sectionId) {
+        Optional<Section> section;
+        if ((section = this.sectionRepository.findById(sectionId)).isPresent()) {
+            return section.get().getSectionLimit();
+        }
+        return null;
+    }
+
+    @Override
+    public Section getSection(Long sectionId) {
+        Optional<Section> section;
+        if ((section = this.sectionRepository.findById(sectionId)).isPresent()) {
+            return section.get();
+        }
+        return null;
+    }
+
+    @Override
+    public Long getCurrentStudentsCountInSection(Long sectionId) {
+        List<StudentSection> studentsInSection = this.studentSectionRepository.findAllBySectionId(sectionId);
+        if(studentsInSection != null) {
+            return Long.valueOf(studentsInSection.stream().count());
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isStudentAlreadyInSection(Long studentId, Long sectionId) {
+        return this.studentSectionRepository.findByStudentIdAndSectionId(studentId, sectionId).isPresent();
     }
 }

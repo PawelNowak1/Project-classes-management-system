@@ -38,14 +38,12 @@ public class StudentController {
 
     @RequestMapping(path = "/checkattendance", method = RequestMethod.POST)
     public ResponseEntity<?> checkAttendance(@RequestBody Attendance attendance) {
-        // TODO gdy data == null to automatycznie ją dodać (najlepiej chyba Trigger na tabeli)
         studentService.saveAttendance(attendance);
         return ResponseEntity.ok("ok");
     }
 
     @RequestMapping(path = "/checkaattendances", method = RequestMethod.POST)
     public ResponseEntity<?> checkAttendanceList(@RequestBody List<Attendance> attendance) {
-        // TODO gdy data == null to automatycznie ją dodać (najlepiej chyba Trigger na tabeli)
         for(Attendance attend : attendance)
             studentService.saveAttendance(attend);
         return ResponseEntity.ok("ok");
