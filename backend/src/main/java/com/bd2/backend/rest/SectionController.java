@@ -70,7 +70,7 @@ public class SectionController {
                     .body("Section is already full - new student cannot be added!\n");
         }
 
-        if(studentSection.getMark() != null) {
+        if (studentSection.getMark() != null) {
             studentSection.setDate(Timestamp.valueOf(LocalDateTime.now()));
         }
 
@@ -79,14 +79,42 @@ public class SectionController {
     }
 
     @RequestMapping(path = "/addStudents", method = RequestMethod.POST) //przetestować
-    public ResponseEntity<?> addStudent(@RequestBody List<StudentSection> studentSection) {
-        // TODO Walidacja stanu sekcji
-        // TODO Jeżeli mark != null to wstawienie Daty (najlepiej chyba Trigger na tabeli)
-        for (StudentSection stud : studentSection) //tutaj walidacja po kazdym dodaniu!!
-            sectionService.addStudentToSection(stud);
+    public ResponseEntity<?> addStudent(@RequestBody List<StudentSection> studentsSections) {
+        Section section = this.sectionService.getSection(studentsSections.get(0).getSection().getId());
 
+        int studentsFromRequestAlreadyInSection = 0;
+        for (StudentSection studentSection : studentsSections) {
+            if (this.sectionService.isStudentAlreadyInSection(studentSection.getStudent().getId(), section.getId())) {
+                ++studentsFromRequestAlreadyInSection;
+            }
+        }
 
-        return ResponseEntity.ok("Dodano studenta do sekcji");
+        if (section == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Section with id " + studentsSections.get(0).getSection().getId() + " does not exist!\n");
+        }
+        if (section.getState().equals(SectionStates.close.name())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Section is already closed - new students cannot be added.\n");
+        }
+        if (this.sectionService.getCurrentStudentsCountInSection(studentsSections.get(0).getSection().getId())
+                + studentsSections.size() - studentsFromRequestAlreadyInSection > section.getSectionLimit()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("In this section is not enough free spaces - new students cannot be added!\n");
+        }
+        for (StudentSection studentSection : studentsSections) {
+            if (studentSection.getMark() != null) {
+                studentSection.setDate(Timestamp.valueOf(LocalDateTime.now()));
+            }
+            if (!this.sectionService.isStudentAlreadyInSection(studentSection.getStudent().getId(), section.getId())) {
+                sectionService.addStudentToSection(studentSection);
+            }
+        }
+
+        return ResponseEntity.ok("All students added to section!\n");
     }
 
     @RequestMapping(path = "/deleteStudent/{studentSectionId}", method = RequestMethod.DELETE)
