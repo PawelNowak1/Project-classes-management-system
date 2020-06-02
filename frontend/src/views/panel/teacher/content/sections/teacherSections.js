@@ -161,7 +161,6 @@ function TeacherSections(props) {
                                 <th>Numer</th>
                                 <th>Nazwa</th>
                                 <th>Temat</th>
-                                <th>Prowadzący</th>
                                 <th>Status</th>
                                 <th></th>
                             </tr>
@@ -174,9 +173,6 @@ function TeacherSections(props) {
                                                 {section.name}
                                             </td>
                                             <td>{displayTopicName(section)}</td>
-                                            <td>
-                                                {displayTeacherName(section)}
-                                            </td>
                                             <td>
                                                 {getStateName(section.state)}
                                             </td>
