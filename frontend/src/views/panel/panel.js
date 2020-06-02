@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import Admin from './admin/admin';
 import { connect } from 'react-redux';
 import Teacher from './teacher/teacher';
+import Student from './student/student';
 
 function Panel({ user }) {
     let component;
@@ -13,6 +14,8 @@ function Panel({ user }) {
         component = Admin;
     } else if (user.role === 'ROLE_TEACHER') {
         component = Teacher;
+    } else if (user.role === 'ROLE_STUDENT') {
+        component = Student;
     }
 
     return (
