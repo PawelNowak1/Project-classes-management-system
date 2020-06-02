@@ -4,7 +4,7 @@ import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.StudentSection;
 
 public interface SectionService {
-    void createSection(Section section);
+    Long createSection(Section section);
     void deleteSection(Long sectionId);
     Iterable<Section> findAllSections(Long semesterId);
 
@@ -17,4 +17,12 @@ public interface SectionService {
     void changeSectionState(String state, Long sectionId);
 
     void setMarkToStudent(Integer mark, Long studentSectionId);
+
+    Integer getSectionLimit(Long sectionId);
+
+    Section getSection(Long sectionId);
+
+    Long getCurrentStudentsCountInSection(Long sectionId);
+
+    boolean isStudentAlreadyInSection(Long studentId, Long sectionId);
 }
