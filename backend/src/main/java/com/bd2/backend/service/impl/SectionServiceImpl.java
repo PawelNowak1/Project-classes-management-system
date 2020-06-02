@@ -7,6 +7,8 @@ import com.bd2.backend.repository.StudentSectionRepository;
 import com.bd2.backend.service.interfaces.SectionService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,6 +69,7 @@ public class SectionServiceImpl implements SectionService {
         if (optionalSection.isPresent()) {
             StudentSection studentSection = optionalSection.get();
             studentSection.setMark(mark);
+            studentSection.setDate(Timestamp.valueOf(LocalDateTime.now()));
             studentSectionRepository.save(studentSection);
         }
     }
