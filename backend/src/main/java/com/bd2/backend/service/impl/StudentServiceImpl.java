@@ -35,6 +35,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Student> getAllStudents() {
+        return this.studentRepository.findAll();
+    }
+
+    @Override
+    public List<Student> getAllStudentsOnSemester(Long semesterId) {
+        return this.studentRepository.findAllBySemesters(semesterId);
+    }
+
+    @Override
     public void saveAttendance(Attendance attendance) {
         attendance.setDate(Timestamp.valueOf(LocalDateTime.now()));
         attendanceRepository.save(attendance);

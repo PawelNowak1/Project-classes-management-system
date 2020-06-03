@@ -20,4 +20,11 @@ public interface StudentRepository extends PagingAndSortingRepository<Student, L
             countQuery = "select count (s) from Student s join s.semesters sm where sm.id = ?2 and (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%)",
             nativeQuery = false)
     Page<Student> findStudentsPaginated(String name, Long semesterId, Pageable pageable);
+
+    List<Student> findAll();
+
+    @Query(value = "SELECT s FROM Student s JOIN s.semesters sm WHERE sm.id = ?1",
+            countQuery = "SELECT COUNT (s) FROM Student s JOIN s.semesters sm WHERE sm.id = ?1",
+            nativeQuery = false)
+    List<Student> findAllBySemesters(Long semesterId);
 }
