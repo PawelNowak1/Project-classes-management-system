@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class AttachmentService {
@@ -41,5 +42,9 @@ public class AttachmentService {
     public Attachment getFile(Long fileId) throws Exception {
         return this.attachmentRepository.findById(fileId)
                 .orElseThrow(() -> new Exception("Attachment with id " + fileId + " not found!"));
+    }
+
+    public List<Attachment> getAllAttachmentsForSection(Long sectionId){
+        return this.attachmentRepository.findAllBySectionId(sectionId);
     }
 }
