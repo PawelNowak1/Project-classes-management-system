@@ -24,6 +24,7 @@ import {getCookie} from "../../../../../theme/cookies";
 function Teachers (props) {
     const {user,context} = props;
 
+    //REACT HOOKS
     const [search,setSearch] = useState('');
     const [addClient,setAddClient] = useState(false);
 

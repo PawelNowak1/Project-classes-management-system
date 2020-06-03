@@ -10,6 +10,7 @@ import Dashboard from '../../../components/dashboard';
 import { Redirect, Route } from 'react-router-dom';
 import { API_URL } from '../../../theme/constans';
 import { getCookie } from '../../../theme/cookies';
+import Sections from "./content/sections";
 
 function Student(props) {
     const { dispatch, user } = props;
@@ -28,11 +29,11 @@ function Student(props) {
                     padding: '30px',
                 }}
             >
-                {/* <Route path="/panel/sections" component={Sections} />
-                <Route path="/panel/yoursections" component={TeacherSections} /> */}
+                 <Route path="/panel/sections" component={Sections} />
+                {/*<Route path="/panel/yoursections" component={TeacherSections} /> *!/*/}
                 {/*<Route path = '/panel/add' component={Students} />*/}
 
-                {/* <Route render={() => <Redirect to="/panel/yoursections" />} /> */}
+                 <Route render={() => <Redirect to="/panel/sections" />} />
             </div>
         </Dashboard>
     );
