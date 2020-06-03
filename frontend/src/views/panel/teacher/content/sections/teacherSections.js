@@ -37,25 +37,28 @@ function TeacherSections(props) {
 
     useEffect(() => {
         setLoading(true);
-        axios
-            .get(`${API_URL}/sections/all/?semesterId=${context.id}`, {
-                headers: {
-                    Authorization: 'Bearer ' + getCookie('token'),
-                },
-            })
-            .then((res) => {
-                setLoading(false);
 
-                var filteredSections = res.data.filter((x) => {
-                    return (
-                        x.topic &&
-                        x.topic.teacher &&
-                        x.topic.teacher.id === user.id
-                    );
+        if (Number.isInteger(context.id)) {
+            axios
+                .get(`${API_URL}/sections/all/?semesterId=${context.id}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + getCookie('token'),
+                    },
+                })
+                .then((res) => {
+                    setLoading(false);
+
+                    var filteredSections = res.data.filter((x) => {
+                        return (
+                            x.topic &&
+                            x.topic.teacher &&
+                            x.topic.teacher.id === user.id
+                        );
+                    });
+
+                    setSections(filteredSections);
                 });
-
-                setSections(filteredSections);
-            });
+        }
 
         axios
             .get(`${API_URL}/topic/all`, {
@@ -76,7 +79,6 @@ function TeacherSections(props) {
             .then((res) => {
                 setTeachers(res.data.content);
             });
-
     }, [user, refresh, search, context]);
 
     const onDelete = (id) => {
@@ -147,8 +149,11 @@ function TeacherSections(props) {
                             />
                         </div>
                         <div>
-                            <Link to="/panel/sections/add-section">
-                                <Button onClick={addTeacherOption()} disabled={loading}>
+                            <Link to="/panel/yoursections/add-section">
+                                <Button
+                                    onClick={addTeacherOption()}
+                                    disabled={loading}
+                                >
                                     <FontAwesomeIcon icon={faPlusCircle} />
                                     Dodaj sekcję
                                 </Button>
@@ -195,7 +200,7 @@ function TeacherSections(props) {
             </Wrapper>
 
             <Route
-                path="/panel/sections/add-section"
+                path="/panel/yoursections/add-section"
                 component={() => (
                     <AddSection
                         refresh={refresh}
@@ -203,6 +208,7 @@ function TeacherSections(props) {
                         context={context}
                         topics={topics}
                         teachers={teachers}
+                        parent={"/panel/yoursections"}
                     />
                 )}
             />

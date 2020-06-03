@@ -203,6 +203,7 @@ function Sections(props) {
                         context={context}
                         topics={topics}
                         teachers={teachers}
+                        parent={"/panel/sections"}
                     />
                 )}
             />

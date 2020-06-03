@@ -26,7 +26,7 @@ import { sectionStates, getStateName, getStateCode } from '../../sectionStates';
 
 function AddSection(props) {
     const history = useHistory();
-    const { refresh, setRefresh, context, topics } = props;
+    const { refresh, setRefresh, context, topics, parent } = props;
 
     const [loading, setLoading] = useState();
     const [loadingTopic, setLoadingTopic] = useState();
@@ -78,7 +78,7 @@ function AddSection(props) {
             .then((res) => {
                 setLoading(false);
                 setRefresh(!refresh);
-                history.push('/panel/sections');
+                history.push(parent);
             })
             .catch((err) => {
                 setError(err);
@@ -145,7 +145,7 @@ function AddSection(props) {
         if (e.target.name && e.target.name === 'limit') {
             setIsLimitCorrect(!ONLY_NUMBERS_REGEX.test(e.target.value));
         }
-    }
+    };
 
     const findTopicInData = (e) => {
         var t = topics.find((topic) => topic.name === e.target.value);
@@ -191,7 +191,7 @@ function AddSection(props) {
         <>
             <ModalBackground
                 className={'show'}
-                onClick={() => history.push('/panel/sections')}
+                onClick={() => history.push(parent)}
             >
                 <ModalContent
                     maxWidth="550px"
@@ -199,7 +199,7 @@ function AddSection(props) {
                 >
                     <Flex jc="space-between">
                         <Title secondary>Dodawanie sekcji</Title>
-                        <div onClick={() => history.push('/panel/sections')}>
+                        <div onClick={() => history.push(parent)}>
                             <FontAwesomeIcon icon={faTimesCircle} />
                         </div>
                     </Flex>
