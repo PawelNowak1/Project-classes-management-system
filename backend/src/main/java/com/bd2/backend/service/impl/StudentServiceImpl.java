@@ -9,8 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,7 +45,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void saveAttendance(Attendance attendance) {
-        attendance.setDate(Timestamp.valueOf(LocalDateTime.now()));
+        attendance.setDate(new Date());
         attendanceRepository.save(attendance);
     }
 

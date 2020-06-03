@@ -8,8 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -71,7 +70,7 @@ public class SectionController {
         }
 
         if (studentSection.getMark() != null) {
-            studentSection.setDate(Timestamp.valueOf(LocalDateTime.now()));
+            studentSection.setDate(new Date());
         }
 
         sectionService.addStudentToSection(studentSection);
@@ -107,7 +106,7 @@ public class SectionController {
         }
         for (StudentSection studentSection : studentsSections) {
             if (studentSection.getMark() != null) {
-                studentSection.setDate(Timestamp.valueOf(LocalDateTime.now()));
+                studentSection.setDate(new Date());
             }
             if (!this.sectionService.isStudentAlreadyInSection(studentSection.getStudent().getId(), section.getId())) {
                 sectionService.addStudentToSection(studentSection);
