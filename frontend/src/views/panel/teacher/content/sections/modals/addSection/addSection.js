@@ -82,20 +82,28 @@ function AddSection(props) {
             });
     };
 
+    const createTopicObject = () => {
+        return {
+            description: topic.topicDescription,
+            name: topic.topicName,
+            status: topic.topicStatus,
+            teacher: {
+                id: topic.teacherId,
+            },
+        };
+    }
+
     const onSubmitTopic = () => {
         setLoadingTopic(true);
+
+        var newTopic = createTopicObject();
+        //dodanie nowego topicu do listy wyswietlanej, jako przedostatni element, bo ostatnia jest opcja "Dodaj nowy..."
+        topics.splice(topics.length - 1, 0, newTopic); 
 
         axios
             .post(
                 `${API_URL}/topic/create`,
-                {
-                    description: topic.topicDescription,
-                    name: topic.topicName,
-                    status: topic.topicStatus,
-                    teacher: {
-                        id: topic.teacherId,
-                    },
-                },
+                newTopic,
                 {
                     headers: {
                         Authorization: 'Bearer ' + getCookie('token'),
@@ -293,13 +301,15 @@ function AddSection(props) {
                                 </>
                             )}
                         </div>
-                        <Button
-                            big
-                            style={{ marginTop: '30px' }}
-                            onClick={onSubmit}
-                        >
-                            {loading ? 'Loading ...' : 'Dodaj sekcję'}
-                        </Button>
+                        {!newTopic && (
+                            <Button
+                                big
+                                style={{ marginTop: '30px' }}
+                                onClick={onSubmit}
+                            >
+                                {loading ? 'Loading ...' : 'Dodaj sekcję'}
+                            </Button>
+                        )}
                     </Content>
                 </ModalContent>
             </ModalBackground>
