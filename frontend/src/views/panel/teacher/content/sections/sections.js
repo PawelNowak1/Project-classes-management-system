@@ -37,17 +37,19 @@ function Sections(props) {
         setLoading(true);
         console.log(context);
 
-        axios
-            .get(`${API_URL}/sections/all/?semesterId=${context.id}`, {
-                headers: {
-                    Authorization: 'Bearer ' + getCookie('token'),
-                },
-            })
-            .then((res) => {
-                setLoading(false);
-                setSections(res.data);
-                console.log(res.data);
-            });
+        if (Number.isInteger(context.id)) {
+            axios
+                .get(`${API_URL}/sections/all/?semesterId=${context.id}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + getCookie('token'),
+                    },
+                })
+                .then((res) => {
+                    setLoading(false);
+                    setSections(res.data);
+                    console.log(res.data);
+                });
+        }
 
         axios
             .get(`${API_URL}/topic/all`, {

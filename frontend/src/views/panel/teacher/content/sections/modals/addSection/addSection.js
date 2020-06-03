@@ -16,7 +16,10 @@ import { faDownload, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../../../../../../components/button';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { API_URL } from '../../../../../../../theme/constans';
+import {
+    API_URL,
+    ONLY_NUMBERS_REGEX,
+} from '../../../../../../../theme/constans';
 import { connect } from 'react-redux';
 import { getCookie } from '../../../../../../../theme/cookies';
 import { sectionStates, getStateName, getStateCode } from '../../sectionStates';
@@ -28,7 +31,7 @@ function AddSection(props) {
     const [loading, setLoading] = useState();
     const [loadingTopic, setLoadingTopic] = useState();
     const [error, setError] = useState();
-
+    const [isLimitCorrect, setIsLimitCorrect] = useState(false);
     const [newTopic, setNewTopic] = useState(false);
 
     const [state, setState] = useState({
@@ -91,25 +94,21 @@ function AddSection(props) {
                 id: topic.teacherId,
             },
         };
-    }
+    };
 
     const onSubmitTopic = () => {
         setLoadingTopic(true);
 
         var newTopic = createTopicObject();
         //dodanie nowego topicu do listy wyswietlanej, jako przedostatni element, bo ostatnia jest opcja "Dodaj nowy..."
-        topics.splice(topics.length - 1, 0, newTopic); 
+        topics.splice(topics.length - 1, 0, newTopic);
 
         axios
-            .post(
-                `${API_URL}/topic/create`,
-                newTopic,
-                {
-                    headers: {
-                        Authorization: 'Bearer ' + getCookie('token'),
-                    },
-                }
-            )
+            .post(`${API_URL}/topic/create`, newTopic, {
+                headers: {
+                    Authorization: 'Bearer ' + getCookie('token'),
+                },
+            })
             .then((res) => {
                 console.log(res);
                 setTopic({ ...topic, topicId: res.data });
@@ -120,8 +119,6 @@ function AddSection(props) {
                 });
                 setNewTopic(false);
                 setLoadingTopic(false);
-                // setRefresh(!refresh);
-                // history.push('/panel/sections');
             })
             .catch((err) => {
                 setError(err);
@@ -133,6 +130,8 @@ function AddSection(props) {
             ...state,
             [e.target.name]: e.target.value,
         });
+
+        validateSectionLimit(e);
     };
 
     const onChangeTopic = (e) => {
@@ -141,6 +140,12 @@ function AddSection(props) {
             [e.target.name]: e.target.value,
         });
     };
+
+    const validateSectionLimit = (e) => {
+        if (e.target.name && e.target.name === 'limit') {
+            setIsLimitCorrect(!ONLY_NUMBERS_REGEX.test(e.target.value));
+        }
+    }
 
     const findTopicInData = (e) => {
         var t = topics.find((topic) => topic.name === e.target.value);
@@ -216,9 +221,11 @@ function AddSection(props) {
                         </InputRow>
                         <InputRow gtc="3fr">
                             <Input
+                                error={isLimitCorrect}
+                                errorText="Podaj liczbę."
                                 label="Limit"
                                 name="limit"
-                                value={state.sectionLimit}
+                                value={state.limit}
                                 onChange={onChange}
                             />
                         </InputRow>
@@ -304,6 +311,7 @@ function AddSection(props) {
                         {!newTopic && (
                             <Button
                                 big
+                                disabled={isLimitCorrect}
                                 style={{ marginTop: '30px' }}
                                 onClick={onSubmit}
                             >
@@ -331,7 +339,7 @@ const Border = styled.div`
     padding: 20px;
     margin-top: 20px;
     border-radius: 10px;
-    border-color: grey;
+    border-color: lightgray;
     border-width: 2px;
 `;
 
