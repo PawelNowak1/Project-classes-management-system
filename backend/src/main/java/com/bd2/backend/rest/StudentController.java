@@ -23,8 +23,8 @@ public class StudentController {
 
     @RequestMapping(path = "/paginated", method = RequestMethod.GET)
     public ResponseEntity<Page<Student>> findStudents(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                   @RequestParam(defaultValue = "10") Integer pageSize,
-                                                   @RequestParam(required = false) String name) {
+                                                      @RequestParam(defaultValue = "10") Integer pageSize,
+                                                      @RequestParam(required = false) String name) {
         return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, name));
     }
 
@@ -36,6 +36,16 @@ public class StudentController {
         return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, semesterId, name));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Student>> getAllStudents() {
+        return ResponseEntity.ok(this.studentService.getAllStudents());
+    }
+
+    @GetMapping("/all/{semesterId}")
+    public ResponseEntity<List<Student>> getAllStudentsOnSpecifiedSemester(@PathVariable(value = "semesterId") Long semesterId) {
+        return ResponseEntity.ok(this.studentService.getAllStudentsOnSemester(semesterId));
+    }
+
     @RequestMapping(path = "/checkattendance", method = RequestMethod.POST)
     public ResponseEntity<?> checkAttendance(@RequestBody Attendance attendance) {
         studentService.saveAttendance(attendance);
@@ -44,14 +54,14 @@ public class StudentController {
 
     @RequestMapping(path = "/checkaattendances", method = RequestMethod.POST)
     public ResponseEntity<?> checkAttendanceList(@RequestBody List<Attendance> attendance) {
-        for(Attendance attend : attendance)
+        for (Attendance attend : attendance)
             studentService.saveAttendance(attend);
         return ResponseEntity.ok("ok");
     }
 
     @RequestMapping(path = "/getattendance", method = RequestMethod.GET)
     public ResponseEntity<List<Attendance>> checkAttendanceList(@RequestParam(required = false) Long sectionId,
-                                                 @RequestParam(required = false) Long studentId) {
+                                                                @RequestParam(required = false) Long studentId) {
         return ResponseEntity.ok(studentService.getAttendance(sectionId, studentId));
     }
 

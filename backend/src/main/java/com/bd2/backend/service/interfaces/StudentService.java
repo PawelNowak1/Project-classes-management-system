@@ -10,6 +10,8 @@ public interface StudentService {
 
     Page<Student> findStudents(int page, int size, String name);
     Page<Student> findStudents(int page, int size, Long semesterId, String name);
+    List<Student> getAllStudents();
+    List<Student> getAllStudentsOnSemester(Long semesterId);
 
     void saveAttendance(Attendance attendance);
 

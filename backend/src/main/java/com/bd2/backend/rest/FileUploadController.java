@@ -16,15 +16,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RequestMapping("/file")
-@PreAuthorize("hasRole('ROLE_STUDENT')")
+@PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
 public class FileUploadController {
 
     private final AttachmentService attachmentService;
@@ -83,6 +80,11 @@ public class FileUploadController {
             return ResponseEntity.badRequest()
                     .body(Collections.singletonMap("error", e.getMessage()));
         }
+    }
+
+    @GetMapping("/all/{sectionId}")
+    public ResponseEntity<List<Attachment>> getAllAttachmentsIdsForSection(@PathVariable("sectionId") Long sectionId) {
+        return ResponseEntity.ok(this.attachmentService.getAllAttachmentsForSection(sectionId));
     }
 
     @GetMapping("/info/{fileId}")
