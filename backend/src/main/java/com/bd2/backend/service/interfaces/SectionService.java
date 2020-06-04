@@ -8,6 +8,8 @@ public interface SectionService {
     void deleteSection(Long sectionId);
     Iterable<Section> findAllSections(Long semesterId);
 
+    Section findSection(Long sectionId);
+
     void addStudentToSection(StudentSection studentSection);
 
     Iterable<StudentSection> findStudentSection(Long semesterId, Long sectionId);
