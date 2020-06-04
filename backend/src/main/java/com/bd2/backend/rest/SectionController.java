@@ -44,6 +44,11 @@ public class SectionController {
         return ResponseEntity.ok(sectionService.findAllSections(semesterId));
     }
 
+    @RequestMapping(path = "/{sectionId}", method = RequestMethod.GET)
+    public ResponseEntity<Section> getSection(@PathVariable("sectionId") Long sectionId) {
+        return ResponseEntity.ok(sectionService.findSection(sectionId));
+    }
+
     @RequestMapping(path = "/addStudent", method = RequestMethod.POST)
     public ResponseEntity<?> addStudent(@RequestBody StudentSection studentSection) {
         Section section = this.sectionService.getSection(studentSection.getSection().getId());

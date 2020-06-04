@@ -38,6 +38,12 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
+    public Section findSection(Long sectionId) {
+        Optional<Section> optionalSection = sectionRepository.findById(sectionId);
+        return optionalSection.orElse(null);
+    }
+
+    @Override
     public void addStudentToSection(StudentSection studentSection) {
         studentSectionRepository.save(studentSection);
     }
