@@ -60,13 +60,13 @@ public class StudentController {
     }
 
     @RequestMapping(path = "/getattendance", method = RequestMethod.GET)
-    public ResponseEntity<List<Attendance>> checkAttendanceList(@RequestParam(required = false) Long sectionId,
+    public ResponseEntity<List<Attendance>> getAttendanceList(@RequestParam(required = false) Long sectionId,
                                                                 @RequestParam(required = false) Long studentId) {
         return ResponseEntity.ok(studentService.getAttendance(sectionId, studentId));
     }
 
-    @RequestMapping(path = "/attendance/delete/{attendanceId}", method = RequestMethod.GET)
-    public ResponseEntity<?> checkAttendanceList(@PathVariable("attendanceId") Long attendanceId) {
+    @RequestMapping(path = "/attendance/delete/{attendanceId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteAttendance(@PathVariable("attendanceId") Long attendanceId) {
         studentService.deleteAttendance(attendanceId);
         return ResponseEntity.ok("ok");
     }
