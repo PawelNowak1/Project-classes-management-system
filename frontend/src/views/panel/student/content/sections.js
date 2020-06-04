@@ -1,5 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components'
+import axios from "axios";
+import {API_URL} from "../../../../theme/constans";
+import {getCookie} from "../../../../theme/cookies";
+import {connect} from "react-redux";
 
 function Sections (props) {
     //HOOKI
@@ -14,10 +18,27 @@ function Sections (props) {
         activePage:0,
         totalPages:0,
     });
-    const [students,setStudents] = useState([]);
+    const [sections,setSections] = useState([]);
 
     //USEEFFECT
+    useEffect(() => {
+      setLoading(true);
 
+      if(context){
+          axios.get(`${API_URL}/sections/all?semesterId=${context}`,{
+              headers: {
+                  Authorization: 'Bearer ' + getCookie('token'),
+              },
+          }).then((response) => {
+              setLoading(false);
+              setSections(response.data)
+          })
+              .catch((err) => {
+                  setLoading(false);
+                  console.log(err.response)
+              });
+      }
+  },[context]);
 
     return(
         <>
@@ -32,34 +53,22 @@ function Sections (props) {
                     <tr>
                         <th>Numer sekcji</th>
                         <th>Nazwa sekcji</th>
+                        <th>Nazwa tematu</th>
                         <th>Nauczyciel</th>
-                        <th>Email nauczyciela</th>
+                        <th>Status</th>
                     </tr>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Sekcja1</td>
-                        <td>Paduch</td>
-                        <td>paduch@polsl.pl</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Sekcja numer 2</td>
-                        <td>Baron</td>
-                        <td>baron@polsl.pl</td>
-                    </tr>
-                    </tbody>
-                    {
-                        students.map(student =>
+                      {
+                        sections.map(section =>
                             <tr>
-                                <td>#{student.id}</td>
-                                <td>{student.firstName}</td>
-                                <td className="name">{student.lastName}</td>
-                                <td>{student.user.email}</td>
-                           </tr>
+                                <td>#{section.id}</td>
+                                <td>{section.name}</td>
+                                <td className="name">{section.topic && section.topic.name}</td>
+                                <td>{`${section.topic && section.topic.teacher.firstName} ${section.topic && section.topic.teacher.lastName}`}</td>
+                            </tr>
                         )
                     }
-
+                    </tbody>
                 </ContentTable>
                 {
                     loading &&
@@ -76,7 +85,13 @@ function Sections (props) {
 Sections.propTypes = {
 };
 
-export default Sections;
+function mapStateToProps(state) {
+  return {
+      context:state.context.current.id
+  };
+}
+
+export default connect(mapStateToProps)(Sections);
 
 const Pagination = styled.div`
   display: flex;
