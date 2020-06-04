@@ -36,6 +36,7 @@
       <change afterPath="$PROJECT_DIR$/src/views/panel/admin/navigation/navigation.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/views/panel/panel.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/views/panel/student/content/sections.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/teacher/content/currentSetion/currentSection.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />

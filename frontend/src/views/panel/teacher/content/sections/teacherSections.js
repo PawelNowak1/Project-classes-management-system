@@ -8,7 +8,7 @@ import {
     faBuilding,
     faChevronLeft,
     faChevronRight,
-    faEllipsisH,
+    faEllipsisH, faPen,
     faPlusCircle,
     faTrash,
     faUser,
@@ -24,7 +24,7 @@ import AddSection from './modals/addSection/addSection';
 import { getStateName } from './sectionStates';
 
 function TeacherSections(props) {
-    const { user, context } = props;
+    const { user, context,history } = props;
 
     const [search, setSearch] = useState('');
 
@@ -188,6 +188,12 @@ function TeacherSections(props) {
                                                         onDelete(section.id)
                                                     }
                                                 />
+                                                <FontAwesomeIcon
+                                                    icon={faPen}
+                                                    onClick={() =>
+                                                        history.push(`/panel/currentsection/${section.id}`)
+                                                    }
+                                                />
                                             </td>
                                         </tr>
                                     )
@@ -336,6 +342,7 @@ const ContentTable = styled.table`
         }
         &.trash {
             cursor: pointer;
+            display: flex;
         }
         span {
             text-transform: uppercase;

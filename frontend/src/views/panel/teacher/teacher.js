@@ -7,11 +7,12 @@ import { getAllContexts, logoutUser } from '../../../redux/actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from '../../../components/dashboard';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route ,Switch} from 'react-router-dom';
 import Sections from './content/sections/sections';
 import TeacherSections from './content/sections/teacherSections';
 import { API_URL } from '../../../theme/constans';
 import { getCookie } from '../../../theme/cookies';
+import CurrentSection from "./content/currentSetion/currentSection";
 
 function Teacher(props) {
     const { dispatch, user } = props;
@@ -30,11 +31,14 @@ function Teacher(props) {
                     padding: '30px',
                 }}
             >
-                <Route path="/panel/sections" component={Sections} />
-                <Route path="/panel/yoursections" component={TeacherSections} />
-                {/*<Route path = '/panel/add' component={Students} />*/}
+                <Switch>
+                    <Route path="/panel/sections" component={Sections} />
+                    <Route path="/panel/yoursections" component={TeacherSections} />
+                    <Route path="/panel/currentsection/:id" component={CurrentSection} />
+                    {/*<Route path = '/panel/add' component={Students} />*/}
 
-                <Route render={() => <Redirect to="/panel/yoursections" />} />
+                    <Route render={() => <Redirect to="/panel/yoursections" />} />
+                </Switch>
             </div>
         </Dashboard>
     );
