@@ -6,11 +6,13 @@ import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.service.impl.StudentServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RequestMapping("/student")
