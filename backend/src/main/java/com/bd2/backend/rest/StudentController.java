@@ -2,6 +2,7 @@ package com.bd2.backend.rest;
 
 import com.bd2.backend.entities.Attendance;
 import com.bd2.backend.entities.Student;
+import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.service.impl.StudentServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -69,5 +70,10 @@ public class StudentController {
     public ResponseEntity<?> checkAttendanceList(@PathVariable("attendanceId") Long attendanceId) {
         studentService.deleteAttendance(attendanceId);
         return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping(path = "/mark/{studentId}")
+    public ResponseEntity<List<MarksResponse>> getMarkForStudent(@PathVariable("studentId") Long studentId) {
+        return ResponseEntity.ok(this.studentService.getAllStudentsMarks(studentId));
     }
 }

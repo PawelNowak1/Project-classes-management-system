@@ -4,12 +4,14 @@ import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.StudentSection;
 import com.bd2.backend.repository.SectionRepository;
 import com.bd2.backend.repository.StudentSectionRepository;
+import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.service.interfaces.SectionService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SectionServiceImpl implements SectionService {
@@ -103,5 +105,17 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public boolean isStudentAlreadyInSection(Long studentId, Long sectionId) {
         return this.studentSectionRepository.findByStudentIdAndSectionId(studentId, sectionId).isPresent();
+    }
+
+    @Override
+    public List<MarksResponse> getAllStudentsMarksInSection(Long sectionId) {
+        return this.studentSectionRepository.findAllBySectionId(sectionId)
+                .stream().map(studentSection ->
+                        new MarksResponse(
+                                studentSection.getDate(),
+                                studentSection.getMark(),
+                                studentSection.getSection().getId(),
+                                studentSection.getStudent().getId()
+                        )).collect(Collectors.toList());
     }
 }
