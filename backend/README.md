@@ -1,4 +1,6 @@
-# Backend application
+# Backend application ![Heroku](https://heroku-badge.herokuapp.com/?app=sekcjeprojektowe)
+
+Our backend is deployed and available on heroku at [sekcjeprojektowe.herokuapp.com](sekcjeprojektowe.herokuapp.com), feel free to try it.
 
 In our system are available three roles: `ROLE_ADMIN`, `ROLE_TEACHER` and `ROLE_STUDENT`. Every role has different accessible paths based on authorization.
 
