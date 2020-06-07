@@ -4,6 +4,8 @@ import com.bd2.backend.entities.Attendance;
 import com.bd2.backend.entities.Student;
 import com.bd2.backend.repository.AttendanceRepository;
 import com.bd2.backend.repository.StudentRepository;
+import com.bd2.backend.repository.StudentSectionRepository;
+import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.service.interfaces.StudentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,16 +13,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final AttendanceRepository attendanceRepository;
+    private final StudentSectionRepository studentSectionRepository;
 
-    public StudentServiceImpl(StudentRepository studentRepository, AttendanceRepository attendanceRepository) {
+    public StudentServiceImpl(StudentRepository studentRepository, AttendanceRepository attendanceRepository,
+                              StudentSectionRepository studentSectionRepository) {
         this.studentRepository = studentRepository;
         this.attendanceRepository = attendanceRepository;
+        this.studentSectionRepository = studentSectionRepository;
     }
 
     @Override
@@ -57,5 +63,16 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteAttendance(Long attendanceId) {
         attendanceRepository.deleteById(attendanceId);
+    }
+
+    @Override
+    public List<MarksResponse> getAllStudentsMarks(Long studentId) {
+        return this.studentSectionRepository.getAllByStudentUserId(studentId)
+                .stream().map(studentSection ->
+                    new MarksResponse(studentSection.getDate(),
+                            studentSection.getMark(),
+                            studentSection.getSection().getId(),
+                            studentSection.getStudent().getId())
+                ).collect(Collectors.toList());
     }
 }

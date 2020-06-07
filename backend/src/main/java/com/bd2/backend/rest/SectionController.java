@@ -2,15 +2,18 @@ package com.bd2.backend.rest;
 
 import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.StudentSection;
+import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.security.SectionStates;
 import com.bd2.backend.service.impl.SectionServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 
+@PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RequestMapping("/sections")
@@ -82,7 +85,7 @@ public class SectionController {
         return ResponseEntity.ok("Dodano studenta do sekcji\n");
     }
 
-    @RequestMapping(path = "/addStudents", method = RequestMethod.POST) //przetestować
+    @RequestMapping(path = "/addStudents", method = RequestMethod.POST)
     public ResponseEntity<?> addStudent(@RequestBody List<StudentSection> studentsSections) {
         Section section = this.sectionService.getSection(studentsSections.get(0).getSection().getId());
 
@@ -137,5 +140,10 @@ public class SectionController {
     public ResponseEntity<?> setMarkToStudent(@RequestParam Integer mark, @RequestParam Long studentSectionId) {
         sectionService.setMarkToStudent(mark, studentSectionId);
         return ResponseEntity.ok("Wystawiono ocene");
+    }
+
+    @GetMapping(path = "/mark/{sectionId}")
+    public ResponseEntity<List<MarksResponse>> getAllMarksForStudentsInSection(@PathVariable("sectionId") Long sectionId) {
+        return ResponseEntity.ok(this.sectionService.getAllStudentsMarksInSection(sectionId));
     }
 }
