@@ -83,11 +83,14 @@ function CurrentSection (props) {
 
                         <div>
                             <ul>
-                                <li>sxxwxsxw</li>
-                                <li>sxxwxsxw</li>
-                                <li>sxxwxsxw</li>
+                                <li>zaloacznik_1.pdf</li>
+                                <li>zaloacznik_2.pdf</li>
+                                <li>zaloacznik_3.pdf</li>
                             </ul>
                         </div>
+                        <Button style={{margin:'0 auto',marginTop:'20px'}}>
+                            Dodaj załącznik
+                        </Button>
                     </InfoDesc>
                     <div style={{width:'100%',overflowX:'scroll'}}>
                         <ContentTable cellspacing="0" cellpadding="0">
