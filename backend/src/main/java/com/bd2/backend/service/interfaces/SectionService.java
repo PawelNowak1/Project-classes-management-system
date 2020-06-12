@@ -2,6 +2,9 @@ package com.bd2.backend.service.interfaces;
 
 import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.StudentSection;
+import com.bd2.backend.response.MarksResponse;
+
+import java.util.List;
 
 public interface SectionService {
     Long createSection(Section section);
@@ -27,4 +30,6 @@ public interface SectionService {
     Long getCurrentStudentsCountInSection(Long sectionId);
 
     boolean isStudentAlreadyInSection(Long studentId, Long sectionId);
+
+    List<MarksResponse> getAllStudentsMarksInSection(Long sectionId);
 }
