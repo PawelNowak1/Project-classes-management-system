@@ -191,7 +191,7 @@ function TeacherSections(props) {
                                                 <FontAwesomeIcon
                                                     icon={faPen}
                                                     onClick={() =>
-                                                        history.push(`/panel/currentsection/${section.id}`)
+                                                        history.push(`/panel/section/${section.id}`)
                                                     }
                                                 />
                                             </td>

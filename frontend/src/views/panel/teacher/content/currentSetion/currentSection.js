@@ -4,21 +4,43 @@ import styled from 'styled-components'
 import Select from "../../../../../components/select";
 import {getStateCode, getStateName, sectionStates} from "../sections/sectionStates";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faTrash} from "@fortawesome/free-solid-svg-icons";
+import Button from "../../../../../components/button";
+import {getCookie} from "../../../../../theme/cookies";
+import axios from "axios";
+import {API_URL} from "../../../../../theme/constans";
+import AddAttendance from "./modals/addAttendance/addAttendance";
 
 function CurrentSection (props) {
-    const [section,setSection] = useState({
-        status:sectionStates.open
-    });
+    const [addAttendance,setAddAttendance] = useState(false);
+    const [loading,setLoading] = useState(false);
+    const [section,setSection] = useState({});
 
     useEffect(() => {
-        //WYSLEMY ZAPYTANIE DO SERWERA I USTAWIMY W SETSECTION()
+        setLoading(true);
+        axios
+            .get(`${API_URL}/sections/${props.match.params.id}`, {
+                headers: {
+                    Authorization: 'Bearer ' + getCookie('token'),
+                },
+            })
+            .then((res) => {
+                setSection(res.data);
+                setLoading(false);
+            });
     },[]);
 
+    if(loading){
+        return (
+            <p>Loading ...</p>
+        )
+    }
+
     return(
+        <>
         <Wrapper>
             <Header>
-                Dypa sekcja
+                {section.name}
             </Header>
             <Content>
                 <InfoBody>
@@ -33,27 +55,28 @@ function CurrentSection (props) {
                                     getStateName(sectionStates.finished),
                                     getStateName(sectionStates.registered),
                                 ]}
-                                value={getStateName(section.status)}
-                                onChange={(e) => setSection({...section,status:getStateCode(
+                                value={getStateName(section.state)}
+                                onChange={(e) => setSection({...section,state:getStateCode(
                                         e.target.value
                                     )})}
                             />
                         </div>
-                        <InfoDate>
-                            <span>Data:</span>
-                            01/04/2020
-                        </InfoDate>
+                        {/*<InfoDate>*/}
+                        {/*    <span>Data:</span>*/}
+                        {/*    01/04/2020*/}
+                        {/*</InfoDate>*/}
                     </InfoSelect>
                     <InfoDesc>
-                        <h2>Opis teamtu</h2>
+                        <h2>Nazwa teamtu</h2>
 
-                        <p>W przyszłości tutaj znajdzie się opis tematu, który wprowadzi tutaj wykładowca by przybliżyć studentom zagadnienie. W przyszłości tutaj znajdzie się opis tematu, który wprowadzi tutaj wykładowca by przybliżyć studentom zagadnienie. W przyszłości tutaj znajdzie się opis tematu, który wprowadzi tutaj wykładowca by przybliżyć studentom zagadnienie.</p>
+                        <p>
+                            {section.topic && section.topic.name}
+                        </p>
 
-                        <h2>Zadania</h2>
+                        <h2>Opis tematu</h2>
 
                         <div>
-                            <p>1. Tutaj wykładowca może napisać jakie zadania ma wykonać student by lepiej mógł zrozumieć temat lub by sprawdzić wiedze oraz umiejętności studenta na temat tego zagadnienia.</p>
-                            <p>2. Tutaj wykładowca może napisać jakie zadania ma wykonać student by lepiej mógł zrozumieć temat lub by sprawdzić wiedze i umiejętności studenta na temat tego zagadnienia.  </p>
+                           <p>{section.topic && section.topic.description}</p>
                         </div>
 
                         <h2>Załączniki</h2>
@@ -66,18 +89,19 @@ function CurrentSection (props) {
                             </ul>
                         </div>
                     </InfoDesc>
-                    <ContentTable cellspacing="0" cellpadding="0">
-                        <tbody>
-                        <tr>
-                            <th>Imię i nazwisko</th>
-                            <th>Załączniki</th>
-                            <th>Komentarz do załącznika</th>
-                            <th>Data</th>
-                            <th></th>
-                        </tr>
+                    <div style={{width:'100%',overflowX:'scroll'}}>
+                        <ContentTable cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr>
+                                <th>Imię i nazwisko</th>
+                                <th>Załączniki</th>
+                                <th>Komentarz do załącznika</th>
+                                <th>Data</th>
+                                <th></th>
+                            </tr>
                             <tr>
                                 <td className="name">
-                                  Adam Wolny
+                                    Adam Wolny
                                 </td>
                                 <TdLinks>
                                     <a href="">swxswxwsxwsxw.pdf</a>
@@ -100,36 +124,138 @@ function CurrentSection (props) {
                                     />
                                 </td>
                             </tr>
-                        <tr>
-                            <td className="name">
-                                Adam Wolny
-                            </td>
-                            <TdLinks>
-                                <a href="">swxswxwsxwsxw.pdf</a>
-                                <a href="">swxswxwsxwsxw.pdf</a>
-                            </TdLinks>
-                            <Td>
-                                <p>wsxxwsxwsxw</p>
-                                <p>wsxxwsxwsxw</p>
-                            </Td>
-                            <Td>
-                                <p>wsxxwsxwsxw</p>
-                                <p>wsxxwsxwsxw</p>
-                            </Td>
-                            <td className="trash">
-                                <FontAwesomeIcon
-                                    icon={faTrash}
-                                    // onClick={() =>
-                                    //     onDelete(section.id)
-                                    // }
-                                />
-                            </td>
-                        </tr>
-                        </tbody>
-                    </ContentTable>
+                            <tr>
+                                <td className="name">
+                                    Adam Wolny
+                                </td>
+                                <TdLinks>
+                                    <a href="">swxswxwsxwsxw.pdf</a>
+                                    <a href="">swxswxwsxwsxw.pdf</a>
+                                </TdLinks>
+                                <Td>
+                                    <p>wsxxwsxwsxw</p>
+                                    <p>wsxxwsxwsxw</p>
+                                </Td>
+                                <Td>
+                                    <p>wsxxwsxwsxw</p>
+                                    <p>wsxxwsxwsxw</p>
+                                </Td>
+                                <td className="trash">
+                                    <FontAwesomeIcon
+                                        icon={faTrash}
+                                        // onClick={() =>
+                                        //     onDelete(section.id)
+                                        // }
+                                    />
+                                </td>
+                            </tr>
+                            </tbody>
+                        </ContentTable>
+                    </div>
+                    <div>
+                        <div style={{display:'flex',marginTop:20}}>
+                            <NameTable>
+                                <TableNameHeader>
+                                    <div>
+                                        Imię i nazwisko
+                                    </div>
+                                </TableNameHeader>
+                                <TableNameContent>
+                                    <div>
+                                        Adam Wolny
+                                    </div>
+                                    <div>
+                                        Adam Wolny
+                                    </div>
+                                </TableNameContent>
+                            </NameTable>
+                            <DateTable>
+                                <TableDateHeader>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                    <div>
+                                        20.08<br/>2020
+                                    </div>
+                                </TableDateHeader>
+                                <TableDateContent>
+                                    <div>
+                                        <div>
+                                            <FontAwesomeIcon icon={faCheck}/>
+                                        </div>
+                                        <div>
+                                            <FontAwesomeIcon icon={faCheck}/>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <FontAwesomeIcon icon={faCheck}/>
+                                        </div>
+                                        <div>
+                                            <FontAwesomeIcon icon={faCheck}/>
+                                        </div>
+                                    </div>
+                                </TableDateContent>
+                            </DateTable>
+                        </div>
+                        <Button style={{margin:'0 auto',marginTop:'20px'}} onClick={() => setAddAttendance(true)}>Dodaj obecność</Button>
+                    </div>
                 </InfoBody>
             </Content>
         </Wrapper>
+
+        {
+            addAttendance &&
+                <AddAttendance
+                    onBack={() => setAddAttendance(false)}
+                />
+        }
+        </>
     )
 };
 
@@ -153,6 +279,7 @@ const ContentTable = styled.table`
     border-collapse: collapse;
     margin-top: 20px;
     width: 100%;
+    overflow-x: scroll;
     tr {
         border-bottom: 1px solid ${({ theme }) => theme.fourthColor};
         &:first-of-type,
@@ -241,6 +368,71 @@ const ContentTable = styled.table`
             }
         }
     }
+`;
+
+const DateTable = styled.div`
+  flex: 1;
+  overflow-x: scroll;
+`;
+
+const TableDateContent = styled.div`       
+ >div{
+    display: flex;
+    >div{
+    font-size: ${({ theme }) => theme.font.XS};
+  color: ${({ theme }) => theme.thirdColor};
+  font-weight: ${({ theme }) => theme.font.Light};
+       width: 60px;
+           min-width: 60px;
+      padding: 6px 8px; 
+      text-align: center;
+      border-right: 1px solid ${({theme}) => theme.secondColor};
+      height: 44px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+   }
+`;
+
+const TableDateHeader = styled.div`
+  display: flex;
+  >div{
+    min-width: 60px;
+    width: 60px;
+   padding: 6px 8px;
+    text-align: center;
+    border-right: 1px solid ${({theme}) => theme.secondColor};
+     background: ${({ theme }) => theme.fourthColor};
+  font-size: ${({ theme }) => theme.font.XS};
+  font-weight: ${({ theme }) => theme.font.Regular};
+  color: ${({ theme }) => theme.secondColor};
+  }
+`;
+
+const TableNameContent = styled.div`
+  div{
+     min-height: 44px;
+     display: flex;
+     align-items: center;
+  }
+`;
+
+const TableNameHeader = styled.div`
+    background: ${({ theme }) => theme.fourthColor};
+    font-size: ${({ theme }) => theme.font.XS};
+    font-weight: ${({ theme }) => theme.font.Regular};
+    color: ${({ theme }) => theme.secondColor};
+    text-align: left;
+    >div{
+      padding: 6px 8px;
+      height: 44px;
+    }
+`;
+
+const NameTable = styled.div`
+   width: 300px;
+   border-right: 1px solid ${({theme}) => theme.secondColor};
 `;
 
 const InfoDesc = styled.div`

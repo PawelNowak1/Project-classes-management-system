@@ -29,12 +29,13 @@ function Teacher(props) {
                     flex: '1 1',
                     background: 'rgb(240,240,240)',
                     padding: '30px',
+                    maxWidth:'calc(100% - 300px)'
                 }}
             >
                 <Switch>
                     <Route path="/panel/sections" component={Sections} />
                     <Route path="/panel/yoursections" component={TeacherSections} />
-                    <Route path="/panel/currentsection/:id" component={CurrentSection} />
+                    <Route path="/panel/section/:id" component={CurrentSection} />
                     {/*<Route path = '/panel/add' component={Students} />*/}
 
                     <Route render={() => <Redirect to="/panel/yoursections" />} />
