@@ -91,6 +91,7 @@ function CurrentSection (props) {
                         <Button style={{margin:'0 auto',marginTop:'20px'}}>
                             Dodaj załącznik
                         </Button>
+                        
                     </InfoDesc>
                     <div style={{width:'100%',overflowX:'scroll'}}>
                         <ContentTable cellspacing="0" cellpadding="0">
