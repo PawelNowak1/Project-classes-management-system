@@ -11,15 +11,15 @@ import java.util.List;
 
 public interface StudentRepository extends PagingAndSortingRepository<Student, Long> {
 
-    @Query(value = "select s from Student s where (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%)",
-            countQuery = "select count (s) from Student s where (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%)",
+    @Query(value = "select s from Student s where (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%) and (?2 is null or s.user.active = ?2)",
+            countQuery = "select count (s) from Student s where (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%) and (?2 is null or s.user.active = ?2)",
             nativeQuery = false)
-    Page<Student> findStudentsPaginated(String name, Pageable pageable);
+    Page<Student> findStudentsPaginated(String name, String active, Pageable pageable);
 
-    @Query(value = "select s from Student s join s.semesters sm where sm.id = ?2 and (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%)",
-            countQuery = "select count (s) from Student s join s.semesters sm where sm.id = ?2 and (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%)",
+    @Query(value = "select s from Student s join s.semesters sm where sm.id = ?2 and (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%) and (?3 is null or s.user.active = ?3)",
+            countQuery = "select count (s) from Student s join s.semesters sm where sm.id = ?2 and (?1 is null or s.lastName like %?1% or s.firstName like %?1% or s.user.id like %?1%) and (?3 is null or s.user.active = ?3)",
             nativeQuery = false)
-    Page<Student> findStudentsPaginated(String name, Long semesterId, Pageable pageable);
+    Page<Student> findStudentsPaginated(String name, Long semesterId, String active, Pageable pageable);
 
     List<Student> findAll();
 

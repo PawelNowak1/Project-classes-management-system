@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface StudentService {
 
-    Page<Student> findStudents(int page, int size, String name);
-    Page<Student> findStudents(int page, int size, Long semesterId, String name);
+    Page<Student> findStudents(int page, int size, String name, Boolean active);
+    Page<Student> findStudents(int page, int size, Long semesterId, String name, Boolean active);
     List<Student> getAllStudents();
     List<Student> getAllStudentsOnSemester(Long semesterId);
 
