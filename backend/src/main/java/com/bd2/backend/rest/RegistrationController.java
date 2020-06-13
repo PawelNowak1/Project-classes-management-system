@@ -98,11 +98,13 @@ public class RegistrationController {
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> registerUser(@PathVariable("userId") Long userId) {
-        Optional<Student> student = studentRepository.findById(userId);
-        student.ifPresent(value -> studentRepository.delete(value));
-        Optional<Teacher> teacher = teacherRepository.findById(userId);
-        teacher.ifPresent(value -> teacherRepository.delete(value));
-        return ResponseEntity.ok("User deleted successfully!");
+    public ResponseEntity<?> deactivateUser(@PathVariable("userId") Long userId,
+                                        @RequestParam(defaultValue = "false") Boolean active) {
+        Optional<User> user = userRepository.findById((userId));
+        user.ifPresent(value -> {
+            value.setActive(active);
+            userRepository.save(value);
+        });
+        return ResponseEntity.ok("Changed active flag to: " + active + " for user with id: " + userId);
     }
 }
