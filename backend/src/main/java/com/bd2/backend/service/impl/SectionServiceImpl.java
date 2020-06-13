@@ -1,8 +1,10 @@
 package com.bd2.backend.service.impl;
 
 import com.bd2.backend.entities.Section;
+import com.bd2.backend.entities.Student;
 import com.bd2.backend.entities.StudentSection;
 import com.bd2.backend.repository.SectionRepository;
+import com.bd2.backend.repository.StudentRepository;
 import com.bd2.backend.repository.StudentSectionRepository;
 import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.service.interfaces.SectionService;
@@ -18,10 +20,12 @@ public class SectionServiceImpl implements SectionService {
 
     private final SectionRepository sectionRepository;
     private final StudentSectionRepository studentSectionRepository;
+    private final StudentRepository studentRepository;
 
-    public SectionServiceImpl(SectionRepository sectionRepository, StudentSectionRepository studentSectionRepository) {
+    public SectionServiceImpl(SectionRepository sectionRepository, StudentSectionRepository studentSectionRepository, StudentRepository studentRepository) {
         this.sectionRepository = sectionRepository;
         this.studentSectionRepository = studentSectionRepository;
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -123,5 +127,10 @@ public class SectionServiceImpl implements SectionService {
                                 studentSection.getSection().getId(),
                                 studentSection.getStudent().getId()
                         )).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Student> findStudentsWithoutSection(Long semesterId) {
+        return this.studentRepository.findStudentsWithoutSection(semesterId);
     }
 }

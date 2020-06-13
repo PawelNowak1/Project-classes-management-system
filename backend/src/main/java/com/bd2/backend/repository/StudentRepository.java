@@ -21,6 +21,10 @@ public interface StudentRepository extends PagingAndSortingRepository<Student, L
             nativeQuery = false)
     Page<Student> findStudentsPaginated(String name, Long semesterId, String active, Pageable pageable);
 
+    @Query(value = "select s from Student s join s.semesters sm where sm.id = ?1 and s.id NOT IN (select studentSect.student.id from StudentSection studentSect join studentSect.section section WHERE section.semester.id = ?1)",
+            nativeQuery = false)
+    List<Student> findStudentsWithoutSection(Long semesterId);
+
     List<Student> findAll();
 
     @Query(value = "SELECT s FROM Student s JOIN s.semesters sm WHERE sm.id = ?1",
