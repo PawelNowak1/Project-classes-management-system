@@ -12,6 +12,7 @@ import {
     faPen,
     faPlusCircle,
     faTrash,
+    faUsersCog,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
@@ -184,9 +185,11 @@ function TeacherSections(props) {
                                             </td>
                                             <td className="trash">
                                                 <FontAwesomeIcon
-                                                    icon={faTrash}
+                                                    icon={faUsersCog}
                                                     onClick={() =>
-                                                        onDelete(section.id)
+                                                        alert(
+                                                            'Zarządzanie użytkownikami jesli sekcja w stanie "zarejestrowana/reg"'
+                                                        )
                                                     }
                                                 />
                                                 <FontAwesomeIcon
@@ -195,6 +198,12 @@ function TeacherSections(props) {
                                                         history.push(
                                                             `/panel/section/${section.id}`
                                                         )
+                                                    }
+                                                />
+                                                <FontAwesomeIcon
+                                                    icon={faTrash}
+                                                    onClick={() =>
+                                                        onDelete(section.id)
                                                     }
                                                 />
                                             </td>
