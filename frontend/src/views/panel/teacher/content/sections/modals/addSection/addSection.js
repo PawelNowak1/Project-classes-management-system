@@ -26,7 +26,15 @@ import { sectionStates, getStateName, getStateCode } from '../../sectionStates';
 
 function AddSection(props) {
     const history = useHistory();
-    const { refresh, setRefresh, context, topics, parent } = props;
+    const {
+        refresh,
+        setRefresh,
+        context,
+        topics,
+        parent,
+        teachers,
+        user,
+    } = props;
 
     const [loading, setLoading] = useState();
     const [loadingTopic, setLoadingTopic] = useState();
@@ -155,12 +163,19 @@ function AddSection(props) {
             topicId: t.id,
             topicName: t.name,
         });
+
+        setTopic({
+            ...topic,
+            teacherId: t.id,
+        });
     };
 
     const checkIfAddingNewResource = (e) => {
         if (String(e.target.value || '').includes('Dodaj nowy...'))
             setNewTopic(true);
         else setNewTopic(false);
+
+        if (topic.teacherId === 0) findTeacherInData(user.id);
     };
 
     const createTeacherName = (teacher) => {
@@ -169,12 +184,8 @@ function AddSection(props) {
             : teacher.name;
     };
 
-    const findTeacherInData = (e) => {
-        let temp = e.target.value;
-        var t = props.teachers.find(
-            (teacher) =>
-                teacher.lastName === temp.substring(temp.indexOf(' ') + 1)
-        );
+    const findTeacherInData = (teacherId) => {
+        var t = teachers.find((teacher) => teacher.id === teacherId);
 
         setState({
             ...state,
@@ -286,13 +297,11 @@ function AddSection(props) {
                                                 onChange={onChangeTopic}
                                             />
                                             <Select
+                                                disabled={true}
                                                 label="Nauczyciel"
                                                 name="teacher"
-                                                options={props.teachers.map(
-                                                    (x) => createTeacherName(x)
-                                                )}
+                                                options={[]}
                                                 value={state.teacher}
-                                                onChange={findTeacherInData}
                                             />
                                         </InputRow>
                                         <Button

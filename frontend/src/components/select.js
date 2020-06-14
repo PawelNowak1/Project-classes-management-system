@@ -1,18 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import { Select as MUSelect } from '@material-ui/core';
 
-function Select({ label, options, onChange, value, onClick }) {
+function Select({ label, options, onChange, value, onClick, disabled }) {
     return (
         <Wrapper>
             <StyledLabel>{label}:</StyledLabel>
             <StyledLabel>{value}</StyledLabel>
-            <StyledFormControl variant="filled">
+            <StyledFormControl variant="filled" disabled={disabled}>
                 <MUSelect
                     labelId="demo-simple-select-filled-label"
                     id="demo-simple-select-filled"
