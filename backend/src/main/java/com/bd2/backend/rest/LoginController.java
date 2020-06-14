@@ -49,7 +49,7 @@ public class LoginController {
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (AuthenticationException e) {
             return ResponseEntity.badRequest()
-                    .body(e.getMessage() + ": wrong username or password!");
+                    .body("Authentication error: " + e.getMessage() + "\n");
         }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
