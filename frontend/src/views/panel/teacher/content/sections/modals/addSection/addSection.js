@@ -11,6 +11,7 @@ import Title from '../../../../../../../components/title';
 import Input from '../../../../../../../components/input';
 import Select from '../../../../../../../components/select';
 import SubTitle from '../../../../../../../components/subtitle';
+import Checkbox from '../../../../../../../components/checkbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../../../../../../components/button';
@@ -41,6 +42,7 @@ function AddSection(props) {
     const [error, setError] = useState();
     const [isLimitCorrect, setIsLimitCorrect] = useState(false);
     const [newTopic, setNewTopic] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
 
     const [state, setState] = useState({
         name: '',
@@ -54,7 +56,7 @@ function AddSection(props) {
 
     const [topic, setTopic] = useState({
         topicName: '',
-        topicStatus: '',
+        topicStatus: false,
         topicDescription: '',
         topicId: 0,
         teacherId: 0,
@@ -142,6 +144,15 @@ function AddSection(props) {
         validateSectionLimit(e);
     };
 
+    const OnCheck = (e) => {
+        setTopic({
+            ...topic,
+            [e.target.name]: !isChecked,
+        });
+
+        setIsChecked((prevIsChecked) => !prevIsChecked);
+    };
+
     const onChangeTopic = (e) => {
         setTopic({
             ...topic,
@@ -171,9 +182,10 @@ function AddSection(props) {
     };
 
     const checkIfAddingNewResource = (e) => {
-        if (String(e.target.value || '').includes('Dodaj nowy...'))
+        if (String(e.target.value || '').includes('Dodaj nowy...')) {
+            setIsChecked(false);
             setNewTopic(true);
-        else setNewTopic(false);
+        } else setNewTopic(false);
 
         if (topic.teacherId === 0) findTeacherInData(user.id);
     };
@@ -291,10 +303,15 @@ function AddSection(props) {
                                                 name="topicDescription"
                                                 onChange={onChangeTopic}
                                             />
-                                            <Input
-                                                label="Status"
+                                            <Checkbox
+                                                label={
+                                                    isChecked
+                                                        ? 'aktywny'
+                                                        : 'nieaktywny'
+                                                }
                                                 name="topicStatus"
-                                                onChange={onChangeTopic}
+                                                value={isChecked}
+                                                onChange={OnCheck}
                                             />
                                             <Select
                                                 disabled={true}

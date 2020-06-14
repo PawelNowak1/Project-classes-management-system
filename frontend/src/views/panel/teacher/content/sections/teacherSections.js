@@ -8,7 +8,8 @@ import {
     faBuilding,
     faChevronLeft,
     faChevronRight,
-    faEllipsisH, faPen,
+    faEllipsisH,
+    faPen,
     faPlusCircle,
     faTrash,
     faUser,
@@ -24,7 +25,7 @@ import AddSection from './modals/addSection/addSection';
 import { getStateName } from './sectionStates';
 
 function TeacherSections(props) {
-    const { user, context,history } = props;
+    const { user, context, history } = props;
 
     const [search, setSearch] = useState('');
 
@@ -135,7 +136,7 @@ function TeacherSections(props) {
         <>
             <Wrapper>
                 <ContentHeader>
-                    <Title>Wszystkie sekcje</Title>
+                    <Title>Twoje sekcje</Title>
                 </ContentHeader>
                 <ContentBody>
                     <FiltersWrapper>
@@ -191,7 +192,9 @@ function TeacherSections(props) {
                                                 <FontAwesomeIcon
                                                     icon={faPen}
                                                     onClick={() =>
-                                                        history.push(`/panel/section/${section.id}`)
+                                                        history.push(
+                                                            `/panel/section/${section.id}`
+                                                        )
                                                     }
                                                 />
                                             </td>
@@ -214,7 +217,7 @@ function TeacherSections(props) {
                         context={context}
                         topics={topics}
                         teachers={teachers}
-                        parent={"/panel/yoursections"}
+                        parent={'/panel/yoursections'}
                     />
                 )}
             />
