@@ -1,18 +1,18 @@
 package com.bd2.backend.service.impl;
 
 import com.bd2.backend.entities.Section;
+import com.bd2.backend.entities.Semester;
 import com.bd2.backend.entities.Student;
 import com.bd2.backend.entities.StudentSection;
 import com.bd2.backend.repository.SectionRepository;
+import com.bd2.backend.repository.SemesterRepository;
 import com.bd2.backend.repository.StudentRepository;
 import com.bd2.backend.repository.StudentSectionRepository;
 import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.service.interfaces.SectionService;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,11 +21,14 @@ public class SectionServiceImpl implements SectionService {
     private final SectionRepository sectionRepository;
     private final StudentSectionRepository studentSectionRepository;
     private final StudentRepository studentRepository;
+    private final SemesterRepository semesterRepository;
 
-    public SectionServiceImpl(SectionRepository sectionRepository, StudentSectionRepository studentSectionRepository, StudentRepository studentRepository) {
+    public SectionServiceImpl(SectionRepository sectionRepository, StudentSectionRepository studentSectionRepository,
+                              StudentRepository studentRepository, SemesterRepository semesterRepository) {
         this.sectionRepository = sectionRepository;
         this.studentSectionRepository = studentSectionRepository;
         this.studentRepository = studentRepository;
+        this.semesterRepository = semesterRepository;
     }
 
     @Override
@@ -130,6 +133,22 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
+    public List<?> getSummaryForSemester(Long semesterId) {
+        Optional<Semester> semester = this.semesterRepository.findById(semesterId);
+        if (!semester.isPresent()) {
+            return Collections.singletonList("error: semester with specified id does not exist!");
+        }
+        return this.studentSectionRepository.findAllBySectionSemester(semester.get())
+                .stream().map(studentSection ->
+                        new MarksResponse(
+                                studentSection.getDate(),
+                                studentSection.getMark(),
+                                studentSection.getSection().getId(),
+                                studentSection.getStudent().getId()
+                        )).collect(Collectors.toList());
+    }
+
+    @Override
     public List<Student> findStudentsWithoutSection(Long semesterId) {
         return this.studentRepository.findStudentsWithoutSection(semesterId);
     }
@@ -148,7 +167,7 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public StudentSection getStudentSection(Long studentSectionId) {
         Optional<StudentSection> studentSection = this.studentSectionRepository.findById(studentSectionId);
-        if(studentSection.isPresent()) {
+        if (studentSection.isPresent()) {
             return studentSection.get();
         }
         return null;

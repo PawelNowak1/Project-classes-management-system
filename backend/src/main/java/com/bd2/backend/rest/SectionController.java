@@ -175,4 +175,9 @@ public class SectionController {
     public ResponseEntity<List<MarksResponse>> getAllMarksForStudentsInSection(@PathVariable("sectionId") Long sectionId) {
         return ResponseEntity.ok(this.sectionService.getAllStudentsMarksInSection(sectionId));
     }
+
+    @GetMapping(path = "/summary/{semesterId}")
+    public ResponseEntity<?> getSummaryForSemester(@PathVariable("semesterId") Long semesterId) {
+        return ResponseEntity.ok(this.sectionService.getSummaryForSemester(semesterId));
+    }
 }
