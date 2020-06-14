@@ -1,5 +1,6 @@
 package com.bd2.backend.repository;
 
+import com.bd2.backend.entities.Semester;
 import com.bd2.backend.entities.StudentSection;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -16,4 +17,5 @@ public interface StudentSectionRepository extends CrudRepository<StudentSection,
 
     List<StudentSection> findAllBySectionId(Long sectionId);
     List<StudentSection> getAllByStudentUserId(Long studentUserId);
+    List<StudentSection> findAllBySectionSemester(Semester semester);
 }

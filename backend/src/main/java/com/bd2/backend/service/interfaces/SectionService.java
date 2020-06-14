@@ -34,6 +34,8 @@ public interface SectionService {
 
     List<MarksResponse> getAllStudentsMarksInSection(Long sectionId);
 
+    List<?> getSummaryForSemester(Long semesterId);
+
     List<Student> findStudentsWithoutSection(Long semesterId);
 
     boolean isStudentAlreadyInSectionOnSemester(Long studentId, Long sectionId);
