@@ -133,3 +133,13 @@ INSERT INTO section(id, name, section_limit, state, semester_id, topic_id) VALUE
 ON DUPLICATE KEY UPDATE
     id = VALUES(id), name = VALUES(name), topic_id = VALUES(topic_id);
 
+INSERT INTO topic(id, description, name, status, teacher_user_id) VALUES
+    (3, "How to become Linux power user", "Linux","reg", 2)
+ON DUPLICATE KEY UPDATE
+    id = VALUES(id), description = VALUES(description), teacher_user_id = VALUES(teacher_user_id);
+
+INSERT INTO section(id, name, section_limit, state, semester_id, topic_id) VALUES
+    (3, "Linux section", 5, "reg", 1, 3)
+ON DUPLICATE KEY UPDATE
+    id = VALUES(id), name = VALUES(name), topic_id = VALUES(topic_id);
+
