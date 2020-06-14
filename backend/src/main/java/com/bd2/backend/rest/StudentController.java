@@ -27,16 +27,18 @@ public class StudentController {
     @RequestMapping(path = "/paginated", method = RequestMethod.GET)
     public ResponseEntity<Page<Student>> findStudents(@RequestParam(defaultValue = "0") Integer pageNo,
                                                       @RequestParam(defaultValue = "10") Integer pageSize,
-                                                      @RequestParam(required = false) String name) {
-        return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, name));
+                                                      @RequestParam(required = false) String name,
+                                                      @RequestParam(defaultValue = "true") Boolean onlyActive){
+        return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, name, onlyActive));
     }
 
     @RequestMapping(path = "/{semesterId}/paginated", method = RequestMethod.GET)
     public ResponseEntity<?> findStudents(@PathVariable("semesterId") Long semesterId,
                                           @RequestParam(defaultValue = "0") Integer pageNo,
                                           @RequestParam(defaultValue = "10") Integer pageSize,
-                                          @RequestParam(required = false) String name) {
-        return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, semesterId, name));
+                                          @RequestParam(required = false) String name,
+                                          @RequestParam(defaultValue = "true") Boolean onlyActive) {
+        return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, semesterId, name, onlyActive));
     }
 
     @GetMapping("/all")

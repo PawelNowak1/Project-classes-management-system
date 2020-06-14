@@ -1,6 +1,7 @@
 package com.bd2.backend.rest;
 
 import com.bd2.backend.entities.Section;
+import com.bd2.backend.entities.Student;
 import com.bd2.backend.entities.StudentSection;
 import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.security.SectionStates;
@@ -122,6 +123,11 @@ public class SectionController {
         }
 
         return ResponseEntity.ok("All students added to section!\n");
+    }
+
+    @RequestMapping(path = "/getStudentsWithoutSection/{semesterId}", method = RequestMethod.GET)
+    public ResponseEntity<List<Student>> getStudetnsWithoutSection(@PathVariable("semesterId") Long semesterId) {
+        return ResponseEntity.ok(sectionService.findStudentsWithoutSection(semesterId));
     }
 
     @RequestMapping(path = "/deleteStudent/{studentSectionId}", method = RequestMethod.DELETE)
