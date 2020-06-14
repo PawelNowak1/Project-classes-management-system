@@ -144,4 +144,13 @@ public class SectionServiceImpl implements SectionService {
                 .mapToLong(student -> student.getUser().getId())
                 .noneMatch(id -> id == studentId);
     }
+
+    @Override
+    public StudentSection getStudentSection(Long studentSectionId) {
+        Optional<StudentSection> studentSection = this.studentSectionRepository.findById(studentSectionId);
+        if(studentSection.isPresent()) {
+            return studentSection.get();
+        }
+        return null;
+    }
 }

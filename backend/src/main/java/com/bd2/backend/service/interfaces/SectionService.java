@@ -37,4 +37,6 @@ public interface SectionService {
     List<Student> findStudentsWithoutSection(Long semesterId);
 
     boolean isStudentAlreadyInSectionOnSemester(Long studentId, Long sectionId);
+
+    StudentSection getStudentSection(Long studentSectionId);
 }

@@ -138,14 +138,25 @@ public class SectionController {
     }
 
     @RequestMapping(path = "/getStudentsWithoutSection/{semesterId}", method = RequestMethod.GET)
-    public ResponseEntity<List<Student>> getStudetnsWithoutSection(@PathVariable("semesterId") Long semesterId) {
+    public ResponseEntity<List<Student>> getStudentsWithoutSection(@PathVariable("semesterId") Long semesterId) {
         return ResponseEntity.ok(sectionService.findStudentsWithoutSection(semesterId));
     }
 
     @RequestMapping(path = "/deleteStudent/{studentSectionId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteStudentFromSection(@PathVariable("studentSectionId") Long studentSectionId) {
+        StudentSection studentSection = this.sectionService.getStudentSection(studentSectionId);
+        if (studentSection == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Student is not in this section!\n");
+        }
+        if (!studentSection.getSection().getState().equals(SectionStates.reg.name())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Section is not in registered state anymore - student cannot be deleted from it.\n");
+        }
         sectionService.deleteStudentFromSection(studentSectionId);
-        return ResponseEntity.ok("Usunięto studenta z sekcji");
+        return ResponseEntity.ok("Usunięto studenta z sekcji\n");
     }
 
     @RequestMapping(path = "/students", method = RequestMethod.GET)
