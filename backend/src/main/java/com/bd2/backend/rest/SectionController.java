@@ -66,10 +66,10 @@ public class SectionController {
                     .body("Student with id " + studentSection.getStudent().getId()
                             + " is already in section with id " + section.getId() + "!\n");
         }
-        if (section.getState().equals(SectionStates.close.name())) {
+        if (!section.getState().equals(SectionStates.reg.name())) {
             return ResponseEntity
                     .badRequest()
-                    .body("Section is already closed - new student cannot be added.\n");
+                    .body("Section is not in registered state anymore - new student cannot be added.\n");
         }
         if (this.sectionService.getCurrentStudentsCountInSection(studentSection.getSection().getId()) >= section.getSectionLimit()) {
             return ResponseEntity
@@ -101,10 +101,10 @@ public class SectionController {
                     .badRequest()
                     .body("Section with id " + studentsSections.get(0).getSection().getId() + " does not exist!\n");
         }
-        if (section.getState().equals(SectionStates.close.name())) {
+        if (!section.getState().equals(SectionStates.reg.name())) {
             return ResponseEntity
                     .badRequest()
-                    .body("Section is already closed - new students cannot be added.\n");
+                    .body("Section is not in registered state anymore - new students cannot be added.\n");
         }
         if (this.sectionService.getCurrentStudentsCountInSection(studentsSections.get(0).getSection().getId())
                 + studentsSections.size() - studentsFromRequestAlreadyInSection > section.getSectionLimit()) {
