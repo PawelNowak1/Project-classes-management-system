@@ -67,6 +67,12 @@ public class SectionController {
                     .body("Student with id " + studentSection.getStudent().getId()
                             + " is already in section with id " + section.getId() + "!\n");
         }
+        if (this.sectionService.isStudentAlreadyInSectionOnSemester(studentSection.getStudent().getId(), studentSection.getSection().getId())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Student with id " + studentSection.getStudent().getId() + " is already in section on the same semester as section with id " +
+                            studentSection.getSection().getId() + "!\n");
+        }
         if (!section.getState().equals(SectionStates.reg.name())) {
             return ResponseEntity
                     .badRequest()
@@ -101,6 +107,12 @@ public class SectionController {
             return ResponseEntity
                     .badRequest()
                     .body("Section with id " + studentsSections.get(0).getSection().getId() + " does not exist!\n");
+        }
+        if (this.sectionService.isStudentAlreadyInSectionOnSemester(studentsSections.get(0).getStudent().getId(), studentsSections.get(0).getSection().getId())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Students are already in section on the same semester as section with id " +
+                            studentsSections.get(0).getSection().getId() + "!\n");
         }
         if (!section.getState().equals(SectionStates.reg.name())) {
             return ResponseEntity

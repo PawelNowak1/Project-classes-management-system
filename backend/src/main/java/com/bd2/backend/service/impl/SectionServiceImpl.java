@@ -106,7 +106,7 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public Long getCurrentStudentsCountInSection(Long sectionId) {
         List<StudentSection> studentsInSection = this.studentSectionRepository.findAllBySectionId(sectionId);
-        if(studentsInSection != null) {
+        if (studentsInSection != null) {
             return Long.valueOf(studentsInSection.stream().count());
         }
         return null;
@@ -132,5 +132,16 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public List<Student> findStudentsWithoutSection(Long semesterId) {
         return this.studentRepository.findStudentsWithoutSection(semesterId);
+    }
+
+    @Override
+    public boolean isStudentAlreadyInSectionOnSemester(Long studentId, Long sectionId) {
+        List<Student> students = findStudentsWithoutSection(getSection(sectionId).getSemester().getId());
+        if (students.isEmpty()) {
+            return true;
+        }
+        return students.stream()
+                .mapToLong(student -> student.getUser().getId())
+                .noneMatch(id -> id == studentId);
     }
 }
