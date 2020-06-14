@@ -1,6 +1,7 @@
 package com.bd2.backend.service.interfaces;
 
 import com.bd2.backend.entities.Section;
+import com.bd2.backend.entities.Student;
 import com.bd2.backend.entities.StudentSection;
 import com.bd2.backend.response.MarksResponse;
 
@@ -32,4 +33,6 @@ public interface SectionService {
     boolean isStudentAlreadyInSection(Long studentId, Long sectionId);
 
     List<MarksResponse> getAllStudentsMarksInSection(Long sectionId);
+
+    List<Student> findStudentsWithoutSection(Long semesterId);
 }
