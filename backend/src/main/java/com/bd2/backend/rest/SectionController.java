@@ -5,9 +5,11 @@ import com.bd2.backend.entities.Student;
 import com.bd2.backend.entities.StudentSection;
 import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.security.SectionStates;
+import com.bd2.backend.service.MyUserDetails;
 import com.bd2.backend.service.impl.SectionServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,6 +69,13 @@ public class SectionController {
                     .body("Student with id " + studentSection.getStudent().getId()
                             + " is already in section with id " + section.getId() + "!\n");
         }
+        if(!this.sectionService.isStudentOnTheSameSemesterAsSection(studentSection.getStudent().getId(), studentSection.getSection().getId())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Student with id " + studentSection.getStudent().getId() + " must be on the same semester as section with id "
+                    + studentSection.getSection().getId() + "!\n");
+
+        }
         if (this.sectionService.isStudentAlreadyInSectionOnSemester(studentSection.getStudent().getId(), studentSection.getSection().getId())) {
             return ResponseEntity
                     .badRequest()
@@ -107,6 +116,13 @@ public class SectionController {
             return ResponseEntity
                     .badRequest()
                     .body("Section with id " + studentsSections.get(0).getSection().getId() + " does not exist!\n");
+        }
+        if(!this.sectionService.isStudentOnTheSameSemesterAsSection(studentsSections.get(0).getStudent().getId(), studentsSections.get(0).getSection().getId())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("All students must be on the same semester as section with id "
+                            + studentsSections.get(0).getSection().getId() + "!\n");
+
         }
         if (this.sectionService.isStudentAlreadyInSectionOnSemester(studentsSections.get(0).getStudent().getId(), studentsSections.get(0).getSection().getId())) {
             return ResponseEntity
@@ -178,6 +194,7 @@ public class SectionController {
 
     @GetMapping(path = "/summary/{semesterId}")
     public ResponseEntity<?> getSummaryForSemester(@PathVariable("semesterId") Long semesterId) {
-        return ResponseEntity.ok(this.sectionService.getSummaryForSemester(semesterId));
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(this.sectionService.getSummaryForSemester(semesterId, userDetails.getId()));
     }
 }
