@@ -133,12 +133,13 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public List<?> getSummaryForSemester(Long semesterId) {
-        Optional<Semester> semester = this.semesterRepository.findById(semesterId);
-        if (!semester.isPresent()) {
-            return Collections.singletonList("error: semester with specified id does not exist!");
+    public List<?> getSummaryForSemester(Long semesterId, Long teacherId) {
+        List<StudentSection> studentsSections = this.studentSectionRepository.findAllBySectionSemesterIdAndSectionTopicTeacherId(semesterId, teacherId);
+        if (studentsSections.isEmpty()) {
+            return Collections.singletonList("Error: cannot generate summary for this semester - " +
+                    "semester with specified id does not exist or teacher does not have section on this semester!");
         }
-        return this.studentSectionRepository.findAllBySectionSemester(semester.get())
+        return studentsSections
                 .stream().map(studentSection ->
                         new MarksResponse(
                                 studentSection.getDate(),
@@ -151,6 +152,22 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public List<Student> findStudentsWithoutSection(Long semesterId) {
         return this.studentRepository.findStudentsWithoutSection(semesterId);
+    }
+
+    @Override
+    public boolean isStudentOnTheSameSemesterAsSection(Long studentId, Long sectionId) {
+        Optional<Semester> semester = this.semesterRepository.findById(getSection(sectionId).getSemester().getId());
+        if(semester.isPresent()) {
+            List<Student> studentsOnSemester = semester.get().getStudents();
+            if(studentsOnSemester.isEmpty()) {
+                return false;
+            }
+            return studentsOnSemester
+                    .stream()
+                    .mapToLong(student -> student.getUser().getId())
+                    .anyMatch(id -> id == studentId);
+        }
+        return false;
     }
 
     @Override
