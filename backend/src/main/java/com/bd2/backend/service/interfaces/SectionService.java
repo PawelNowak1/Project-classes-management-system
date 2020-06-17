@@ -17,6 +17,8 @@ public interface SectionService {
 
     void addStudentToSection(StudentSection studentSection);
 
+    void addStudentToSection(Long studentId, Long sectionId);
+
     Iterable<StudentSection> findStudentSection(Long semesterId, Long sectionId);
 
     StudentsInSectionResponse getStudentsInSection(Long sectionId);

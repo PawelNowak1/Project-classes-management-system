@@ -3,6 +3,7 @@ package com.bd2.backend.rest;
 import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.Student;
 import com.bd2.backend.entities.StudentSection;
+import com.bd2.backend.request.AddStudentsToSectionRequest;
 import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.response.StudentsInSectionResponse;
 import com.bd2.backend.security.SectionStates;
@@ -103,7 +104,7 @@ public class SectionController {
     }
 
     @RequestMapping(path = "/addStudents", method = RequestMethod.POST)
-    public ResponseEntity<?> addStudent(@RequestBody List<StudentSection> studentsSections) {
+    public ResponseEntity<?> addStudents(@RequestBody List<StudentSection> studentsSections) {
         Section section = this.sectionService.getSection(studentsSections.get(0).getSection().getId());
 
         int studentsFromRequestAlreadyInSection = 0;
@@ -148,6 +149,54 @@ public class SectionController {
             }
             if (!this.sectionService.isStudentAlreadyInSection(studentSection.getStudent().getId(), section.getId())) {
                 sectionService.addStudentToSection(studentSection);
+            }
+        }
+
+        return ResponseEntity.ok("All students added to section!\n");
+    }
+
+    @RequestMapping(path = "/addStudentsList", method = RequestMethod.POST)
+    public ResponseEntity<?> addStudentsList(@RequestBody AddStudentsToSectionRequest addStudentsRequest) {
+        Section section = this.sectionService.getSection(addStudentsRequest.getSectionId());
+        int studentsFromRequestAlreadyInSection = 0;
+        for (Long id : addStudentsRequest.getStudentIds()) {
+            if (this.sectionService.isStudentAlreadyInSection(id, addStudentsRequest.getSectionId())) {
+                ++studentsFromRequestAlreadyInSection;
+            }
+        }
+
+        if (section == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Section with id " + addStudentsRequest.getSectionId() + " does not exist!\n");
+        }
+        if(!this.sectionService.isStudentOnTheSameSemesterAsSection(addStudentsRequest.getStudentIds().get(0), addStudentsRequest.getSectionId())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("All students must be on the same semester as section with id "
+                            + addStudentsRequest.getStudentIds().get(0) + "!\n");
+
+        }
+        if (this.sectionService.isStudentAlreadyInSectionOnSemester(addStudentsRequest.getStudentIds().get(0), addStudentsRequest.getSectionId())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Students are already in section on the same semester as section with id " +
+                            addStudentsRequest.getStudentIds().get(0) + "!\n");
+        }
+        if (!section.getState().equals(SectionStates.reg.name())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Section is not in registered state anymore - new students cannot be added.\n");
+        }
+        if (this.sectionService.getCurrentStudentsCountInSection(addStudentsRequest.getSectionId())
+                + addStudentsRequest.getStudentIds().size() - studentsFromRequestAlreadyInSection > section.getSectionLimit()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("In this section is not enough free spaces - new students cannot be added!\n");
+        }
+        for (Long id : addStudentsRequest.getStudentIds()) {
+            if (!this.sectionService.isStudentAlreadyInSection(id, section.getId())) {
+                sectionService.addStudentToSection(id, section.getId());
             }
         }
 

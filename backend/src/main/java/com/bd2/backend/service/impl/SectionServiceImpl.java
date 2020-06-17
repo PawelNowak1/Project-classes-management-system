@@ -59,6 +59,16 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
+    public void addStudentToSection(Long studentId, Long sectionId) {
+        Optional<Student> student = this.studentRepository.findById(studentId);
+        Optional<Section> section = this.sectionRepository.findById(sectionId);
+        if (student.isPresent() && section.isPresent()) {
+            StudentSection studentSection = new StudentSection(student.get(), section.get());
+            studentSectionRepository.save(studentSection);
+        }
+    }
+
+    @Override
     public Iterable<StudentSection> findStudentSection(Long semesterId, Long sectionId) {
         return studentSectionRepository.findAllStudentSections(semesterId, sectionId);
     }
