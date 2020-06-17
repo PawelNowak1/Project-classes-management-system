@@ -66,14 +66,17 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public StudentsInSectionResponse getStudentsInSection(Long sectionId) {
         StudentsInSectionResponse studentsInSectionResponse = new StudentsInSectionResponse();
-        studentSectionRepository.findAllBySectionId(sectionId)
-                .forEach(studentSection -> {
-                    studentsInSectionResponse.setSection(studentSection.getSection());
-                    studentsInSectionResponse.addStudent(
-                            studentSection.getStudent(),
-                            studentSection.getDate(),
-                            studentSection.getMark());
-                });
+        List<StudentSection> studentSections = this.studentSectionRepository.findAllBySectionId(sectionId);
+        if (studentSections.isEmpty()) {
+            return null;
+        }
+        studentSections.forEach(studentSection -> {
+            studentsInSectionResponse.setSection(studentSection.getSection());
+            studentsInSectionResponse.addStudent(
+                    studentSection.getStudent(),
+                    studentSection.getDate(),
+                    studentSection.getMark());
+        });
 
         return studentsInSectionResponse;
     }
