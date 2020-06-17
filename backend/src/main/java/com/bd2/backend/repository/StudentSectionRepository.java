@@ -16,4 +16,5 @@ public interface StudentSectionRepository extends CrudRepository<StudentSection,
 
     List<StudentSection> findAllBySectionId(Long sectionId);
     List<StudentSection> getAllByStudentUserId(Long studentUserId);
+    List<StudentSection> findAllBySectionSemesterIdAndSectionTopicTeacherId(Long semesterId, Long teacherId);
 }

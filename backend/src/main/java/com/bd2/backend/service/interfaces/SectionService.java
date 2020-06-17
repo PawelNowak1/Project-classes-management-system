@@ -4,6 +4,7 @@ import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.Student;
 import com.bd2.backend.entities.StudentSection;
 import com.bd2.backend.response.MarksResponse;
+import com.bd2.backend.response.StudentsInSectionResponse;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ public interface SectionService {
     void addStudentToSection(StudentSection studentSection);
 
     Iterable<StudentSection> findStudentSection(Long semesterId, Long sectionId);
+
+    StudentsInSectionResponse getStudentsInSection(Long sectionId);
 
     void deleteStudentFromSection(Long studentSectionId);
 
@@ -34,5 +37,13 @@ public interface SectionService {
 
     List<MarksResponse> getAllStudentsMarksInSection(Long sectionId);
 
+    List<?> getSummaryForSemester(Long semesterId, Long teacherId);
+
     List<Student> findStudentsWithoutSection(Long semesterId);
+
+    boolean isStudentOnTheSameSemesterAsSection(Long studentId, Long sectionId);
+
+    boolean isStudentAlreadyInSectionOnSemester(Long studentId, Long sectionId);
+
+    StudentSection getStudentSection(Long studentSectionId);
 }

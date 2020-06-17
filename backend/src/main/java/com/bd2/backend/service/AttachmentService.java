@@ -4,7 +4,7 @@ import com.bd2.backend.entities.Attachment;
 import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.Student;
 import com.bd2.backend.repository.AttachmentRepository;
-import com.bd2.backend.security.JwtUtils;
+import com.bd2.backend.response.AttachmentsResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.List;
 public class AttachmentService {
 
     private AttachmentRepository attachmentRepository;
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(AttachmentService.class);
 
     @Autowired
     public AttachmentService(AttachmentRepository attachmentRepository) {
@@ -44,7 +44,24 @@ public class AttachmentService {
                 .orElseThrow(() -> new Exception("Attachment with id " + fileId + " not found!"));
     }
 
-    public List<Attachment> getAllAttachmentsForSection(Long sectionId){
-        return this.attachmentRepository.findAllBySectionId(sectionId);
+    public AttachmentsResponse getAllAttachmentsForSection(Long sectionId){
+        List<Attachment> attachments = this.attachmentRepository.findAllBySectionId(sectionId);
+        if(attachments.isEmpty()) {
+            return null;
+        }
+        AttachmentsResponse attachmentsResponse = new AttachmentsResponse();
+        attachments.forEach(attachment -> {
+            attachmentsResponse.setSection(attachment.getSection());
+            attachmentsResponse.addStudentWithAttachments(
+                    attachment.getStudent(),
+                    attachment.getId(),
+                    attachment.getFileName(),
+                    attachment.getFileType(),
+                    attachment.getInsertDate(),
+                    attachment.getDescription()
+            );
+        });
+
+        return attachmentsResponse;
     }
 }
