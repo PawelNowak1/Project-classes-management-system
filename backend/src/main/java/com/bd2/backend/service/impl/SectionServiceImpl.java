@@ -156,7 +156,7 @@ public class SectionServiceImpl implements SectionService {
         List<StudentSection> studentsSections = this.studentSectionRepository.findAllBySectionSemesterIdAndSectionTopicTeacherId(semesterId, teacherId);
         if (studentsSections.isEmpty()) {
             return Collections.singletonList("Error: cannot generate summary for this semester - " +
-                    "semester with specified id does not exist or teacher does not have section on this semester!");
+                    "semester with specified id does not exist or teacher does not have section on this semester or section is empty!!");
         }
         return studentsSections
                 .stream().map(studentSection ->
