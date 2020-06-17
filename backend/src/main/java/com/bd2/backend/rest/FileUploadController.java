@@ -5,6 +5,7 @@ import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.Student;
 import com.bd2.backend.repository.SectionRepository;
 import com.bd2.backend.repository.StudentRepository;
+import com.bd2.backend.response.AttachmentsResponse;
 import com.bd2.backend.service.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -83,8 +84,14 @@ public class FileUploadController {
     }
 
     @GetMapping("/all/{sectionId}")
-    public ResponseEntity<List<Attachment>> getAllAttachmentsIdsForSection(@PathVariable("sectionId") Long sectionId) {
-        return ResponseEntity.ok(this.attachmentService.getAllAttachmentsForSection(sectionId));
+    public ResponseEntity<?> getAllAttachmentsForSection(@PathVariable("sectionId") Long sectionId) {
+        AttachmentsResponse attachmentsResponse = this.attachmentService.getAllAttachmentsForSection(sectionId);
+        if(attachmentsResponse == null) {
+            return ResponseEntity.badRequest()
+                    .body("Cannot find attachment(s) for section with id " + sectionId + "!\n");
+        }
+
+        return ResponseEntity.ok(attachmentsResponse);
     }
 
     @GetMapping("/info/{fileId}")
