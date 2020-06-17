@@ -4,6 +4,7 @@ import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.Student;
 import com.bd2.backend.entities.StudentSection;
 import com.bd2.backend.response.MarksResponse;
+import com.bd2.backend.response.StudentsInSectionResponse;
 import com.bd2.backend.security.SectionStates;
 import com.bd2.backend.service.MyUserDetails;
 import com.bd2.backend.service.impl.SectionServiceImpl;
@@ -176,9 +177,14 @@ public class SectionController {
     }
 
     @RequestMapping(path = "/students", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<StudentSection>> findStudentSections(@RequestParam(required = false) Long semesterId,
-                                                                        @RequestParam(required = false) Long sectiondId) {
-        return ResponseEntity.ok(sectionService.findStudentSection(semesterId, sectiondId));
+    public ResponseEntity<Iterable<StudentSection>> findStudentSection(@RequestParam(required = false) Long semesterId,
+                                                                         @RequestParam(required = false) Long sectionId) {
+        return ResponseEntity.ok(sectionService.findStudentSection(semesterId, sectionId));
+    }
+
+    @GetMapping(path="/students/{sectionId}")
+    public ResponseEntity<StudentsInSectionResponse> getStudentsInSection(@PathVariable("sectionId") Long sectionId) {
+        return ResponseEntity.ok(this.sectionService.getStudentsInSection(sectionId));
     }
 
     @RequestMapping(path = "/mark", method = RequestMethod.POST)

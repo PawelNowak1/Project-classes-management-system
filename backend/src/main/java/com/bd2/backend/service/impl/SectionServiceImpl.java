@@ -9,6 +9,7 @@ import com.bd2.backend.repository.SemesterRepository;
 import com.bd2.backend.repository.StudentRepository;
 import com.bd2.backend.repository.StudentSectionRepository;
 import com.bd2.backend.response.MarksResponse;
+import com.bd2.backend.response.StudentsInSectionResponse;
 import com.bd2.backend.service.interfaces.SectionService;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,21 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public Iterable<StudentSection> findStudentSection(Long semesterId, Long sectionId) {
         return studentSectionRepository.findAllStudentSections(semesterId, sectionId);
+    }
+
+    @Override
+    public StudentsInSectionResponse getStudentsInSection(Long sectionId) {
+        StudentsInSectionResponse studentsInSectionResponse = new StudentsInSectionResponse();
+        studentSectionRepository.findAllBySectionId(sectionId)
+                .forEach(studentSection -> {
+                    studentsInSectionResponse.setSection(studentSection.getSection());
+                    studentsInSectionResponse.addStudent(
+                            studentSection.getStudent(),
+                            studentSection.getDate(),
+                            studentSection.getMark());
+                });
+
+        return studentsInSectionResponse;
     }
 
     @Override
@@ -157,9 +173,9 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public boolean isStudentOnTheSameSemesterAsSection(Long studentId, Long sectionId) {
         Optional<Semester> semester = this.semesterRepository.findById(getSection(sectionId).getSemester().getId());
-        if(semester.isPresent()) {
+        if (semester.isPresent()) {
             List<Student> studentsOnSemester = semester.get().getStudents();
-            if(studentsOnSemester.isEmpty()) {
+            if (studentsOnSemester.isEmpty()) {
                 return false;
             }
             return studentsOnSemester
