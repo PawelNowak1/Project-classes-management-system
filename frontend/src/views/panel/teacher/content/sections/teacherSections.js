@@ -23,7 +23,7 @@ import { Link, Route } from 'react-router-dom';
 import { API_URL } from '../../../../../theme/constans';
 import { getCookie } from '../../../../../theme/cookies';
 import AddSection from './modals/addSection/addSection';
-import { getStateName } from './sectionStates';
+import {getStateName, sectionStates} from './sectionStates';
 
 function TeacherSections(props) {
     const { user, context, history } = props;
@@ -184,22 +184,25 @@ function TeacherSections(props) {
                                                 {getStateName(section.state)}
                                             </td>
                                             <td className="trash">
-                                                <FontAwesomeIcon
-                                                    icon={faUsersCog}
-                                                    onClick={() =>
-                                                        alert(
-                                                            'Zarządzanie użytkownikami jesli sekcja w stanie "zarejestrowana/reg"'
-                                                        )
-                                                    }
-                                                />
-                                                <FontAwesomeIcon
-                                                    icon={faPen}
-                                                    onClick={() =>
-                                                        history.push(
-                                                            `/panel/section/${section.id}`
-                                                        )
-                                                    }
-                                                />
+                                                {
+                                                    section.state === sectionStates.registered ?
+                                                        <FontAwesomeIcon
+                                                            icon={faUsersCog}
+                                                            onClick={() =>
+                                                                history.push(
+                                                                    `/panel/registered-section/${section.id}`
+                                                                )
+                                                            }
+                                                        /> :
+                                                        <FontAwesomeIcon
+                                                            icon={faPen}
+                                                            onClick={() =>
+                                                                history.push(
+                                                                    `/panel/section/${section.id}`
+                                                                )
+                                                            }
+                                                        />
+                                                }
                                                 <FontAwesomeIcon
                                                     icon={faTrash}
                                                     onClick={() =>

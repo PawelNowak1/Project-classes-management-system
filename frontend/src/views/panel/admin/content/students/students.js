@@ -25,6 +25,7 @@ import AddTeacher from "../teachers/modals/addTeacher";
 function Students (props) {
     const {user,context} = props;
 
+    const [active,setActive] = useState(true);
     const [search,setSearch] = useState('');
     const [addClient,setAddClient] = useState(false);
 
@@ -38,24 +39,26 @@ function Students (props) {
     const [students,setStudents] = useState([]);
 
     useEffect(() => {
-        setLoading(true);
-        axios.get(`${API_URL}/student/${context}/paginated${search !== '' ? '?name='+search : ''}`,{
-            headers:{
-                'Authorization': 'Bearer ' + getCookie('token')
-            }
-        })
-        .then(res => {
-            setLoading(false);
-            setStudents(res.data.content);
-            setPageSettings({
-                activePage:res.data.pageable.pageNumber,
-                totalPages:res.data.totalPages,
+        if(context){
+            setLoading(true);
+            axios.get(`${API_URL}/student/${context}/paginated/?onlyActive=${active}&${search !== '' ? 'name='+search : ''}`,{
+                headers:{
+                    'Authorization': 'Bearer ' + getCookie('token')
+                }
             })
-        });
-    },[user,refresh,search,context]);
+                .then(res => {
+                    setLoading(false);
+                    setStudents(res.data.content);
+                    setPageSettings({
+                        activePage:res.data.pageable.pageNumber,
+                        totalPages:res.data.totalPages,
+                    })
+                }).catch(err => console.log(err.response));
+        }
+    },[user,refresh,search,context,active]);
 
     const onDelete = (email,id) => {
-        if(window.confirm(`Czy chcesz usunąć użytkownika o emailu: ${email} ?`)){
+        if(window.confirm(`Czy chcesz dezaktywować użytkownika o emailu: ${email} ?`)){
             setLoading(true);
             axios.delete(`${API_URL}/registration/${id}`,{
                 headers:{
@@ -78,7 +81,7 @@ function Students (props) {
             <ContentBody>
                 <FiltersWrapper>
                     <div>
-                        {/*<Select label="Kierunek" options={['Informtyka','Elektronika']}/>*/}
+                        <Select label="Status" options={['Aktywni','Nieaktywni']} value={active ? 'Aktywni' : 'Nieaktywni'} onChange={(e) => setActive(e.target.value == 'Aktywni')}/>
                         {/*<Select label="Semestr" options={['1','2','3','4','5']}/>*/}
                     <Search placeHolder={"Imię / Nazwisko / Numer studenta"} value={search} onChange={(e) => setSearch(e.target.value)}/>
                     </div>

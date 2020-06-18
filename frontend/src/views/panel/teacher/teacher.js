@@ -13,6 +13,7 @@ import TeacherSections from './content/sections/teacherSections';
 import { API_URL } from '../../../theme/constans';
 import { getCookie } from '../../../theme/cookies';
 import CurrentSection from "./content/currentSetion/currentSection";
+import RegisteredSection from "./content/registeredSetion/registeredSection";
 
 function Teacher(props) {
     const { dispatch, user } = props;
@@ -36,6 +37,7 @@ function Teacher(props) {
                     <Route path="/panel/sections" component={Sections} />
                     <Route path="/panel/yoursections" component={TeacherSections} />
                     <Route path="/panel/section/:id" component={CurrentSection} />
+                    <Route path="/panel/registered-section/:id" component={RegisteredSection} />
                     {/*<Route path = '/panel/add' component={Students} />*/}
 
                     <Route render={() => <Redirect to="/panel/yoursections" />} />

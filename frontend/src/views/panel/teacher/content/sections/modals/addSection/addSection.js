@@ -70,7 +70,7 @@ function AddSection(props) {
                 `${API_URL}/sections/create`,
                 {
                     name: state.name,
-                    state: state.sectionStateCode,
+                    state: sectionStates.registered,
                     sectionLimit: parseInt(state.limit),
                     topic: {
                         id: state.topicId,
@@ -252,27 +252,6 @@ function AddSection(props) {
                                 onChange={onChange}
                             />
                         </InputRow>
-                        <Select
-                            label="Stan"
-                            name="sectionState"
-                            options={[
-                                getStateName(sectionStates.open),
-                                getStateName(sectionStates.closed),
-                                getStateName(sectionStates.cancelled),
-                                getStateName(sectionStates.finished),
-                                getStateName(sectionStates.registered),
-                            ]}
-                            onChange={(e) => {
-                                setState({
-                                    ...state,
-                                    sectionStateCode: getStateCode(
-                                        e.target.value
-                                    ),
-                                    sectionStateName: e.target.value,
-                                });
-                            }}
-                            value={state.sectionStateName}
-                        />
                         <SubTitle>Temat</SubTitle>
                         <InputRow gtc="1fr">
                             <Select

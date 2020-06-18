@@ -10,10 +10,12 @@ import {getCookie} from "../../../../../theme/cookies";
 import axios from "axios";
 import {API_URL} from "../../../../../theme/constans";
 import AddAttendance from "./modals/addAttendance/addAttendance";
+import Spinner from "../../../../../components/spinner";
 
 function CurrentSection (props) {
     const [addAttendance,setAddAttendance] = useState(false);
     const [loading,setLoading] = useState(false);
+    const [sending,setSending] = useState(false);
     const [section,setSection] = useState({});
 
     useEffect(() => {
@@ -30,6 +32,21 @@ function CurrentSection (props) {
             });
     },[]);
 
+    const onChangeStatus = (e) => {
+        setSending(true);
+        axios.post(`${API_URL}/sections/status/?sectionId=${section.id}&state=${getStateCode(e.target.value)}`, null,{
+                headers: {
+                    Authorization: 'Bearer ' + getCookie('token'),
+                },
+            }).then((res) => {
+                setSection({
+                    ...section,
+                    state:getStateCode(e.target.value)
+                });
+                setSending(false);
+            });
+    };
+
     if(loading){
         return (
             <p>Loading ...</p>
@@ -41,6 +58,12 @@ function CurrentSection (props) {
         <Wrapper>
             <Header>
                 {section.name}
+                {
+                    sending &&
+                        <div style={{display:'inline-block',marginLeft:10}}>
+                            <Spinner width={20} height={20} white/>
+                        </div>
+                }
             </Header>
             <Content>
                 <InfoBody>
@@ -53,12 +76,9 @@ function CurrentSection (props) {
                                     getStateName(sectionStates.closed),
                                     getStateName(sectionStates.cancelled),
                                     getStateName(sectionStates.finished),
-                                    getStateName(sectionStates.registered),
                                 ]}
                                 value={getStateName(section.state)}
-                                onChange={(e) => setSection({...section,state:getStateCode(
-                                        e.target.value
-                                    )})}
+                                onChange={onChangeStatus}
                             />
                         </div>
                         {/*<InfoDate>*/}
@@ -79,19 +99,19 @@ function CurrentSection (props) {
                            <p>{section.topic && section.topic.description}</p>
                         </div>
 
-                        <h2>Załączniki</h2>
+                        {/*<h2>Załączniki</h2>*/}
 
-                        <div>
-                            <ul>
-                                <li>zaloacznik_1.pdf</li>
-                                <li>zaloacznik_2.pdf</li>
-                                <li>zaloacznik_3.pdf</li>
-                            </ul>
-                        </div>
-                        <Button style={{margin:'0 auto',marginTop:'20px'}}>
-                            Dodaj załącznik
-                        </Button>
-                        
+                        {/*<div>*/}
+                        {/*    <ul>*/}
+                        {/*        <li>zaloacznik_1.pdf</li>*/}
+                        {/*        <li>zaloacznik_2.pdf</li>*/}
+                        {/*        <li>zaloacznik_3.pdf</li>*/}
+                        {/*    </ul>*/}
+                        {/*</div>*/}
+                        {/*<Button style={{margin:'0 auto',marginTop:'20px'}}>*/}
+                        {/*    Dodaj załącznik*/}
+                        {/*</Button>*/}
+
                     </InfoDesc>
                     <div style={{width:'100%',overflowX:'scroll'}}>
                         <ContentTable cellspacing="0" cellpadding="0">
