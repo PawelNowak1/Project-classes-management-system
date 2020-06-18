@@ -284,10 +284,10 @@ public class SectionController {
     @GetMapping(path="/students/{sectionId}")
     public ResponseEntity<?> getStudentsInSection(@PathVariable("sectionId") Long sectionId) {
         StudentsInSectionResponse studentsInSectionResponse = this.sectionService.getStudentsInSection(sectionId);
-        if(studentsInSectionResponse == null) {
-            return ResponseEntity.badRequest()
-                    .body("Section with id " + sectionId + " does not exist or is empty!\n");
-        }
+//        if(studentsInSectionResponse == null) {
+//            return ResponseEntity.badRequest()
+//                    .body("Section with id " + sectionId + " does not exist or is empty!\n");
+//        }
         return ResponseEntity.ok(studentsInSectionResponse);
     }
 
