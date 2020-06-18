@@ -22,7 +22,7 @@ import java.util.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RequestMapping("/file")
-@PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
+@PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_ADMIN')")
 public class FileUploadController {
 
     private final AttachmentService attachmentService;

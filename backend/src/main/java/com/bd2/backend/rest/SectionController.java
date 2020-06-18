@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-@PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
+@PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_ADMIN')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RequestMapping("/sections")
