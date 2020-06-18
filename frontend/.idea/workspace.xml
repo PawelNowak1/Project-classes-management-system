@@ -5,12 +5,14 @@
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/assets/Gilroy.otf" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/button.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/checkbox.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/dashboard.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/input.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/protectedRoute.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/search.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/select.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/selectContext.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/spinner.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/subtitle.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/title.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/configureStore.js" afterDir="false" />
@@ -36,6 +38,9 @@
       <change afterPath="$PROJECT_DIR$/src/views/panel/admin/navigation/navigation.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/views/panel/panel.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/views/panel/student/content/sections.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/teacher/content/currentSetion/currentSection.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/teacher/content/currentSetion/modals/addAttendance/addAttendance.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/teacher/content/registeredSetion/registeredSection.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
@@ -71,17 +76,17 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/views/panel/student" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/views/panel/teacher/content" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/views/panel/student" />
+      <recent name="$PROJECT_DIR$/src/views/panel/teacher/content" />
       <recent name="$PROJECT_DIR$/src/components" />
+      <recent name="$PROJECT_DIR$/src/views/panel/teacher/content/currentSetion" />
+      <recent name="$PROJECT_DIR$/src/views/panel/student" />
       <recent name="$PROJECT_DIR$/src/redux/reducers" />
-      <recent name="$PROJECT_DIR$/src/redux/actions" />
-      <recent name="$PROJECT_DIR$/src/views/panel/admin/content/students/modals" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/views/panel" />
@@ -120,6 +125,7 @@
       <workItem from="1588154147144" duration="3923000" />
       <workItem from="1589023482827" duration="9529000" />
       <workItem from="1590745026792" duration="4015000" />
+      <workItem from="1592417293436" duration="7361000" />
     </task>
     <servers />
   </component>

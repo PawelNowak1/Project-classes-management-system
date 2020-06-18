@@ -11,6 +11,7 @@ import Title from '../../../../../../../components/title';
 import Input from '../../../../../../../components/input';
 import Select from '../../../../../../../components/select';
 import SubTitle from '../../../../../../../components/subtitle';
+import Checkbox from '../../../../../../../components/checkbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../../../../../../components/button';
@@ -26,13 +27,22 @@ import { sectionStates, getStateName, getStateCode } from '../../sectionStates';
 
 function AddSection(props) {
     const history = useHistory();
-    const { refresh, setRefresh, context, topics, parent } = props;
+    const {
+        refresh,
+        setRefresh,
+        context,
+        topics,
+        parent,
+        teachers,
+        user,
+    } = props;
 
     const [loading, setLoading] = useState();
     const [loadingTopic, setLoadingTopic] = useState();
     const [error, setError] = useState();
     const [isLimitCorrect, setIsLimitCorrect] = useState(false);
     const [newTopic, setNewTopic] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
 
     const [state, setState] = useState({
         name: '',
@@ -46,7 +56,7 @@ function AddSection(props) {
 
     const [topic, setTopic] = useState({
         topicName: '',
-        topicStatus: '',
+        topicStatus: false,
         topicDescription: '',
         topicId: 0,
         teacherId: 0,
@@ -60,7 +70,7 @@ function AddSection(props) {
                 `${API_URL}/sections/create`,
                 {
                     name: state.name,
-                    state: state.sectionStateCode,
+                    state: sectionStates.registered,
                     sectionLimit: parseInt(state.limit),
                     topic: {
                         id: state.topicId,
@@ -134,6 +144,15 @@ function AddSection(props) {
         validateSectionLimit(e);
     };
 
+    const OnCheck = (e) => {
+        setTopic({
+            ...topic,
+            [e.target.name]: !isChecked,
+        });
+
+        setIsChecked((prevIsChecked) => !prevIsChecked);
+    };
+
     const onChangeTopic = (e) => {
         setTopic({
             ...topic,
@@ -155,12 +174,20 @@ function AddSection(props) {
             topicId: t.id,
             topicName: t.name,
         });
+
+        setTopic({
+            ...topic,
+            teacherId: t.id,
+        });
     };
 
     const checkIfAddingNewResource = (e) => {
-        if (String(e.target.value || '').includes('Dodaj nowy...'))
+        if (String(e.target.value || '').includes('Dodaj nowy...')) {
+            setIsChecked(false);
             setNewTopic(true);
-        else setNewTopic(false);
+        } else setNewTopic(false);
+
+        if (topic.teacherId === 0) findTeacherInData(user.id);
     };
 
     const createTeacherName = (teacher) => {
@@ -169,12 +196,8 @@ function AddSection(props) {
             : teacher.name;
     };
 
-    const findTeacherInData = (e) => {
-        let temp = e.target.value;
-        var t = props.teachers.find(
-            (teacher) =>
-                teacher.lastName === temp.substring(temp.indexOf(' ') + 1)
-        );
+    const findTeacherInData = (teacherId) => {
+        var t = teachers.find((teacher) => teacher.id === teacherId);
 
         setState({
             ...state,
@@ -229,27 +252,6 @@ function AddSection(props) {
                                 onChange={onChange}
                             />
                         </InputRow>
-                        <Select
-                            label="Stan"
-                            name="sectionState"
-                            options={[
-                                getStateName(sectionStates.open),
-                                getStateName(sectionStates.closed),
-                                getStateName(sectionStates.cancelled),
-                                getStateName(sectionStates.finished),
-                                getStateName(sectionStates.registered),
-                            ]}
-                            onChange={(e) => {
-                                setState({
-                                    ...state,
-                                    sectionStateCode: getStateCode(
-                                        e.target.value
-                                    ),
-                                    sectionStateName: e.target.value,
-                                });
-                            }}
-                            value={state.sectionStateName}
-                        />
                         <SubTitle>Temat</SubTitle>
                         <InputRow gtc="1fr">
                             <Select
@@ -280,19 +282,22 @@ function AddSection(props) {
                                                 name="topicDescription"
                                                 onChange={onChangeTopic}
                                             />
-                                            <Input
-                                                label="Status"
+                                            <Checkbox
+                                                label={
+                                                    isChecked
+                                                        ? 'aktywny'
+                                                        : 'nieaktywny'
+                                                }
                                                 name="topicStatus"
-                                                onChange={onChangeTopic}
+                                                value={isChecked}
+                                                onChange={OnCheck}
                                             />
                                             <Select
+                                                disabled={true}
                                                 label="Nauczyciel"
                                                 name="teacher"
-                                                options={props.teachers.map(
-                                                    (x) => createTeacherName(x)
-                                                )}
+                                                options={[]}
                                                 value={state.teacher}
-                                                onChange={findTeacherInData}
                                             />
                                         </InputRow>
                                         <Button

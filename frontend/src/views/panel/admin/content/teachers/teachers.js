@@ -25,6 +25,7 @@ function Teachers (props) {
     const {user,context} = props;
 
     //REACT HOOKS
+    const [active,setActive] = useState(true);
     const [search,setSearch] = useState('');
     const [addClient,setAddClient] = useState(false);
 
@@ -38,28 +39,30 @@ function Teachers (props) {
     const [teachers,setTeachers] = useState([]);
 
     useEffect(() => {
-        setLoading(true);
-        console.log(getCookie('token'));
-        axios.get(`${API_URL}/teacher/paginated${search !== '' ? '?name='+search : ''}`,{
-            headers:{
-                'Authorization': 'Bearer ' + getCookie('token')
-            }
-        })
-        .then(res => {
-            setLoading(false);
-            setTeachers(res.data.content);
-            setPageSettings({
-                activePage:res.data.number,
-                totalPages:res.data.totalPages,
-                last:res.data.last,
-                first:res.data.first,
+        if(context) {
+            setLoading(true);
+            console.log(getCookie('token'));
+            axios.get(`${API_URL}/teacher/paginated/?onlyActive=${active}&${search !== '' ? '&name=' + search : ''}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + getCookie('token')
+                }
             })
-        })
-        .catch(err => console.log(err));
-    },[user,refresh,search]);
+                .then(res => {
+                    setLoading(false);
+                    setTeachers(res.data.content);
+                    setPageSettings({
+                        activePage: res.data.number,
+                        totalPages: res.data.totalPages,
+                        last: res.data.last,
+                        first: res.data.first,
+                    })
+                })
+                .catch(err => console.log(err));
+        }
+    },[user,refresh,search,active]);
 
     const onDelete = (email,id) => {
-        if(window.confirm(`Czy chcesz usunąć użytkownika o emailu: ${email} ?`)){
+        if(window.confirm(`Czy chcesz dezaktywować użytkownika o emailu: ${email} ?`)){
             setLoading(true);
             axios.delete(`${API_URL}/registration/${id}`,{
                 headers:{
@@ -82,8 +85,8 @@ function Teachers (props) {
             <ContentBody>
                 <FiltersWrapper>
                     <div>
-                        {/*<Select label="Kierunek" options={['Informtyka','Elektronika']}/>*/}
-                        {/*<Select label="Semestr" options={['1','2','3','4','5']}/>*/}
+                        <Select label="Status" options={['Aktywni','Nieaktywni']} value={active ? 'Aktywni' : 'Nieaktywni'} onChange={(e) => setActive(e.target.value == 'Aktywni')}/>
+
                 <Search placeHolder={"Imię / Nazwisko / Numer nauczyciela"}value={search} onChange={(e) => setSearch(e.target.value)}/>
                     </div>
                     <div>

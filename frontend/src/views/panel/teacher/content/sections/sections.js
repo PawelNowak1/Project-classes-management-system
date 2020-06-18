@@ -204,6 +204,7 @@ function Sections(props) {
                         topics={topics}
                         teachers={teachers}
                         parent={"/panel/sections"}
+                        user={user}
                     />
                 )}
             />

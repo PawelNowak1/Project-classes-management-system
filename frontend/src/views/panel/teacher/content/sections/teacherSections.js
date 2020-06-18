@@ -9,8 +9,10 @@ import {
     faChevronLeft,
     faChevronRight,
     faEllipsisH,
+    faPen,
     faPlusCircle,
     faTrash,
+    faUsersCog,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
@@ -21,10 +23,10 @@ import { Link, Route } from 'react-router-dom';
 import { API_URL } from '../../../../../theme/constans';
 import { getCookie } from '../../../../../theme/cookies';
 import AddSection from './modals/addSection/addSection';
-import { getStateName } from './sectionStates';
+import {getStateName, sectionStates} from './sectionStates';
 
 function TeacherSections(props) {
-    const { user, context } = props;
+    const { user, context, history } = props;
 
     const [search, setSearch] = useState('');
 
@@ -135,7 +137,7 @@ function TeacherSections(props) {
         <>
             <Wrapper>
                 <ContentHeader>
-                    <Title>Wszystkie sekcje</Title>
+                    <Title>Twoje sekcje</Title>
                 </ContentHeader>
                 <ContentBody>
                     <FiltersWrapper>
@@ -182,6 +184,25 @@ function TeacherSections(props) {
                                                 {getStateName(section.state)}
                                             </td>
                                             <td className="trash">
+                                                {
+                                                    section.state === sectionStates.registered ?
+                                                        <FontAwesomeIcon
+                                                            icon={faUsersCog}
+                                                            onClick={() =>
+                                                                history.push(
+                                                                    `/panel/registered-section/${section.id}`
+                                                                )
+                                                            }
+                                                        /> :
+                                                        <FontAwesomeIcon
+                                                            icon={faPen}
+                                                            onClick={() =>
+                                                                history.push(
+                                                                    `/panel/section/${section.id}`
+                                                                )
+                                                            }
+                                                        />
+                                                }
                                                 <FontAwesomeIcon
                                                     icon={faTrash}
                                                     onClick={() =>
@@ -208,7 +229,7 @@ function TeacherSections(props) {
                         context={context}
                         topics={topics}
                         teachers={teachers}
-                        parent={"/panel/yoursections"}
+                        parent={'/panel/yoursections'}
                     />
                 )}
             />
@@ -336,6 +357,7 @@ const ContentTable = styled.table`
         }
         &.trash {
             cursor: pointer;
+            display: flex;
         }
         span {
             text-transform: uppercase;
