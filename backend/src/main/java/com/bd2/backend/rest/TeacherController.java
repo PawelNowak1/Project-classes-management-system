@@ -25,7 +25,7 @@ public class TeacherController {
     public ResponseEntity<Page<Teacher>> findTeachers(@RequestParam(defaultValue = "0") Integer pageNo,
                                                       @RequestParam(defaultValue = "10") Integer pageSize,
                                                       @RequestParam(required = false) String name,
-                                                      @RequestParam(defaultValue = "true") Boolean onlyActive) {
-        return ResponseEntity.ok(teacherService.findTeachers(pageNo, pageSize, name, onlyActive));
+                                                      @RequestParam(defaultValue = "true") Boolean active) {
+        return ResponseEntity.ok(teacherService.findTeachers(pageNo, pageSize, name, active));
     }
 }
