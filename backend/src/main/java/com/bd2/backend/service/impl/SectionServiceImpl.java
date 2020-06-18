@@ -97,6 +97,13 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
+    public void deleteAllStudentsFromSection(Long sectionId) {
+        List<StudentSection> studentSections = studentSectionRepository.findAllBySectionId(sectionId);
+        for (StudentSection sc : studentSections)
+            studentSectionRepository.deleteById(sc.getId());
+    }
+
+    @Override
     public void changeSectionState(String state, Long sectionId) {
         Optional<Section> optionalSection = sectionRepository.findById(sectionId);
         if (optionalSection.isPresent()) {
