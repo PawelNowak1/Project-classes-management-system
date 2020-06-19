@@ -4,11 +4,9 @@ import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.Semester;
 import com.bd2.backend.entities.Student;
 import com.bd2.backend.entities.StudentSection;
-import com.bd2.backend.repository.SectionRepository;
-import com.bd2.backend.repository.SemesterRepository;
-import com.bd2.backend.repository.StudentRepository;
-import com.bd2.backend.repository.StudentSectionRepository;
+import com.bd2.backend.repository.*;
 import com.bd2.backend.response.MarksResponse;
+import com.bd2.backend.response.StudentDTO;
 import com.bd2.backend.response.StudentsInSectionResponse;
 import com.bd2.backend.service.interfaces.SectionService;
 import org.springframework.stereotype.Service;
@@ -23,13 +21,17 @@ public class SectionServiceImpl implements SectionService {
     private final StudentSectionRepository studentSectionRepository;
     private final StudentRepository studentRepository;
     private final SemesterRepository semesterRepository;
+    private final AttachmentRepository attachmentRepository;
+    private final AttendanceRepository attendanceRepository;
 
     public SectionServiceImpl(SectionRepository sectionRepository, StudentSectionRepository studentSectionRepository,
-                              StudentRepository studentRepository, SemesterRepository semesterRepository) {
+                              StudentRepository studentRepository, SemesterRepository semesterRepository, AttendanceRepository attendanceRepository, AttachmentRepository attachmentRepository) {
         this.sectionRepository = sectionRepository;
         this.studentSectionRepository = studentSectionRepository;
         this.studentRepository = studentRepository;
         this.semesterRepository = semesterRepository;
+        this.attachmentRepository = attachmentRepository;
+        this.attendanceRepository = attendanceRepository;
     }
 
     @Override
@@ -83,8 +85,12 @@ public class SectionServiceImpl implements SectionService {
         Optional<Section> section = sectionRepository.findById(sectionId);
         section.ifPresent(studentsInSectionResponse::setSection);
         studentSections.forEach(studentSection -> {
+            StudentDTO studentDTO = new StudentDTO();
+            studentDTO.setStudent(studentSection.getStudent());
+            studentDTO.setAttachment(this.attachmentRepository.findAttachment(sectionId, studentSection.getStudent().getId()));
+            studentDTO.setAttendances(this.attendanceRepository.findAttendace(studentSection.getId(), studentSection.getStudent().getId()));
             studentsInSectionResponse.addStudent(
-                    studentSection.getStudent(),
+                    studentDTO,
                     studentSection.getDate(),
                     studentSection.getMark());
         });

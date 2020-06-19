@@ -1,5 +1,6 @@
 package com.bd2.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ public class Attendance {
 
     private String status; // change to ENUM or dictionary?
 
+    @JsonIgnore
     @ManyToOne
     StudentSection studentSection;
 }

@@ -18,7 +18,7 @@ public class StudentsInSectionResponse {
         this.studentsInSection = new LinkedList<>();
     }
 
-    public void addStudent(Student student, Date date, Integer mark) {
+    public void addStudent(StudentDTO student, Date date, Integer mark) {
         this.studentsInSection.add(new StudentsInSection(
                 student,
                 date,
@@ -30,7 +30,7 @@ public class StudentsInSectionResponse {
 @Data
 @AllArgsConstructor
 class StudentsInSection {
-    private Student student;
+    private StudentDTO student;
     private Date date;
     private Integer mark;
 }
