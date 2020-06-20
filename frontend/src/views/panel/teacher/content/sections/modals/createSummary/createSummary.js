@@ -23,8 +23,6 @@ import SummaryList from './summaryList';
 function CreateSummary(props) {
     const history = useHistory();
     const {
-        refresh,
-        setRefresh,
         context,
         parent,
         sections,
@@ -49,40 +47,44 @@ function CreateSummary(props) {
     const onSubmit = () => {
         setLoading(true);
 
-        axios
-            .post(
-                `${API_URL}/sections/create`,
-                {
-                    name: state.name,
-                    sectionLimit: parseInt(state.limit),
-                    topic: {
-                        id: state.topicId,
-                    },
-                    semester: {
-                        id: context.id,
-                    },
-                },
-                {
-                    headers: {
-                        Authorization: 'Bearer ' + getCookie('token'),
-                    },
-                }
-            )
-            .then((res) => {
-                setLoading(false);
-                setRefresh(!refresh);
-                history.push(parent);
-            })
-            .catch((err) => {
-                setError(err);
-            });
+        // axios
+        //     .post(
+        //         `${API_URL}/sections/create`,
+        //         {
+        //             name: state.name,
+        //             sectionLimit: parseInt(state.limit),
+        //             topic: {
+        //                 id: state.topicId,
+        //             },
+        //             semester: {
+        //                 id: context.id,
+        //             },
+        //         },
+        //         {
+        //             headers: {
+        //                 Authorization: 'Bearer ' + getCookie('token'),
+        //             },
+        //         }
+        //     )
+        //     .then((res) => {
+        //         setLoading(false);
+        //         setRefresh(!refresh);
+        //         history.push(parent);
+        //     })
+        //     .catch((err) => {
+        //         setError(err);
+        //     });
+        console.log(summary);
     };
 
-    const onChange = (e) => {
-        setState({
-            ...state,
-            [e.target.name]: e.target.value,
-        });
+    const isSummaryNotEmpty = () => {
+        return summary.length > 1;
+    };
+
+    const createSubTitle = () => {
+        return isSummaryNotEmpty()
+            ? 'Liczba studentów ujętych w raporcie: ' + summary.length + '.'
+            : 'Brak studentów do zaraportowania.';
     };
 
     return (
@@ -108,23 +110,28 @@ function CreateSummary(props) {
                                 później.
                             </StyledErrorMessage>
                         )}
-                        <SubTitle>Dane sekcji</SubTitle>
-                        <ContentTable cellspacing="0" cellpadding="0">
-                            <tbody>
-                                <tr>
-                                    <th>Data</th>
-                                    <th>Sekcja</th>
-                                    <th>Student</th>
-                                    <th>Ocena</th>
-                                </tr>
-                                <SummaryList
-                                    summary={summary}
-                                    sections={sections}
-                                    students={students}
-                                />
-                            </tbody>
-                        </ContentTable>
+                        <SubTitle>{createSubTitle()}</SubTitle>
+                        {isSummaryNotEmpty() && (
+                            <div>
+                                <ContentTable cellspacing="0" cellpadding="0">
+                                    <tbody>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Sekcja</th>
+                                            <th>Student</th>
+                                            <th>Ocena</th>
+                                        </tr>
+                                        <SummaryList
+                                            summary={summary}
+                                            sections={sections}
+                                            students={students}
+                                        />
+                                    </tbody>
+                                </ContentTable>
+                            </div>
+                        )}
                         <Button
+                            disabled={() => isSummaryNotEmpty()}
                             big
                             style={{ marginTop: '30px' }}
                             onClick={onSubmit}
@@ -146,28 +153,5 @@ function mapStateToProps(state) {
     };
 }
 export default connect(mapStateToProps)(CreateSummary);
-
-const Border = styled.div`
-    border-style: solid;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 10px;
-    border-color: lightgray;
-    border-width: 2px;
-`;
-
-const DownloadInfo = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    color: ${({ theme }) => theme.thirdColor};
-    transition: all 0.3s;
-    cursor: pointer;
-
-    &:hover {
-        color: ${({ theme }) => theme.primaryColor};
-    }
-`;
 
 const Content = styled.div``;
