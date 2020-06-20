@@ -124,20 +124,6 @@ function TeacherSections(props) {
         }
     };
 
-    const displayTeacherName = (section) => {
-        if (section.topic) {
-            if (section.topic.teacher) {
-                return (
-                    section.topic.teacher.firstName +
-                    ' ' +
-                    section.topic.teacher.lastName
-                );
-            }
-        }
-
-        return '-';
-    };
-
     const displayTopicName = (section) => {
         return section.topic ? section.topic.name : '-';
     };
@@ -158,13 +144,6 @@ function TeacherSections(props) {
             });
     };
 
-    const createSummary = (email, id) => {
-        if (window.confirm(`Czy chcesz wygenerować podsumowanie?`)) {
-            // setLoading(true);
-            console.log(summary);
-        }
-    };
-
     return (
         <>
             <Wrapper>
@@ -173,36 +152,33 @@ function TeacherSections(props) {
                 </ContentHeader>
                 <ContentBody>
                     <FiltersWrapper>
+                        <Search
+                            placeHolder={'Nazwa / Temat sekcji'}
+                            value={search}
+                            onChange={(e) =>
+                                setSearch(e.target.value.toLowerCase())
+                            }
+                        />
                         <div>
-                            <Search
-                                placeHolder={'Nazwa / Temat sekcji'}
-                                value={search}
-                                onChange={(e) =>
-                                    setSearch(e.target.value.toLowerCase())
-                                }
-                            />
-                        </div>
-                        <div>
-                            <Link to="/panel/yoursections/create-summary">
-                                <Button
-                                    // onClick={createSummary}
-                                    disabled={loading}
-                                >
-                                    <FontAwesomeIcon icon={faListOl} />
-                                    Generuj raport
-                                </Button>
-                            </Link>
-                        </div>
-                        <div>
-                            <Link to="/panel/yoursections/add-section">
-                                <Button
-                                    onClick={addTeacherOption()}
-                                    disabled={loading}
-                                >
-                                    <FontAwesomeIcon icon={faPlusCircle} />
-                                    Dodaj sekcję
-                                </Button>
-                            </Link>
+                            <div style={{ marginRight: '10px' }}>
+                                <Link to="/panel/yoursections/create-summary">
+                                    <Button disabled={loading}>
+                                        <FontAwesomeIcon icon={faListOl} />
+                                        Generuj raport
+                                    </Button>
+                                </Link>
+                            </div>
+                            <div>
+                                <Link to="/panel/yoursections/add-section">
+                                    <Button
+                                        onClick={addTeacherOption()}
+                                        disabled={loading}
+                                    >
+                                        <FontAwesomeIcon icon={faPlusCircle} />
+                                        Dodaj sekcję
+                                    </Button>
+                                </Link>
+                            </div>
                         </div>
                     </FiltersWrapper>
                     <ContentTable cellspacing="0" cellpadding="0">
@@ -336,18 +312,12 @@ const FiltersWrapper = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    > div {
-        margin-bottom: 10px;
-        align-items: left;
-    }
-    > div:first-of-type {
+    margin-right: 10px;
+    div {
         display: flex;
         flex-wrap: wrap;
-        justify-content: flex-start;
+        justify-content: flex-end;
         align-items: center;
-        > div {
-            margin-right: 10px;
-        }
     }
 `;
 

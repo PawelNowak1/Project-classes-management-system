@@ -22,30 +22,12 @@ import SummaryList from './summaryList';
 
 function CreateSummary(props) {
     const history = useHistory();
-    const {
-        context,
-        parent,
-        sections,
-        students,
-        summary,
-        user,
-    } = props;
+    const { context, parent, sections, students, summary, user } = props;
 
-    const [loading, setLoading] = useState();
     const [error, setError] = useState();
 
-    const [state, setState] = useState({
-        name: '',
-        limit: '',
-        sectionStateCode: '',
-        sectionStateName: '',
-        topicName: '',
-        topicId: 0,
-        teacher: '',
-    });
-
     const onSubmit = () => {
-        setLoading(true);
+        // setLoading(true);
 
         // axios
         //     .post(
@@ -77,14 +59,14 @@ function CreateSummary(props) {
         console.log(summary);
     };
 
-    const isSummaryNotEmpty = () => {
-        return summary.length > 1;
+    const isSummaryEmpty = () => {
+        return summary.length === 0;
     };
 
     const createSubTitle = () => {
-        return isSummaryNotEmpty()
-            ? 'Liczba studentów ujętych w raporcie: ' + summary.length + '.'
-            : 'Brak studentów do zaraportowania.';
+        return isSummaryEmpty()
+            ? 'Brak studentów do zaraportowania.'
+            : 'Liczba studentów ujętych w raporcie: ' + summary.length + '.';
     };
 
     return (
@@ -111,7 +93,7 @@ function CreateSummary(props) {
                             </StyledErrorMessage>
                         )}
                         <SubTitle>{createSubTitle()}</SubTitle>
-                        {isSummaryNotEmpty() && (
+                        {!isSummaryEmpty() && (
                             <div>
                                 <ContentTable cellspacing="0" cellpadding="0">
                                     <tbody>
@@ -131,8 +113,8 @@ function CreateSummary(props) {
                             </div>
                         )}
                         <Button
-                            disabled={() => isSummaryNotEmpty()}
                             big
+                            disabled={isSummaryEmpty() ? true : false}
                             style={{ marginTop: '30px' }}
                             onClick={onSubmit}
                         >
