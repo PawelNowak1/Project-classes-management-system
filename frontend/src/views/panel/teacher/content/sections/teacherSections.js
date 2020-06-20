@@ -14,16 +14,19 @@ import {
     faTrash,
     faUsersCog,
     faUser,
+    faListOl,
 } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Select from '../../../../../components/select';
 import Search from '../../../../../components/search';
+import ContentTable from '../../../../../components/contentTable';
 import { Link, Route } from 'react-router-dom';
 import { API_URL } from '../../../../../theme/constans';
 import { getCookie } from '../../../../../theme/cookies';
 import AddSection from './modals/addSection/addSection';
-import {getStateName, sectionStates} from './sectionStates';
+import CreateSummary from './modals/createSummary/createSummary';
+import { getStateName, sectionStates } from './sectionStates';
 
 function TeacherSections(props) {
     const { user, context, history } = props;
@@ -36,6 +39,8 @@ function TeacherSections(props) {
     const [sections, setSections] = useState([]);
     const [topics, setTopics] = useState([]);
     const [teachers, setTeachers] = useState([]);
+    const [summary, setSummary] = useState([]);
+    const [students, setStudents] = useState([]);
 
     useEffect(() => {
         setLoading(true);
@@ -59,6 +64,26 @@ function TeacherSections(props) {
                     });
 
                     setSections(filteredSections);
+                });
+
+            axios
+                .get(`${API_URL}/sections/summary/${context.id}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + getCookie('token'),
+                    },
+                })
+                .then((res) => {
+                    setSummary(res.data);
+                });
+
+            axios
+                .get(`${API_URL}/student/all/${context.id}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + getCookie('token'),
+                    },
+                })
+                .then((res) => {
+                    setStudents(res.data);
                 });
         }
 
@@ -133,6 +158,13 @@ function TeacherSections(props) {
             });
     };
 
+    const createSummary = (email, id) => {
+        if (window.confirm(`Czy chcesz wygenerować podsumowanie?`)) {
+            // setLoading(true);
+            console.log(summary);
+        }
+    };
+
     return (
         <>
             <Wrapper>
@@ -149,6 +181,17 @@ function TeacherSections(props) {
                                     setSearch(e.target.value.toLowerCase())
                                 }
                             />
+                        </div>
+                        <div>
+                            <Link to="/panel/yoursections/create-summary">
+                                <Button
+                                    // onClick={createSummary}
+                                    disabled={loading}
+                                >
+                                    <FontAwesomeIcon icon={faListOl} />
+                                    Generuj raport
+                                </Button>
+                            </Link>
                         </div>
                         <div>
                             <Link to="/panel/yoursections/add-section">
@@ -184,25 +227,26 @@ function TeacherSections(props) {
                                                 {getStateName(section.state)}
                                             </td>
                                             <td className="trash">
-                                                {
-                                                    section.state === sectionStates.registered ?
-                                                        <FontAwesomeIcon
-                                                            icon={faUsersCog}
-                                                            onClick={() =>
-                                                                history.push(
-                                                                    `/panel/registered-section/${section.id}`
-                                                                )
-                                                            }
-                                                        /> :
-                                                        <FontAwesomeIcon
-                                                            icon={faPen}
-                                                            onClick={() =>
-                                                                history.push(
-                                                                    `/panel/section/${section.id}`
-                                                                )
-                                                            }
-                                                        />
-                                                }
+                                                {section.state ===
+                                                sectionStates.registered ? (
+                                                    <FontAwesomeIcon
+                                                        icon={faUsersCog}
+                                                        onClick={() =>
+                                                            history.push(
+                                                                `/panel/registered-section/${section.id}`
+                                                            )
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <FontAwesomeIcon
+                                                        icon={faPen}
+                                                        onClick={() =>
+                                                            history.push(
+                                                                `/panel/section/${section.id}`
+                                                            )
+                                                        }
+                                                    />
+                                                )}
                                                 <FontAwesomeIcon
                                                     icon={faTrash}
                                                     onClick={() =>
@@ -229,6 +273,20 @@ function TeacherSections(props) {
                         context={context}
                         topics={topics}
                         teachers={teachers}
+                        parent={'/panel/yoursections'}
+                    />
+                )}
+            />
+            <Route
+                path="/panel/yoursections/create-summary"
+                component={() => (
+                    <CreateSummary
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        context={context}
+                        summary={summary}
+                        sections={sections}
+                        students={students}
                         parent={'/panel/yoursections'}
                     />
                 )}
@@ -280,6 +338,7 @@ const FiltersWrapper = styled.div`
     align-items: center;
     > div {
         margin-bottom: 10px;
+        align-items: left;
     }
     > div:first-of-type {
         display: flex;
