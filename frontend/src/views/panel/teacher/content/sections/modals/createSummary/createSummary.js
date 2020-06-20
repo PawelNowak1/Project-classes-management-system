@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactDOMServer } from 'react';
 import styled from 'styled-components';
 import {
     Flex,
@@ -14,50 +14,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../../../../../../components/button';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
-import { API_URL } from '../../../../../../../theme/constans';
 import { connect } from 'react-redux';
-import { getCookie } from '../../../../../../../theme/cookies';
 import SummaryList from './summaryList';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 function CreateSummary(props) {
     const history = useHistory();
     const { context, parent, sections, students, summary, user } = props;
 
     const [error, setError] = useState();
-
-    const onSubmit = () => {
-        // setLoading(true);
-
-        // axios
-        //     .post(
-        //         `${API_URL}/sections/create`,
-        //         {
-        //             name: state.name,
-        //             sectionLimit: parseInt(state.limit),
-        //             topic: {
-        //                 id: state.topicId,
-        //             },
-        //             semester: {
-        //                 id: context.id,
-        //             },
-        //         },
-        //         {
-        //             headers: {
-        //                 Authorization: 'Bearer ' + getCookie('token'),
-        //             },
-        //         }
-        //     )
-        //     .then((res) => {
-        //         setLoading(false);
-        //         setRefresh(!refresh);
-        //         history.push(parent);
-        //     })
-        //     .catch((err) => {
-        //         setError(err);
-        //     });
-        console.log(summary);
-    };
 
     const isSummaryEmpty = () => {
         return summary.length === 0;
@@ -67,6 +33,17 @@ function CreateSummary(props) {
         return isSummaryEmpty()
             ? 'Brak studentów do zaraportowania.'
             : 'Liczba studentów ujętych w raporcie: ' + summary.length + '.';
+    };
+
+    const createPDF = () => {
+        let date = new Date().toJSON().slice(0, 10).replace(/-/g, '_');
+        html2canvas(document.querySelector('#capture')).then((canvas) => {
+            document.body.appendChild(canvas);
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF();
+            pdf.addImage(imgData, 'PNG', 0, 0);
+            pdf.save(`raport_${date}.pdf`);
+        });
     };
 
     return (
@@ -94,7 +71,7 @@ function CreateSummary(props) {
                         )}
                         <SubTitle>{createSubTitle()}</SubTitle>
                         {!isSummaryEmpty() && (
-                            <div>
+                            <div id={'capture'}>
                                 <ContentTable cellspacing="0" cellpadding="0">
                                     <tbody>
                                         <tr>
@@ -116,7 +93,7 @@ function CreateSummary(props) {
                             big
                             disabled={isSummaryEmpty() ? true : false}
                             style={{ marginTop: '30px' }}
-                            onClick={onSubmit}
+                            onClick={createPDF}
                         >
                             {'Stwórz raport'}
                         </Button>
