@@ -57,7 +57,7 @@ function CreateSummary(props) {
                     onClick={(e) => e.stopPropagation()}
                 >
                     <Flex jc="space-between">
-                        <Title secondary>Tworzenie raportu</Title>
+                        <Title secondary>Generowanie raportu</Title>
                         <div onClick={() => history.push(parent)}>
                             <FontAwesomeIcon icon={faTimesCircle} />
                         </div>
@@ -95,7 +95,7 @@ function CreateSummary(props) {
                             style={{ marginTop: '30px' }}
                             onClick={createPDF}
                         >
-                            {'Stwórz raport'}
+                            {'Pobierz plik pdf'}
                         </Button>
                     </Content>
                 </ModalContent>
