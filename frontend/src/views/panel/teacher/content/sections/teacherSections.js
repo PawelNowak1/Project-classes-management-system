@@ -307,6 +307,7 @@ const Pagination = styled.div`
         }
     }
 `;
+
 const FiltersWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
