@@ -100,7 +100,6 @@ function Students(props) {
             email: student.user.email ?? '',
             id: student.id,
         });
-        // window.alert(`edytujesz studenta o id: ${id}`);
     };
 
     return (
