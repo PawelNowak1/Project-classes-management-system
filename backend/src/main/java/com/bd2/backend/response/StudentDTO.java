@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class StudentDTO {
     private Student student;
+    private Long studentSectionId;
     private List<Attachment> attachment;
     private List<Attendance> attendances;
 }

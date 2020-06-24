@@ -2,6 +2,10 @@ package com.bd2.backend.rest;
 
 import com.bd2.backend.entities.Attendance;
 import com.bd2.backend.entities.Student;
+import com.bd2.backend.request.AttendanceRequest;
+import com.bd2.backend.request.MarkRequest;
+import com.bd2.backend.request.StudentAttendanceRequest;
+import com.bd2.backend.request.StudentMarkRequest;
 import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.service.impl.StudentServiceImpl;
 import org.springframework.data.domain.Page;
@@ -58,9 +62,16 @@ public class StudentController {
     }
 
     @RequestMapping(path = "/checkaattendances", method = RequestMethod.POST)
-    public ResponseEntity<?> checkAttendanceList(@RequestBody List<Attendance> attendance) {
-        for (Attendance attend : attendance)
-            studentService.saveAttendance(attend);
+    public ResponseEntity<?> checkAttendanceList(@RequestBody AttendanceRequest attendanceRequest) {
+        for (StudentAttendanceRequest attend : attendanceRequest.getStudentAttendanceList())
+            studentService.saveAttendance(attend, attendanceRequest.getDate());
+        return ResponseEntity.ok("ok");
+    }
+
+    @RequestMapping(path = "/markstudents", method = RequestMethod.POST)
+    public ResponseEntity<?> getAllMarksForStudentsInSection(@RequestBody MarkRequest markRequest) {
+        for (StudentMarkRequest mark : markRequest.getStudentMarkRequestList())
+            studentService.saveMark(mark, markRequest.getDate());
         return ResponseEntity.ok("ok");
     }
 
