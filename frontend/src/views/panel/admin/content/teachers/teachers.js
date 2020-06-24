@@ -53,7 +53,7 @@ function Teachers(props) {
             console.log(getCookie('token'));
             axios
                 .get(
-                    `${API_URL}/teacher/paginated/?onlyActive=${active}&${
+                    `${API_URL}/teacher/paginated/?active=${active}&${
                         search !== '' ? '&name=' + search : ''
                     }`,
                     {
@@ -77,14 +77,19 @@ function Teachers(props) {
     }, [user, refresh, search, active]);
 
     const onDelete = (email, id) => {
+        var textInfo = active ? 'dezaktywować' : 'aktywować';
+        var query = active
+            ? `${API_URL}/registration/${id}`
+            : `${API_URL}/registration/${id}?active=true`;
+
         if (
             window.confirm(
-                `Czy chcesz dezaktywować użytkownika o emailu: ${email} ?`
+                `Czy chcesz ${textInfo} użytkownika o emailu: ${email} ?`
             )
         ) {
             setLoading(true);
             axios
-                .delete(`${API_URL}/registration/${id}`, {
+                .delete(query, {
                     headers: {
                         Authorization: 'Bearer ' + getCookie('token'),
                     },

@@ -74,14 +74,19 @@ function Students(props) {
     }, [user, refresh, search, context, active]);
 
     const onDelete = (email, id) => {
+        var textInfo = active ? 'dezaktywować' : 'aktywować';
+        var query = active
+            ? `${API_URL}/registration/${id}`
+            : `${API_URL}/registration/${id}?active=true`;
+
         if (
             window.confirm(
-                `Czy chcesz dezaktywować użytkownika o emailu: ${email} ?`
+                `Czy chcesz ${textInfo} użytkownika o emailu: ${email} ?`
             )
         ) {
             setLoading(true);
             axios
-                .delete(`${API_URL}/registration/${id}`, {
+                .delete(query, {
                     headers: {
                         Authorization: 'Bearer ' + getCookie('token'),
                     },
