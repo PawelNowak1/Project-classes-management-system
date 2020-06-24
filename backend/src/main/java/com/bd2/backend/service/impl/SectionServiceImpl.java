@@ -86,6 +86,7 @@ public class SectionServiceImpl implements SectionService {
         section.ifPresent(studentsInSectionResponse::setSection);
         studentSections.forEach(studentSection -> {
             StudentDTO studentDTO = new StudentDTO();
+            studentDTO.setStudentSectionId(studentSection.getId());
             studentDTO.setStudent(studentSection.getStudent());
             studentDTO.setAttachment(this.attachmentRepository.findAttachment(sectionId, studentSection.getStudent().getId()));
             studentDTO.setAttendances(this.attendanceRepository.findAttendace(studentSection.getId(), studentSection.getStudent().getId()));
