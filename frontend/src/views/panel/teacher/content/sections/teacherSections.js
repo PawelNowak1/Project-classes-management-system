@@ -14,16 +14,19 @@ import {
     faTrash,
     faUsersCog,
     faUser,
+    faListOl,
 } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Select from '../../../../../components/select';
 import Search from '../../../../../components/search';
+import ContentTable from '../../../../../components/contentTable';
 import { Link, Route } from 'react-router-dom';
 import { API_URL } from '../../../../../theme/constans';
 import { getCookie } from '../../../../../theme/cookies';
 import AddSection from './modals/addSection/addSection';
-import {getStateName, sectionStates} from './sectionStates';
+import CreateSummary from './modals/createSummary/createSummary';
+import { getStateName, sectionStates } from './sectionStates';
 
 function TeacherSections(props) {
     const { user, context, history } = props;
@@ -36,6 +39,8 @@ function TeacherSections(props) {
     const [sections, setSections] = useState([]);
     const [topics, setTopics] = useState([]);
     const [teachers, setTeachers] = useState([]);
+    const [summary, setSummary] = useState([]);
+    const [students, setStudents] = useState([]);
 
     useEffect(() => {
         setLoading(true);
@@ -59,6 +64,26 @@ function TeacherSections(props) {
                     });
 
                     setSections(filteredSections);
+                });
+
+            axios
+                .get(`${API_URL}/sections/summary/${context.id}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + getCookie('token'),
+                    },
+                })
+                .then((res) => {
+                    setSummary(res.data);
+                });
+
+            axios
+                .get(`${API_URL}/student/all/${context.id}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + getCookie('token'),
+                    },
+                })
+                .then((res) => {
+                    setStudents(res.data);
                 });
         }
 
@@ -99,20 +124,6 @@ function TeacherSections(props) {
         }
     };
 
-    const displayTeacherName = (section) => {
-        if (section.topic) {
-            if (section.topic.teacher) {
-                return (
-                    section.topic.teacher.firstName +
-                    ' ' +
-                    section.topic.teacher.lastName
-                );
-            }
-        }
-
-        return '-';
-    };
-
     const displayTopicName = (section) => {
         return section.topic ? section.topic.name : '-';
     };
@@ -141,25 +152,33 @@ function TeacherSections(props) {
                 </ContentHeader>
                 <ContentBody>
                     <FiltersWrapper>
+                        <Search
+                            placeHolder={'Nazwa / Temat sekcji'}
+                            value={search}
+                            onChange={(e) =>
+                                setSearch(e.target.value.toLowerCase())
+                            }
+                        />
                         <div>
-                            <Search
-                                placeHolder={'Nazwa / Temat sekcji'}
-                                value={search}
-                                onChange={(e) =>
-                                    setSearch(e.target.value.toLowerCase())
-                                }
-                            />
-                        </div>
-                        <div>
-                            <Link to="/panel/yoursections/add-section">
-                                <Button
-                                    onClick={addTeacherOption()}
-                                    disabled={loading}
-                                >
-                                    <FontAwesomeIcon icon={faPlusCircle} />
-                                    Dodaj sekcję
-                                </Button>
-                            </Link>
+                            <div style={{ marginRight: '10px' }}>
+                                <Link to="/panel/yoursections/create-summary">
+                                    <Button disabled={loading}>
+                                        <FontAwesomeIcon icon={faListOl} />
+                                        Generuj raport
+                                    </Button>
+                                </Link>
+                            </div>
+                            <div>
+                                <Link to="/panel/yoursections/add-section">
+                                    <Button
+                                        onClick={addTeacherOption()}
+                                        disabled={loading}
+                                    >
+                                        <FontAwesomeIcon icon={faPlusCircle} />
+                                        Dodaj sekcję
+                                    </Button>
+                                </Link>
+                            </div>
                         </div>
                     </FiltersWrapper>
                     <ContentTable cellspacing="0" cellpadding="0">
@@ -184,25 +203,26 @@ function TeacherSections(props) {
                                                 {getStateName(section.state)}
                                             </td>
                                             <td className="trash">
-                                                {
-                                                    section.state === sectionStates.registered ?
-                                                        <FontAwesomeIcon
-                                                            icon={faUsersCog}
-                                                            onClick={() =>
-                                                                history.push(
-                                                                    `/panel/registered-section/${section.id}`
-                                                                )
-                                                            }
-                                                        /> :
-                                                        <FontAwesomeIcon
-                                                            icon={faPen}
-                                                            onClick={() =>
-                                                                history.push(
-                                                                    `/panel/section/${section.id}`
-                                                                )
-                                                            }
-                                                        />
-                                                }
+                                                {section.state ===
+                                                sectionStates.registered ? (
+                                                    <FontAwesomeIcon
+                                                        icon={faUsersCog}
+                                                        onClick={() =>
+                                                            history.push(
+                                                                `/panel/registered-section/${section.id}`
+                                                            )
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <FontAwesomeIcon
+                                                        icon={faPen}
+                                                        onClick={() =>
+                                                            history.push(
+                                                                `/panel/section/${section.id}`
+                                                            )
+                                                        }
+                                                    />
+                                                )}
                                                 <FontAwesomeIcon
                                                     icon={faTrash}
                                                     onClick={() =>
@@ -229,6 +249,20 @@ function TeacherSections(props) {
                         context={context}
                         topics={topics}
                         teachers={teachers}
+                        parent={'/panel/yoursections'}
+                    />
+                )}
+            />
+            <Route
+                path="/panel/yoursections/create-summary"
+                component={() => (
+                    <CreateSummary
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        context={context}
+                        summary={summary}
+                        sections={sections}
+                        students={students}
                         parent={'/panel/yoursections'}
                     />
                 )}
@@ -273,22 +307,18 @@ const Pagination = styled.div`
         }
     }
 `;
+
 const FiltersWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    > div {
-        margin-bottom: 10px;
-    }
-    > div:first-of-type {
+    margin-right: 10px;
+    div {
         display: flex;
         flex-wrap: wrap;
-        justify-content: flex-start;
+        justify-content: flex-end;
         align-items: center;
-        > div {
-            margin-right: 10px;
-        }
     }
 `;
 
@@ -307,101 +337,6 @@ const PatronSelect = styled.select`
     border-radius: 3px;
     padding: 7px 25px;
     border: none;
-`;
-
-const ContentTable = styled.table`
-    border-collapse: collapse;
-    margin-top: 20px;
-    width: 100%;
-    tr {
-        border-bottom: 1px solid ${({ theme }) => theme.fourthColor};
-        &:first-of-type,
-        &:last-of-type {
-            border-bottom: 0px;
-        }
-    }
-    th,
-    td {
-        border: none;
-        padding: 0px;
-    }
-    th {
-        background: ${({ theme }) => theme.fourthColor};
-        font-size: ${({ theme }) => theme.font.XS};
-        font-weight: ${({ theme }) => theme.font.Regular};
-        color: ${({ theme }) => theme.secondColor};
-        padding: 6px 8px;
-        text-align: left;
-        &:first-of-type {
-            border-radius: 3px 0 0 3px;
-        }
-        &:last-of-type {
-            border-radius: 3px 0 0 3px;
-        }
-        &.textAlign-center {
-            text-align: center;
-        }
-    }
-    td {
-        padding: 8px 8px;
-        font-size: ${({ theme }) => theme.font.XS};
-        color: ${({ theme }) => theme.thirdColor};
-        font-weight: ${({ theme }) => theme.font.Light};
-        svg {
-            margin: 0 auto;
-            display: block;
-        }
-        &.name {
-            color: ${({ theme }) => theme.secondColor};
-            min-width: 200px;
-        }
-        &.trash {
-            cursor: pointer;
-            display: flex;
-        }
-        span {
-            text-transform: uppercase;
-            font-size: ${({ theme }) => theme.font.XS};
-            border-radius: 3px;
-            padding: 3px 15px;
-            font-weight: ${({ theme }) => theme.font.Bold};
-        }
-        &.web {
-            span {
-                background: ${({ theme }) => theme.greenBackground};
-                color: ${({ theme }) => theme.green};
-            }
-        }
-
-        &.comperia {
-            span {
-                background: ${({ theme }) => theme.blueBackground};
-                color: ${({ theme }) => theme.blue};
-            }
-        }
-
-        &.wlasny {
-            span {
-                background: ${({ theme }) => theme.yellowBackground};
-                color: ${({ theme }) => theme.yellow};
-            }
-        }
-
-        &.patron {
-            span {
-                height: 35px;
-                width: 35px;
-                margin: 0 auto;
-                display: block;
-                background: ${({ theme }) => theme.fourthColor};
-                font-weight: ${({ theme }) => theme.font.Bold};
-                font-size: ${({ theme }) => theme.font.XS};
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-    }
 `;
 
 const ContentBody = styled.div`

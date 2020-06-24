@@ -20,6 +20,6 @@ public class TeacherServiceImpl implements TeacherService {
     public Page<Teacher> findTeachers(int page, int size, String name, Boolean active) {
         if (active)
             return teacherRepository.findTeacherPaginated(name, "Y", PageRequest.of(page, size));
-        return teacherRepository.findTeacherPaginated(name, null, PageRequest.of(page, size));
+        return teacherRepository.findTeacherPaginated(name, "N", PageRequest.of(page, size));
     }
 }

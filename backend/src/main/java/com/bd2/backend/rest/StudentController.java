@@ -28,8 +28,8 @@ public class StudentController {
     public ResponseEntity<Page<Student>> findStudents(@RequestParam(defaultValue = "0") Integer pageNo,
                                                       @RequestParam(defaultValue = "10") Integer pageSize,
                                                       @RequestParam(required = false) String name,
-                                                      @RequestParam(defaultValue = "true") Boolean onlyActive){
-        return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, name, onlyActive));
+                                                      @RequestParam(defaultValue = "true") Boolean active){
+        return ResponseEntity.ok(studentService.findStudents(pageNo, pageSize, name, active));
     }
 
     @RequestMapping(path = "/{semesterId}/paginated", method = RequestMethod.GET)

@@ -2,6 +2,7 @@ package com.bd2.backend.rest;
 
 import com.bd2.backend.entities.*;
 import com.bd2.backend.repository.*;
+import com.bd2.backend.request.EditUserRequest;
 import com.bd2.backend.request.RegistrationRequest;
 import com.bd2.backend.security.JwtUtils;
 import com.bd2.backend.security.Roles;
@@ -89,8 +90,7 @@ public class RegistrationController {
                     studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user, semesterContext.get()));
                 else
                     studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user));
-            }
-            else
+            } else
                 studentRepository.save(new Student(registrationRequest.getName(), registrationRequest.getLastName(), user));
         }
         return ResponseEntity.ok("User " + user.getUsername() + " registered successfully!");
@@ -99,12 +99,29 @@ public class RegistrationController {
     @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deactivateUser(@PathVariable("userId") Long userId,
-                                        @RequestParam(defaultValue = "false") Boolean active) {
+                                            @RequestParam(defaultValue = "false") Boolean active) {
         Optional<User> user = userRepository.findById((userId));
         user.ifPresent(value -> {
             value.setActive(active);
             userRepository.save(value);
         });
         return ResponseEntity.ok("Changed active flag to: " + active + " for user with id: " + userId);
+    }
+
+    @PutMapping(value = "/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> updateUser(@PathVariable("userId") Long userId, @RequestBody EditUserRequest editUser) {
+        Optional<User> existingUser = this.userRepository.findById(userId);
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
+            user.setEmail(editUser.getEmail());
+            user.setUsername(editUser.getUsername());
+            user.setPassword(this.encoder.encode(editUser.getPassword()));
+            this.userRepository.save(user);
+            return ResponseEntity.ok("User updated!");
+        }
+        return ResponseEntity
+                .badRequest()
+                .body("User does not exist!");
     }
 }

@@ -155,8 +155,58 @@ public class SectionController {
         return ResponseEntity.ok("All students added to section!\n");
     }
 
-    @RequestMapping(path = "/addStudentsList", method = RequestMethod.POST)
-    public ResponseEntity<?> addStudentsList(@RequestBody AddStudentsToSectionRequest addStudentsRequest) {
+    @RequestMapping(path = "/appendStudentsList", method = RequestMethod.POST)
+    public ResponseEntity<?> appendStudentsList(@RequestBody AddStudentsToSectionRequest addStudentsRequest) {
+        Section section = this.sectionService.getSection(addStudentsRequest.getSectionId());
+        int studentsFromRequestAlreadyInSection = 0;
+        for (Long id : addStudentsRequest.getStudentIds()) {
+            if (this.sectionService.isStudentAlreadyInSection(id, addStudentsRequest.getSectionId())) {
+                ++studentsFromRequestAlreadyInSection;
+            }
+        }
+
+        if (section == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Section with id " + addStudentsRequest.getSectionId() + " does not exist!\n");
+        }
+        if(!this.sectionService.isStudentOnTheSameSemesterAsSection(addStudentsRequest.getStudentIds().get(0), addStudentsRequest.getSectionId())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("All students must be on the same semester as section with id "
+                            + addStudentsRequest.getStudentIds().get(0) + "!\n");
+
+        }
+        if (this.sectionService.isStudentAlreadyInSectionOnSemester(addStudentsRequest.getStudentIds().get(0), addStudentsRequest.getSectionId())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Students are already in section on the same semester as section with id " +
+                            addStudentsRequest.getStudentIds().get(0) + "!\n");
+        }
+        if (!section.getState().equals(SectionStates.reg.name())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Section is not in registered state anymore - new students cannot be added.\n");
+        }
+        if (this.sectionService.getCurrentStudentsCountInSection(addStudentsRequest.getSectionId())
+                + addStudentsRequest.getStudentIds().size() - studentsFromRequestAlreadyInSection > section.getSectionLimit()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("In this section is not enough free spaces - new students cannot be added!\n");
+        }
+        for (Long id : addStudentsRequest.getStudentIds()) {
+            if (!this.sectionService.isStudentAlreadyInSection(id, section.getId())) {
+                sectionService.addStudentToSection(id, section.getId());
+            }
+        }
+
+        return ResponseEntity.ok("All students added to section!\n");
+    }
+
+    @RequestMapping(path = "/updateStudentsList", method = RequestMethod.POST)
+    public ResponseEntity<?> updateStudentsList(@RequestBody AddStudentsToSectionRequest addStudentsRequest) {
+        this.sectionService.deleteAllStudentsFromSection(addStudentsRequest.getSectionId());
+        // wydzielic osobne metody
         Section section = this.sectionService.getSection(addStudentsRequest.getSectionId());
         int studentsFromRequestAlreadyInSection = 0;
         for (Long id : addStudentsRequest.getStudentIds()) {
@@ -234,10 +284,10 @@ public class SectionController {
     @GetMapping(path="/students/{sectionId}")
     public ResponseEntity<?> getStudentsInSection(@PathVariable("sectionId") Long sectionId) {
         StudentsInSectionResponse studentsInSectionResponse = this.sectionService.getStudentsInSection(sectionId);
-        if(studentsInSectionResponse == null) {
-            return ResponseEntity.badRequest()
-                    .body("Section with id " + sectionId + " does not exist or is empty!\n");
-        }
+//        if(studentsInSectionResponse == null) {
+//            return ResponseEntity.badRequest()
+//                    .body("Section with id " + sectionId + " does not exist or is empty!\n");
+//        }
         return ResponseEntity.ok(studentsInSectionResponse);
     }
 

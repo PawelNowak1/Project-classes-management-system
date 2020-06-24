@@ -22,6 +22,7 @@ public class Attachment {
     @ManyToOne
     private Student student;
 
+    @JsonIgnore
     @ManyToOne
     private Section section;
 

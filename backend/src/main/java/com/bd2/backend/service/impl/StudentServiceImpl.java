@@ -33,14 +33,14 @@ public class StudentServiceImpl implements StudentService {
     public Page<Student> findStudents(int page, int size, String name, Boolean active) {
         if (active)
             return studentRepository.findStudentsPaginated(name, "Y", PageRequest.of(page, size));
-        return studentRepository.findStudentsPaginated(name, null, PageRequest.of(page, size));
+        return studentRepository.findStudentsPaginated(name, "N", PageRequest.of(page, size));
     }
 
     @Override
     public Page<Student> findStudents(int page, int size, Long semesterId, String name, Boolean active) {
         if (active)
             return studentRepository.findStudentsPaginated(name, semesterId, "Y", PageRequest.of(page, size));
-        return studentRepository.findStudentsPaginated(name, semesterId, null, PageRequest.of(page, size));
+        return studentRepository.findStudentsPaginated(name, semesterId, "N", PageRequest.of(page, size));
     }
 
     @Override

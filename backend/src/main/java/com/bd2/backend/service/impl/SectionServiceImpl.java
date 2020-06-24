@@ -4,11 +4,9 @@ import com.bd2.backend.entities.Section;
 import com.bd2.backend.entities.Semester;
 import com.bd2.backend.entities.Student;
 import com.bd2.backend.entities.StudentSection;
-import com.bd2.backend.repository.SectionRepository;
-import com.bd2.backend.repository.SemesterRepository;
-import com.bd2.backend.repository.StudentRepository;
-import com.bd2.backend.repository.StudentSectionRepository;
+import com.bd2.backend.repository.*;
 import com.bd2.backend.response.MarksResponse;
+import com.bd2.backend.response.StudentDTO;
 import com.bd2.backend.response.StudentsInSectionResponse;
 import com.bd2.backend.service.interfaces.SectionService;
 import org.springframework.stereotype.Service;
@@ -23,13 +21,17 @@ public class SectionServiceImpl implements SectionService {
     private final StudentSectionRepository studentSectionRepository;
     private final StudentRepository studentRepository;
     private final SemesterRepository semesterRepository;
+    private final AttachmentRepository attachmentRepository;
+    private final AttendanceRepository attendanceRepository;
 
     public SectionServiceImpl(SectionRepository sectionRepository, StudentSectionRepository studentSectionRepository,
-                              StudentRepository studentRepository, SemesterRepository semesterRepository) {
+                              StudentRepository studentRepository, SemesterRepository semesterRepository, AttendanceRepository attendanceRepository, AttachmentRepository attachmentRepository) {
         this.sectionRepository = sectionRepository;
         this.studentSectionRepository = studentSectionRepository;
         this.studentRepository = studentRepository;
         this.semesterRepository = semesterRepository;
+        this.attachmentRepository = attachmentRepository;
+        this.attendanceRepository = attendanceRepository;
     }
 
     @Override
@@ -77,13 +79,18 @@ public class SectionServiceImpl implements SectionService {
     public StudentsInSectionResponse getStudentsInSection(Long sectionId) {
         StudentsInSectionResponse studentsInSectionResponse = new StudentsInSectionResponse();
         List<StudentSection> studentSections = this.studentSectionRepository.findAllBySectionId(sectionId);
-        if (studentSections.isEmpty()) {
-            return null;
-        }
+//        if (studentSections.isEmpty()) {
+//            return null;
+//        }
+        Optional<Section> section = sectionRepository.findById(sectionId);
+        section.ifPresent(studentsInSectionResponse::setSection);
         studentSections.forEach(studentSection -> {
-            studentsInSectionResponse.setSection(studentSection.getSection());
+            StudentDTO studentDTO = new StudentDTO();
+            studentDTO.setStudent(studentSection.getStudent());
+            studentDTO.setAttachment(this.attachmentRepository.findAttachment(sectionId, studentSection.getStudent().getId()));
+            studentDTO.setAttendances(this.attendanceRepository.findAttendace(studentSection.getId(), studentSection.getStudent().getId()));
             studentsInSectionResponse.addStudent(
-                    studentSection.getStudent(),
+                    studentDTO,
                     studentSection.getDate(),
                     studentSection.getMark());
         });
@@ -94,6 +101,13 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public void deleteStudentFromSection(Long studentSectionId) {
         studentSectionRepository.deleteById(studentSectionId);
+    }
+
+    @Override
+    public void deleteAllStudentsFromSection(Long sectionId) {
+        List<StudentSection> studentSections = studentSectionRepository.findAllBySectionId(sectionId);
+        for (StudentSection sc : studentSections)
+            studentSectionRepository.deleteById(sc.getId());
     }
 
     @Override
@@ -165,8 +179,7 @@ public class SectionServiceImpl implements SectionService {
     public List<?> getSummaryForSemester(Long semesterId, Long teacherId) {
         List<StudentSection> studentsSections = this.studentSectionRepository.findAllBySectionSemesterIdAndSectionTopicTeacherId(semesterId, teacherId);
         if (studentsSections.isEmpty()) {
-            return Collections.singletonList("Error: cannot generate summary for this semester - " +
-                    "semester with specified id does not exist or teacher does not have section on this semester or section is empty!!");
+            return Collections.EMPTY_LIST;
         }
         return studentsSections
                 .stream().map(studentSection ->

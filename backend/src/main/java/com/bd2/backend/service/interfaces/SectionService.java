@@ -25,6 +25,8 @@ public interface SectionService {
 
     void deleteStudentFromSection(Long studentSectionId);
 
+    void deleteAllStudentsFromSection(Long sectionId);
+
     void changeSectionState(String state, Long sectionId);
 
     void setMarkToStudent(Integer mark, Long studentSectionId);

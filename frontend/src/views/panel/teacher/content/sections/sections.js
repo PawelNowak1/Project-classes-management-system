@@ -203,7 +203,7 @@ function Sections(props) {
                         context={context}
                         topics={topics}
                         teachers={teachers}
-                        parent={"/panel/sections"}
+                        parent={'/panel/sections'}
                         user={user}
                     />
                 )}
@@ -255,22 +255,18 @@ const Pagination = styled.div`
         }
     }
 `;
+
 const FiltersWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    > div {
-        margin-bottom: 10px;
-    }
-    > div:first-of-type {
+    margin-right: 10px;
+    div {
         display: flex;
         flex-wrap: wrap;
-        justify-content: flex-start;
+        justify-content: flex-end;
         align-items: center;
-        > div {
-            margin-right: 10px;
-        }
     }
 `;
 
