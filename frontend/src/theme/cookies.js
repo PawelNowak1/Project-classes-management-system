@@ -22,3 +22,12 @@ export function getCookie(name) {
 export function eraseCookie(name) {
     document.cookie = name+'=; Max-Age=-99999999;';
 }
+
+export const dateNow = () => {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = today.getFullYear();
+
+    return `${yyyy}-${mm.toString().length == 1 ? `0${mm}` : mm}-${dd.toString().length == 1 ? `0${dd}` : dd}`
+};

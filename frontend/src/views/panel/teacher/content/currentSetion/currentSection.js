@@ -4,49 +4,58 @@ import styled from 'styled-components'
 import Select from "../../../../../components/select";
 import {getStateCode, getStateName, sectionStates} from "../sections/sectionStates";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faTimes, faTrash, faUser} from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../../../components/button";
 import {getCookie} from "../../../../../theme/cookies";
 import axios from "axios";
 import {API_URL} from "../../../../../theme/constans";
 import AddAttendance from "./modals/addAttendance/addAttendance";
 import Spinner from "../../../../../components/spinner";
+import EditMarks from "./modals/editMarks/editMarks";
+import {ModalContent} from "../../../../../theme/styledComponents";
+import {useHistory} from "react-router-dom";
 
 function CurrentSection (props) {
+    const history = useHistory();
+
+    const [refetch,setRefetch] = useState(false);
     const [addAttendance,setAddAttendance] = useState(false);
+    const [editMark,setEditMark] = useState(false);
     const [loading,setLoading] = useState(false);
     const [sending,setSending] = useState(false);
     const [section,setSection] = useState({});
-    const [studentsInSection,setStundentsInSection] = useState([]);
+    const [students,setStudents] = useState([]);
+    const [attendanceDates,setAttendanceDates] = useState([]);
 
-    useEffect(async () => {
+    useEffect(() => {
         setLoading(true);
-        const sectionData = await axios.get(`${API_URL}/sections/${props.match.params.id}`, {
+        axios.get(`${API_URL}/sections/students/${props.match.params.id}`, {
                 headers: {
                     Authorization: 'Bearer ' + getCookie('token'),
                 },
+            })
+            .then(response => {
+                setLoading(false);
+                setSection(response.data.section);
+                setStudents(response.data.studentsInSection);
+                const dates = [];
+                response.data.studentsInSection.map(student => {
+                    student.student.attendances.map(attendance => {
+                        if(attendance.date){
+                            const temp = dates.find(date => date === attendance.date);
+                            if(temp === undefined){
+                                dates.push(attendance.date)
+                            }
+                        }
+                    })
+                });
+
+                setAttendanceDates(dates.sort(function(a,b){
+                    return new Date(a) - new Date(b);
+                }));
             });
 
-        setSection(sectionData.data);
-
-        const studentsData = await axios.get(`${API_URL}/sections/students/${sectionData.data.id}/`, {
-            headers: {
-                Authorization: 'Bearer ' + getCookie('token'),
-            },
-        });
-
-        const studentsArray = [];
-
-        studentsData.data.studentsInSection.map(async (item) => {
-            const studentAttendanceData = await axios.get(`${API_URL}/sections/students/${sectionData.data.id}/`, {
-                headers: {
-                    Authorization: 'Bearer ' + getCookie('token'),
-                },
-            });
-
-            console.log(studentAttendanceData.map);
-        });
-    },[]);
+    },[refetch]);
 
     const onChangeStatus = (e) => {
         setSending(true);
@@ -92,15 +101,15 @@ function CurrentSection (props) {
                                     getStateName(sectionStates.closed),
                                     getStateName(sectionStates.cancelled),
                                     getStateName(sectionStates.finished),
+                                    getStateName(sectionStates.registered),
                                 ]}
                                 value={getStateName(section.state)}
                                 onChange={onChangeStatus}
                             />
                         </div>
-                        {/*<InfoDate>*/}
-                        {/*    <span>Data:</span>*/}
-                        {/*    01/04/2020*/}
-                        {/*</InfoDate>*/}
+                        {/*<Button style={{margin:'0',marginTop:10}} onClick={() => history.push(`/panel/registered-section/${section.id}`)}>*/}
+                        {/*    <FontAwesomeIcon icon={faUser}/> Zapisz oceny*/}
+                        {/*</Button>*/}
                     </InfoSelect>
                     <InfoDesc>
                         <h2>Nazwa teamtu</h2>
@@ -140,10 +149,10 @@ function CurrentSection (props) {
                                 <th></th>
                             </tr>
                             {
-                                studentsInSection.map(item =>
+                                students.map(item =>
                                     <tr>
                                         <td className="name">
-                                            {item.firstName} {item.lastName}
+                                            {item.student.student.firstName} {item.student.student.lastName}
                                         </td>
                                     </tr>
                                 )
@@ -210,89 +219,66 @@ function CurrentSection (props) {
                                     </div>
                                 </TableNameHeader>
                                 <TableNameContent>
-                                    <div>
-                                        Adam Wolny
-                                    </div>
-                                    <div>
-                                        Adam Wolny
-                                    </div>
+                                    {
+                                        students.map(item =>
+                                            <div>
+                                                    {item.student.student.firstName} {item.student.student.lastName}
+                                            </div>
+                                        )
+                                    }
                                 </TableNameContent>
                             </NameTable>
                             <DateTable>
                                 <TableDateHeader>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
-                                    <div>
-                                        20.08<br/>2020
-                                    </div>
+                                    {
+                                        attendanceDates.map(date =>
+                                            <div>
+                                                {date.substring(8,10)}.{date.substring(5,7)}<br/>{date.substring(0,4)}
+                                            </div>
+                                        )
+                                    }
+
                                 </TableDateHeader>
                                 <TableDateContent>
-                                    <div>
-                                        <div>
-                                            <FontAwesomeIcon icon={faCheck}/>
-                                        </div>
-                                        <div>
-                                            <FontAwesomeIcon icon={faCheck}/>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div>
-                                            <FontAwesomeIcon icon={faCheck}/>
-                                        </div>
-                                        <div>
-                                            <FontAwesomeIcon icon={faCheck}/>
-                                        </div>
-                                    </div>
+                                    {
+                                        students.map(student =>
+                                            <div>
+                                                {
+                                                    attendanceDates.map(date =>
+                                                        <div>
+                                                            {
+                                                                student.student.attendances.find(item => item.date === date) && student.student.attendances.find(item => item.date === date).status === "present" ?
+                                                                <FontAwesomeIcon icon={faCheck}/> :  <FontAwesomeIcon icon={faTimes}/>
+                                                            }
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
+                                        )
+                                    }
                                 </TableDateContent>
                             </DateTable>
+                            <MarkTable>
+                                <TableNameHeader>
+                                    <div>
+                                        Ocena
+                                    </div>
+                                </TableNameHeader>
+                                <TableNameContent>
+                                    {
+                                        students.map(item =>
+                                            <div style={{textAlign:'center',width:'100%',justifyContent:'center'}}>
+                                                {item.mark}
+                                            </div>
+                                        )
+                                    }
+                                </TableNameContent>
+                            </MarkTable>
                         </div>
-                        <Button style={{margin:'0 auto',marginTop:'20px'}} onClick={() => setAddAttendance(true)}>Dodaj obecność</Button>
+                        <div style={{display:'flex',justifyContent:'space-between'}}>
+                            <Button style={{margin:'0',marginTop:'20px'}} onClick={() => setAddAttendance(true)}>Dodaj obecność</Button>
+                            <Button style={{margin:'0',marginTop:'20px'}} onClick={() => setEditMark(true)}>Edytuj oceny</Button>
+                        </div>
                     </div>
                 </InfoBody>
             </Content>
@@ -301,9 +287,20 @@ function CurrentSection (props) {
         {
             addAttendance &&
                 <AddAttendance
+                    students={students}
+                    sectionId={section.id}
+                    refetch={() => setRefetch(!refetch)}
                     onBack={() => setAddAttendance(false)}
                 />
         }
+            {
+                editMark &&
+                <EditMarks
+                    students={students}
+                    refetch={() => setRefetch(!refetch)}
+                    onBack={() => setEditMark(false)}
+                />
+            }
         </>
     )
 };
@@ -417,6 +414,10 @@ const ContentTable = styled.table`
             }
         }
     }
+`;
+
+const MarkTable = styled.div`
+   width: 60px;
 `;
 
 const DateTable = styled.div`

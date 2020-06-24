@@ -5,10 +5,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import { Select as MUSelect } from '@material-ui/core';
 
-function Select({ label, options, onChange, value, onClick, disabled }) {
+function Select({ label,nolabel = false, options, onChange, value, onClick, disabled }) {
     return (
         <Wrapper>
-            <StyledLabel>{label}:</StyledLabel>
+            {
+                !nolabel && <StyledLabel>{label}:</StyledLabel>
+            }
             <StyledLabel>{value}</StyledLabel>
             <StyledFormControl variant="filled" disabled={disabled}>
                 <MUSelect

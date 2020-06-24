@@ -21,53 +21,71 @@ import {
     ONLY_NUMBERS_REGEX,
 } from '../../../../../../../theme/constans';
 import { connect } from 'react-redux';
-import { getCookie } from '../../../../../../../theme/cookies';
+import {dateNow, getCookie} from '../../../../../../../theme/cookies';
 import CheckBox from "../../../../../../../components/checkbox";
 import DatePicker from "../../../../../../../components/datePicker";
-import {getStateCode} from "../../../sections/sectionStates";
 import Spinner from "../../../../../../../components/spinner";
-import student from "../../../../../student/student";
 
 
-function AddAttendance(props) {
+function EditMarks(props) {
+    const history = useHistory();
     const { students, onBack,refetch } = props;
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState();
     const [error, setError] = useState(false);
     const [state, setState] = useState({
         date: '',
-        studentAttendanceList: []
+        studentMarkRequestList: []
     });
 
-    const toggleStudent = (e,studentId) => {
-        if(e.target.checked){
-            const array = state.studentAttendanceList;
-            array.push(studentId);
+    useEffect(() => {
+        const array = [];
+        students.map(student => {
+            if(student.mark){
+                array.push({
+                    mark:student.mark,
+                    studentSectionId:student.student.studentSectionId
+                })
+            }
+        })
+
+        setState({
+            ...state,
+            studentMarkRequestList:array
+        })
+    },[]);
+
+    const changeMark = (e,studentId) => {
+        if(state.studentMarkRequestList.find(student => student.studentSectionId === studentId)){
+            const index = state.studentMarkRequestList.findIndex(student => student.studentSectionId === studentId);
+            const array = state.studentMarkRequestList.slice(0,index).concat(state.studentMarkRequestList.slice(index+1,state.studentMarkRequestList.length));
+            array.push({
+                mark:e.target.value,
+                studentSectionId:studentId
+            });
             setState({
                 ...state,
-                studentAttendanceList: array
+                studentMarkRequestList: array
             })
         }else {
-            const index = state.studentAttendanceList.findIndex(id => id === studentId);
-            const array = state.studentAttendanceList.slice(0,index).concat(state.studentAttendanceList.slice(index+1,state.studentAttendanceList.length));
+            const array = state.studentMarkRequestList;
+            array.push({
+                mark:e.target.value,
+                studentSectionId:studentId
+            });
 
             setState({
                 ...state,
-                studentAttendanceList: array
+                studentMarkRequestList: array
             });
         }
     };
 
-    const sendAttendance = () => {
+    const sendMarks = () => {
         setLoading(true);
-        axios.post(`${API_URL}/student/checkaattendances`, {
-            date:`${state.date}T12:00:00.000`,
-            studentAttendanceList:students.map(student => {
-                return ({
-                    status: state.studentAttendanceList.find(item => item === student.student.student.id) ? 'present' : 'notpresent',
-                    studentSectionId:student.student.studentSectionId
-                })
-            })
+        axios.post(`${API_URL}/student/markstudents`, {
+            date:`${dateNow()}T12:00:00.000`,
+            studentMarkRequestList:state.studentMarkRequestList
         },{
             headers: {
                 Authorization: 'Bearer ' + getCookie('token'),
@@ -76,6 +94,7 @@ function AddAttendance(props) {
             onBack();
             refetch();
         }).catch(err => {
+            console.log(err.response);
             setLoading(false);
             setError(true);
         });
@@ -92,24 +111,12 @@ function AddAttendance(props) {
                     onClick={(e) => e.stopPropagation()}
                 >
                     <Flex jc="space-between">
-                        <Title secondary>Dodawanie obecności</Title>
+                        <Title secondary>Edytuj oceny</Title>
                         <div onClick={onBack}>
                             <FontAwesomeIcon icon={faTimesCircle} />
                         </div>
                     </Flex>
-                    {
-                        error &&
-                            <p>Nie udało się :/</p>
-                    }
                     <Content>
-                        <Row>
-                            <div>
-                                Imie i Nazwisko
-                            </div>
-                            <div>
-                                <DatePicker label="Data" value={state.date} onChange={(e) => setState({...state,date:e.target.value})}/>
-                            </div>
-                        </Row>
                         {
                             students.map(student =>
                                 <Row>
@@ -117,13 +124,13 @@ function AddAttendance(props) {
                                         {student.student.student.firstName} {student.student.student.lastName}
                                     </h2>
                                     <div>
-                                        <CheckBox value={state.studentAttendanceList.find(id => id === student.student.student.id)} onChange={(e) => toggleStudent(e,student.student.student.id)}/>
+                                        <Select nolabel options={[5,4,3,2]} value={state.studentMarkRequestList.find(item => item.studentSectionId === student.student.studentSectionId) ? state.studentMarkRequestList.find(item => item.studentSectionId === student.student.studentSectionId).mark : ''} onChange={(e) => changeMark(e,student.student.studentSectionId)}/>
                                     </div>
                                 </Row>
                             )
                         }
                     </Content>
-                    <Button style={{margin:'0 auto',marginTop:10}} onClick={sendAttendance}>
+                    <Button style={{margin:'0 auto',marginTop:10}} onClick={sendMarks}>
                         {
                             loading ?
                                 <Spinner width={20} height={20} white/>:
@@ -136,17 +143,17 @@ function AddAttendance(props) {
     );
 }
 
-AddAttendance.propTypes = {};
+EditMarks.propTypes = {};
 
 function mapStateToProps(state) {
     return {
         user: state.auth.user,
     };
 }
-export default connect(mapStateToProps)(AddAttendance);
+export default connect(mapStateToProps)(EditMarks);
 
 const Row = styled.div`
-    margin-bottom: 0px;
+    margin-bottom: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;

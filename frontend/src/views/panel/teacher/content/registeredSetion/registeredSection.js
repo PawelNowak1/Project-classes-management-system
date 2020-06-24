@@ -48,7 +48,7 @@ function RegisteredSection ({context,match}) {
                     }).then(response3 => {
                         setStundentsInSection(response3.data.studentsInSection.map(item => {
                             return {
-                                ...item.student
+                                ...item.student.student
                             }
                         }));
                         setLoading(false);
@@ -88,10 +88,10 @@ function RegisteredSection ({context,match}) {
                         Authorization: 'Bearer ' + getCookie('token'),
                     },
                 }).then((res) => {
-                    history.push('/panel/yoursections');
+                    history.goBack();
                 });
             }else {
-                history.push('/panel/yoursections');
+                history.goBack();
             }
         }).catch(err => console.log(err.response))
     };
