@@ -28,44 +28,34 @@ function EditTeacher(props) {
     const [error, setError] = useState();
 
     const [state, setState] = useState({
-        name: teacher.firstName,
-        surname: teacher.lastName,
         email: teacher.email,
         password: '',
-        // name: '',
-        // surname: '',
-        // password: '',
     });
 
     const onSubmit = () => {
         setLoading(true);
-        // axios
-        //     .post(
-        //         `${API_URL}/registration`,
-        //         {
-        //             username: `${state.name.toLowerCase()}.${state.surname.toLowerCase()}@student.polsl.pl`,
-        //             password: state.password,
-        //             email: `${state.name.toLowerCase()}.${state.surname.toLowerCase()}@student.polsl.pl`,
-        //             name: state.name,
-        //             lastName: state.surname,
-        //             semesterId: props.context,
-        //             role: 'student',
-        //             active: true,
-        //         },
-        //         {
-        //             headers: {
-        //                 Authorization: 'Bearer ' + getCookie('token'),
-        //             },
-        //         }
-        //     )
-        //     .then((res) => {
-        //         setLoading(false);
-        //         setRefresh(!refresh);
-        //         history.push('/panel/teachers');
-        //     })
-        //     .catch((err) => {
-        //         setError(err);
-        //     });
+        axios
+            .put(
+                `${API_URL}/registration/${teacher.id}`,
+                {
+                    username: state.email,
+                    email: state.email,
+                    password: state.password,
+                },
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + getCookie('token'),
+                    },
+                }
+            )
+            .then((res) => {
+                setLoading(false);
+                setRefresh(!refresh);
+                history.push('/panel/teachers');
+            })
+            .catch((err) => {
+                setError(err);
+            });
     };
 
     const onChange = (e) => {
@@ -98,26 +88,11 @@ function EditTeacher(props) {
                                 inne dane
                             </StyledErrorMessage>
                         )}
-                        <SubTitle>Dane nauczyciela</SubTitle>
-                        <InputRow gtc="1fr">
-                            <Input
-                                label="Imię"
-                                name="name"
-                                value={state.name}
-                                onChange={onChange}
-                            />
-                            <Input
-                                label="Nazwisko"
-                                name="surname"
-                                value={state.surname}
-                                onChange={onChange}
-                            />
-                        </InputRow>
                         <SubTitle>Dane logowania</SubTitle>
                         <InputRow gtc="1fr">
                             <Input
                                 label="Mail"
-                                name="password"
+                                name="email"
                                 value={state.email}
                                 onChange={onChange}
                             />
@@ -134,7 +109,7 @@ function EditTeacher(props) {
                             style={{ marginTop: '30px' }}
                             onClick={onSubmit}
                         >
-                            {loading ? 'Loading ...' : 'Dodaj studenta'}
+                            {loading ? 'Loading ...' : 'Edytuj nauczyciela'}
                         </Button>
                     </Content>
                 </ModalContent>
@@ -151,19 +126,5 @@ function mapStateToProps(state) {
     };
 }
 export default connect(mapStateToProps)(EditTeacher);
-
-const DownloadInfo = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    color: ${({ theme }) => theme.thirdColor};
-    transition: all 0.3s;
-    cursor: pointer;
-
-    &:hover {
-        color: ${({ theme }) => theme.primaryColor};
-    }
-`;
 
 const Content = styled.div``;
