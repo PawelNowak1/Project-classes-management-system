@@ -7,6 +7,7 @@ import com.bd2.backend.repository.AttendanceRepository;
 import com.bd2.backend.repository.StudentRepository;
 import com.bd2.backend.repository.StudentSectionRepository;
 import com.bd2.backend.request.StudentAttendanceRequest;
+import com.bd2.backend.request.StudentMarkRequest;
 import com.bd2.backend.response.MarksResponse;
 import com.bd2.backend.service.interfaces.StudentService;
 import org.springframework.data.domain.Page;
@@ -74,6 +75,19 @@ public class StudentServiceImpl implements StudentService {
         Optional<StudentSection> section = studentSectionRepository.findById(studentAttendanceRequest.getStudentSectionId());
         section.ifPresent(attendance::setStudentSection);
         attendanceRepository.save(attendance);
+    }
+
+    @Override
+    public void saveMark(StudentMarkRequest mark, Date date) {
+        Optional<StudentSection> studentSection = studentSectionRepository.findById(mark.getStudentSectionId());
+        if (studentSection.isPresent()) {
+            if (date == null)
+                studentSection.get().setDate(new Date());
+            else
+                studentSection.get().setDate(date);
+            studentSection.get().setMark(mark.getMark());
+            studentSectionRepository.save(studentSection.get());
+        }
     }
 
     @Override
