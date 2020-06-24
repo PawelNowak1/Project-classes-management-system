@@ -41,7 +41,7 @@ function Students (props) {
     useEffect(() => {
         if(context){
             setLoading(true);
-            axios.get(`${API_URL}/student/${context}/paginated/?onlyActive=${active}&${search !== '' ? 'name='+search : ''}`,{
+            axios.get(`${API_URL}/student/${context}/paginated/?active=${active}&${search !== '' ? 'name='+search : ''}`,{
                 headers:{
                     'Authorization': 'Bearer ' + getCookie('token')
                 }

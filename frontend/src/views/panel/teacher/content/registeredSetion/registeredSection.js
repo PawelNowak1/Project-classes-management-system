@@ -13,8 +13,10 @@ import Spinner from "../../../../../components/spinner";
 import {connect} from "react-redux";
 import CheckBox from "../../../../../components/checkbox";
 import student from "../../../student/student";
+import { useHistory } from "react-router-dom";
 
 function RegisteredSection ({context,match}) {
+    const history = useHistory();
     const [loading,setLoading] = useState(true);
     const [sending,setSending] = useState(false);
     const [section,setSection] = useState({});
@@ -71,7 +73,8 @@ function RegisteredSection ({context,match}) {
     };
 
     const onSave = () => {
-        axios.post(`${API_URL}/sections/addStudentsList/`, {
+        setSending(true);
+        axios.post(`${API_URL}/sections/updateStudentsList/`, {
             sectionId:section.id,
             studentIds:studentsInSection.map(student => student.id)
         },{
@@ -79,7 +82,17 @@ function RegisteredSection ({context,match}) {
                 Authorization: 'Bearer ' + getCookie('token'),
             },
         }).then(response => {
-            console.log(response)
+            if(sectionStatus !== section.state){
+                axios.post(`${API_URL}/sections/status/?sectionId=${section.id}&state=${sectionStatus}`, null,{
+                    headers: {
+                        Authorization: 'Bearer ' + getCookie('token'),
+                    },
+                }).then((res) => {
+                    history.push('/panel/yoursections');
+                });
+            }else {
+                history.push('/panel/yoursections');
+            }
         }).catch(err => console.log(err.response))
     };
 

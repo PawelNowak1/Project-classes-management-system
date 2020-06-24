@@ -42,7 +42,7 @@ function Teachers (props) {
         if(context) {
             setLoading(true);
             console.log(getCookie('token'));
-            axios.get(`${API_URL}/teacher/paginated/?onlyActive=${active}&${search !== '' ? '&name=' + search : ''}`, {
+            axios.get(`${API_URL}/teacher/paginated/?active=${active}&${search !== '' ? '&name=' + search : ''}`, {
                 headers: {
                     'Authorization': 'Bearer ' + getCookie('token')
                 }

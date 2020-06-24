@@ -17,19 +17,35 @@ function CurrentSection (props) {
     const [loading,setLoading] = useState(false);
     const [sending,setSending] = useState(false);
     const [section,setSection] = useState({});
+    const [studentsInSection,setStundentsInSection] = useState([]);
 
-    useEffect(() => {
+    useEffect(async () => {
         setLoading(true);
-        axios
-            .get(`${API_URL}/sections/${props.match.params.id}`, {
+        const sectionData = await axios.get(`${API_URL}/sections/${props.match.params.id}`, {
                 headers: {
                     Authorization: 'Bearer ' + getCookie('token'),
                 },
-            })
-            .then((res) => {
-                setSection(res.data);
-                setLoading(false);
             });
+
+        setSection(sectionData.data);
+
+        const studentsData = await axios.get(`${API_URL}/sections/students/${sectionData.data.id}/`, {
+            headers: {
+                Authorization: 'Bearer ' + getCookie('token'),
+            },
+        });
+
+        const studentsArray = [];
+
+        studentsData.data.studentsInSection.map(async (item) => {
+            const studentAttendanceData = await axios.get(`${API_URL}/sections/students/${sectionData.data.id}/`, {
+                headers: {
+                    Authorization: 'Bearer ' + getCookie('token'),
+                },
+            });
+
+            console.log(studentAttendanceData.map);
+        });
     },[]);
 
     const onChangeStatus = (e) => {
@@ -123,56 +139,65 @@ function CurrentSection (props) {
                                 <th>Data</th>
                                 <th></th>
                             </tr>
-                            <tr>
-                                <td className="name">
-                                    Adam Wolny
-                                </td>
-                                <TdLinks>
-                                    <a href="">swxswxwsxwsxw.pdf</a>
-                                    <a href="">swxswxwsxwsxw.pdf</a>
-                                </TdLinks>
-                                <Td>
-                                    <p>wsxxwsxwsxw</p>
-                                    <p>wsxxwsxwsxw</p>
-                                </Td>
-                                <Td>
-                                    <p>wsxxwsxwsxw</p>
-                                    <p>wsxxwsxwsxw</p>
-                                </Td>
-                                <td className="trash">
-                                    <FontAwesomeIcon
-                                        icon={faTrash}
-                                        // onClick={() =>
-                                        //     onDelete(section.id)
-                                        // }
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="name">
-                                    Adam Wolny
-                                </td>
-                                <TdLinks>
-                                    <a href="">swxswxwsxwsxw.pdf</a>
-                                    <a href="">swxswxwsxwsxw.pdf</a>
-                                </TdLinks>
-                                <Td>
-                                    <p>wsxxwsxwsxw</p>
-                                    <p>wsxxwsxwsxw</p>
-                                </Td>
-                                <Td>
-                                    <p>wsxxwsxwsxw</p>
-                                    <p>wsxxwsxwsxw</p>
-                                </Td>
-                                <td className="trash">
-                                    <FontAwesomeIcon
-                                        icon={faTrash}
-                                        // onClick={() =>
-                                        //     onDelete(section.id)
-                                        // }
-                                    />
-                                </td>
-                            </tr>
+                            {
+                                studentsInSection.map(item =>
+                                    <tr>
+                                        <td className="name">
+                                            {item.firstName} {item.lastName}
+                                        </td>
+                                    </tr>
+                                )
+                            }
+                            {/*<tr>*/}
+                            {/*    <td className="name">*/}
+                            {/*        Adam Wolny*/}
+                            {/*    </td>*/}
+                            {/*    <TdLinks>*/}
+                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
+                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
+                            {/*    </TdLinks>*/}
+                            {/*    <Td>*/}
+                            {/*        <p>wsxxwsxwsxw</p>*/}
+                            {/*        <p>wsxxwsxwsxw</p>*/}
+                            {/*    </Td>*/}
+                            {/*    <Td>*/}
+                            {/*        <p>wsxxwsxwsxw</p>*/}
+                            {/*        <p>wsxxwsxwsxw</p>*/}
+                            {/*    </Td>*/}
+                            {/*    <td className="trash">*/}
+                            {/*        <FontAwesomeIcon*/}
+                            {/*            icon={faTrash}*/}
+                            {/*            // onClick={() =>*/}
+                            {/*            //     onDelete(section.id)*/}
+                            {/*            // }*/}
+                            {/*        />*/}
+                            {/*    </td>*/}
+                            {/*</tr>*/}
+                            {/*<tr>*/}
+                            {/*    <td className="name">*/}
+                            {/*        Adam Wolny*/}
+                            {/*    </td>*/}
+                            {/*    <TdLinks>*/}
+                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
+                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
+                            {/*    </TdLinks>*/}
+                            {/*    <Td>*/}
+                            {/*        <p>wsxxwsxwsxw</p>*/}
+                            {/*        <p>wsxxwsxwsxw</p>*/}
+                            {/*    </Td>*/}
+                            {/*    <Td>*/}
+                            {/*        <p>wsxxwsxwsxw</p>*/}
+                            {/*        <p>wsxxwsxwsxw</p>*/}
+                            {/*    </Td>*/}
+                            {/*    <td className="trash">*/}
+                            {/*        <FontAwesomeIcon*/}
+                            {/*            icon={faTrash}*/}
+                            {/*            // onClick={() =>*/}
+                            {/*            //     onDelete(section.id)*/}
+                            {/*            // }*/}
+                            {/*        />*/}
+                            {/*    </td>*/}
+                            {/*</tr>*/}
                             </tbody>
                         </ContentTable>
                     </div>
