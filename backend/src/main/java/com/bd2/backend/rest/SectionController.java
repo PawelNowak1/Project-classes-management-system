@@ -291,6 +291,13 @@ public class SectionController {
         return ResponseEntity.ok(studentsInSectionResponse);
     }
 
+    @GetMapping(path="/getstudent")
+    public ResponseEntity<?> getStudentsInSection(@RequestParam(required = true) Long semesterId,
+                                                  @RequestParam(required = true) Long studentId) {
+        StudentsInSectionResponse studentsInSectionResponse = this.sectionService.getStudentInSect(semesterId, studentId);
+        return ResponseEntity.ok(studentsInSectionResponse);
+    }
+
     @RequestMapping(path = "/mark", method = RequestMethod.POST)
     public ResponseEntity<?> setMarkToStudent(@RequestParam Integer mark, @RequestParam Long studentSectionId) {
         sectionService.setMarkToStudent(mark, studentSectionId);

@@ -76,6 +76,12 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
+    public StudentsInSectionResponse getStudentInSect(Long semesterId, Long studentId) {
+        Optional<StudentSection> studentSection = studentSectionRepository.findOneBySemesterIdAndStudentId(semesterId, studentId);
+        return studentSection.map(section -> getStudentsInSection(section.getSection().getId())).orElse(null);
+    }
+
+    @Override
     public StudentsInSectionResponse getStudentsInSection(Long sectionId) {
         StudentsInSectionResponse studentsInSectionResponse = new StudentsInSectionResponse();
         List<StudentSection> studentSections = this.studentSectionRepository.findAllBySectionId(sectionId);

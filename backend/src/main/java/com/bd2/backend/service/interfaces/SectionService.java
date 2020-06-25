@@ -23,6 +23,8 @@ public interface SectionService {
 
     StudentsInSectionResponse getStudentsInSection(Long sectionId);
 
+    StudentsInSectionResponse getStudentInSect(Long semesterId, Long studentId);
+
     void deleteStudentFromSection(Long studentSectionId);
 
     void deleteAllStudentsFromSection(Long sectionId);
