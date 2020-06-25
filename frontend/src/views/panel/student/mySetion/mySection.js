@@ -104,22 +104,22 @@ function MySection (props) {
                     <div style={{width:'100%',overflowX:'scroll'}}>
                         <ContentTable cellspacing="0" cellpadding="0">
                             <tbody>
-                            <tr>
-                                <th>Imię i nazwisko</th>
-                                <th>Załączniki</th>
-                                <th>Komentarz do załącznika</th>
-                                <th>Data</th>
-                                <th></th>
-                            </tr>
-                            {
-                                students.map(item =>
-                                    <tr>
-                                        <td className="name">
-                                            {item.student.student.firstName} {item.student.student.lastName}
-                                        </td>
-                                    </tr>
-                                )
-                            }
+                            {/*<tr>*/}
+                            {/*    <th>Imię i nazwisko</th>*/}
+                            {/*    <th>Załączniki</th>*/}
+                            {/*    <th>Komentarz do załącznika</th>*/}
+                            {/*    <th>Data</th>*/}
+                            {/*    <th></th>*/}
+                            {/*</tr>*/}
+                            {/*{*/}
+                            {/*    students.map(item =>*/}
+                            {/*        <tr>*/}
+                            {/*            <td className="name">*/}
+                            {/*                {item.student.student.firstName} {item.student.student.lastName}*/}
+                            {/*            </td>*/}
+                            {/*        </tr>*/}
+                            {/*    )*/}
+                            {/*}*/}
                             {/*<tr>*/}
                             {/*    <td className="name">*/}
                             {/*        Adam Wolny*/}
