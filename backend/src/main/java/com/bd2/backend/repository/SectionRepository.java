@@ -11,4 +11,8 @@ public interface SectionRepository extends CrudRepository<Section, Long> {
     @Query(value = "select s from Section s where ?1 is null or s.semester.id = ?1",
             nativeQuery = false)
     List<Section> findAllBySemesterId(Long semesterId);
+
+    @Query(value = "select s from Section s where (?1 is null or s.semester.id = ?1) and (?2 is null or s.state = ?2)",
+            nativeQuery = false)
+    List<Section> findAllBySemesterIdAndStatus(Long semesterId, String status);
 }

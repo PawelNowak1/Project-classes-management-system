@@ -48,8 +48,11 @@ public class SectionController {
     }
 
     @RequestMapping(path = "/all", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Section>> getAllSections(@RequestParam(required = false) Long semesterId) {
-        return ResponseEntity.ok(sectionService.findAllSections(semesterId));
+    public ResponseEntity<Iterable<Section>> getAllSections(@RequestParam(required = false) Long semesterId, @RequestParam(required = false) String state) {
+        if (state == null)
+            return ResponseEntity.ok(sectionService.findAllSections(semesterId));
+        else
+            return ResponseEntity.ok(sectionService.findAllSections(semesterId, state));
     }
 
     @RequestMapping(path = "/{sectionId}", method = RequestMethod.GET)

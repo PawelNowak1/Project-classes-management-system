@@ -50,6 +50,11 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
+    public Iterable<Section> findAllSections(Long semesterId, String status) {
+        return sectionRepository.findAllBySemesterIdAndStatus(semesterId, status);
+    }
+
+    @Override
     public Section findSection(Long sectionId) {
         Optional<Section> optionalSection = sectionRepository.findById(sectionId);
         return optionalSection.orElse(null);

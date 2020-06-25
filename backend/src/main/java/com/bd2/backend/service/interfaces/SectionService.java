@@ -12,6 +12,7 @@ public interface SectionService {
     Long createSection(Section section);
     void deleteSection(Long sectionId);
     Iterable<Section> findAllSections(Long semesterId);
+    Iterable<Section> findAllSections(Long semesterId, String status);
 
     Section findSection(Long sectionId);
 
