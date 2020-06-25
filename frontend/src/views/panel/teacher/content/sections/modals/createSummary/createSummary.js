@@ -37,7 +37,16 @@ function CreateSummary(props) {
 
     const createPDF = () => {
         let date = new Date().toJSON().slice(0, 10).replace(/-/g, '_');
-        html2canvas(document.querySelector('#capture')).then((canvas) => {
+        let element = document.querySelector('#capture');
+
+        html2canvas(element, {
+            // width: 20000,
+            // height: 200,
+            scrollY: -window.scrollY,
+            scrollX: 0,
+            windowWidth: element.scrollWidth,
+            windowHeight: element.scrollHeight,
+        }).then((canvas) => {
             document.body.appendChild(canvas);
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF();
@@ -53,7 +62,7 @@ function CreateSummary(props) {
                 onClick={() => history.push(parent)}
             >
                 <ModalContent
-                    maxWidth="750px"
+                    maxWidth="800px"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <Flex jc="space-between">
@@ -89,14 +98,14 @@ function CreateSummary(props) {
                                 </ContentTable>
                             </div>
                         )}
-                        <Button
+                        {/* <Button
                             big
                             disabled={isSummaryEmpty() ? true : false}
                             style={{ marginTop: '30px' }}
                             onClick={createPDF}
                         >
                             {'Pobierz plik pdf'}
-                        </Button>
+                        </Button> */}
                     </Content>
                 </ModalContent>
             </ModalBackground>
@@ -113,4 +122,9 @@ function mapStateToProps(state) {
 }
 export default connect(mapStateToProps)(CreateSummary);
 
-const Content = styled.div``;
+const Content = styled.div`
+    .html2canvas-container {
+        width: 3000px !important;
+        height: 3000px !important;
+    }
+`;
