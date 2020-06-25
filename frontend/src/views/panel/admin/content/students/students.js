@@ -52,7 +52,7 @@ function Students(props) {
             setLoading(true);
             axios
                 .get(
-                    `${API_URL}/student/${context}/paginated/?onlyActive=${active}&${
+                    `${API_URL}/student/${context}/paginated/?pageSize=${50}&onlyActive=${active}&${
                         search !== '' ? 'name=' + search : ''
                     }`,
                     {

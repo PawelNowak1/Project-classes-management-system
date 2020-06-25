@@ -4,10 +4,13 @@ import axios from 'axios';
 import { API_URL } from '../../../../theme/constans';
 import { getCookie } from '../../../../theme/cookies';
 import { connect } from 'react-redux';
+import Button from "../../../../components/button";
+import Title from "../../../../components/title";
+import Spinner from "../../../../components/spinner";
 
 function Sections(props) {
     //HOOKI
-    const { user, context } = props;
+    const { user, context,refetch } = props;
 
     const [addClient, setAddClient] = useState(false);
 
@@ -26,7 +29,7 @@ function Sections(props) {
 
         if (context) {
             axios
-                .get(`${API_URL}/sections/all?semesterId=${context}`, {
+                .get(`${API_URL}/sections/all?semesterId=${context}&state=reg`, {
                     headers: {
                         Authorization: 'Bearer ' + getCookie('token'),
                     },
@@ -42,21 +45,41 @@ function Sections(props) {
         }
     }, [context]);
 
+    const onSignUp = (sectionId) => {
+        setLoading(sectionId);
+        axios.post(`${API_URL}/sections/appendStudentsList`, {
+            sectionId:sectionId,
+            studentIds:[user.id]
+        },{
+                headers: {
+                    Authorization: 'Bearer ' + getCookie('token'),
+                },
+            })
+            .then((response) => {
+                setLoading(false);
+                console.log(response);
+                refetch();
+            })
+            .catch((err) => {
+                setLoading(false);
+                console.log(err.response);
+            });
+    };
+
     return (
         <>
             <Wrapper>
                 <ContentHeader>
-                    <h1>Bieżące sekcje</h1>
+                    <Title>Dostepne sekcje</Title>
                 </ContentHeader>
                 <ContentBody>
-                    <FiltersWrapper></FiltersWrapper>
                     <ContentTable cellspacing="0" cellpadding="0">
                         <tr>
                             <th>Numer sekcji</th>
                             <th>Nazwa sekcji</th>
                             <th>Nazwa tematu</th>
                             <th>Nauczyciel</th>
-                            <th>Status</th>
+                            <th></th>
                         </tr>
                         <tbody>
                             {sections.map((section) => (
@@ -75,6 +98,15 @@ function Sections(props) {
                                         section.topic.teacher &&
                                         section.topic.teacher.lastName
                                     }`}</td>
+                                    <td>
+                                        <Button margin="0" onClick={() => onSignUp(section.id)}>
+                                            {
+                                                loading === section.id ?
+                                                    <Spinner width={20} height={20} white/>:
+                                                    <>Zapisz się</>
+                                            }
+                                        </Button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -91,6 +123,7 @@ Sections.propTypes = {};
 
 function mapStateToProps(state) {
     return {
+        user: state.auth.user,
         context: state.context.current.id,
     };
 }
@@ -161,7 +194,6 @@ const PatronSelect = styled.select`
 
 const ContentTable = styled.table`
     border-collapse: collapse;
-    margin-top: 20px;
     width: 100%;
     tr {
         border-bottom: 1px solid ${({ theme }) => theme.fourthColor};

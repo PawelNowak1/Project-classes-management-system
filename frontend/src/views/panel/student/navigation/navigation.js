@@ -15,7 +15,7 @@ import {
 import { logoutUser } from '../../../../redux/actions';
 import SelectContext from '../../../../components/selectContext';
 
-function Navigation({ dispatch }) {
+function Navigation({ dispatch,loading,section }) {
     return (
         <Wrapper>
             <div>
@@ -24,12 +24,21 @@ function Navigation({ dispatch }) {
                 </Logo>
                 <NavLinksWrapper>
                     <SelectContext />
-                    <StyledNavLink exact to="/panel/sections">
-                        <FontAwesomeIcon icon={faUsers} /> Moje sekcje
-                    </StyledNavLink>
-                    {/*<StyledNavLink exact to="/panel/sections">*/}
-                    {/*    <FontAwesomeIcon icon={faUsers} /> Wszystkie sekcje*/}
-                    {/*</StyledNavLink> */}
+                    {
+                        !loading &&
+                        <>
+                            {
+                                section ?
+                                    <StyledNavLink exact to={`/panel/my-section/${section.section.id}`}>
+                                        <FontAwesomeIcon icon={faUsers} /> Moja sekcja
+                                    </StyledNavLink>
+                                    :
+                                    <StyledNavLink exact to="/panel/sections">
+                                        <FontAwesomeIcon icon={faUsers} /> Dostępne sekcje
+                                    </StyledNavLink>
+                            }
+                        </>
+                    }
                 </NavLinksWrapper>
             </div>
             <StyledLogout onClick={() => dispatch(logoutUser())}>

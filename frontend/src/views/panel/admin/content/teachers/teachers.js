@@ -53,7 +53,7 @@ function Teachers(props) {
             console.log(getCookie('token'));
             axios
                 .get(
-                    `${API_URL}/teacher/paginated/?active=${active}&${
+                    `${API_URL}/teacher/paginated/?pageSize=${50}&active=${active}&${
                         search !== '' ? '&name=' + search : ''
                     }`,
                     {

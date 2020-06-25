@@ -4,6 +4,7 @@ const Button = styled.button`
   font-size: ${({theme}) => theme.font.S};
   color: white;
   font-weight: ${({theme}) => theme.font.Regular};
+  margin: ${({margin}) => margin || "0px"};
   background: ${({theme}) => theme.primaryColor};
   padding: 8px 25px;
   border-radius: 5px;

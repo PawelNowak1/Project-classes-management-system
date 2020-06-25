@@ -53,7 +53,7 @@ const SummaryList = ({ summary, students, sections }) => {
 
     return mapStudentFromSummary().map((s) => (
         <tr>
-            <td>{s.date}</td>
+            <td>{s.date && s.date.substring(0,10)}</td>
             <td className="name">{s.section}</td>
             <td>{s.fullName}</td>
             <td>{s.mark}</td>

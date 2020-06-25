@@ -53,7 +53,7 @@ function CreateSummary(props) {
                 onClick={() => history.push(parent)}
             >
                 <ModalContent
-                    maxWidth="550px"
+                    maxWidth="750px"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <Flex jc="space-between">

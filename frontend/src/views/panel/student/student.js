@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Navigation from './navigation/navigation';
@@ -11,17 +11,42 @@ import { Redirect, Route } from 'react-router-dom';
 import { API_URL } from '../../../theme/constans';
 import { getCookie } from '../../../theme/cookies';
 import Sections from "./content/sections";
+import axios from "axios";
+import MySection from "./mySetion/mySection";
 
 function Student(props) {
-    const { dispatch, user } = props;
+    const { dispatch, user, context } = props;
+
+    const [refetch,setRefetch] = useState(false);
+    const [loading,setLoading] = useState(true);
+    const [section,setSection] = useState("");
 
     useEffect(() => {
         dispatch(getAllContexts());
     }, []);
 
+    useEffect(() => {
+        if(context){
+            setLoading(true);
+            axios.get(`${API_URL}/sections/getstudent/?semesterId=${context}&studentId=${user.id}`,
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + getCookie('token'),
+                        },
+                    }
+                )
+                .then((res) => {
+                    setLoading(false);
+                    setSection(res.data);
+                    console.log(res.data);
+                })
+                .catch((err) => console.log(err));
+        }
+    }, [context,refetch]);
+
     return (
         <Dashboard>
-            <Navigation dispatch={dispatch} />
+            <Navigation dispatch={dispatch} loading={loading} section={section}/>
             <div
                 style={{
                     flex: '1 1',
@@ -29,11 +54,24 @@ function Student(props) {
                     padding: '30px',
                 }}
             >
-                 <Route path="/panel/sections" component={Sections} />
-                {/*<Route path="/panel/yoursections" component={TeacherSections} /> *!/*/}
-                {/*<Route path = '/panel/add' component={Students} />*/}
-
-                 <Route render={() => <Redirect to="/panel/sections" />} />
+            {
+                !loading ?
+                    <>
+                        {
+                            section && section !== "" ?
+                                <>
+                                    <Route path="/panel/my-section/:id" component={() => <MySection data={section}/>} />
+                                    <Route render={() => <Redirect to={`/panel/my-section/${section.section.id}`} />} />
+                                </>
+                                :
+                                <>
+                                    <Route path="/panel/sections" component={() => <Sections refetch={() => setRefetch(!refetch)}/>} />
+                                    <Route render={() => <Redirect to="/panel/sections" />} />
+                                </>
+                        }
+                    </> :
+                    <p>Loading ...</p>
+            }
             </div>
         </Dashboard>
     );
@@ -46,6 +84,7 @@ function mapStateToProps(state) {
         isLoggingOut: state.auth.isLoggingOut,
         logoutError: state.auth.logoutError,
         user: state.auth.user,
+        context: state.context.current.id,
     };
 }
 export default connect(mapStateToProps)(Student);
