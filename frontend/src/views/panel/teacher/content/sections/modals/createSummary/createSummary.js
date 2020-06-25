@@ -16,12 +16,11 @@ import Button from '../../../../../../../components/button';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import SummaryList from './summaryList';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import Pdf from 'react-to-pdf';
 
 function CreateSummary(props) {
     const history = useHistory();
-    const { context, parent, sections, students, summary, user } = props;
+    const { parent, sections, students, summary } = props;
 
     const [error, setError] = useState();
 
@@ -35,25 +34,8 @@ function CreateSummary(props) {
             : 'Liczba studentów ujętych w raporcie: ' + summary.length + '.';
     };
 
-    const createPDF = () => {
-        let date = new Date().toJSON().slice(0, 10).replace(/-/g, '_');
-        let element = document.querySelector('#capture');
-
-        html2canvas(element, {
-            // width: 20000,
-            // height: 200,
-            scrollY: -window.scrollY,
-            scrollX: 0,
-            windowWidth: element.scrollWidth,
-            windowHeight: element.scrollHeight,
-        }).then((canvas) => {
-            document.body.appendChild(canvas);
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF();
-            pdf.addImage(imgData, 'PNG', 0, 0);
-            pdf.save(`raport_${date}.pdf`);
-        });
-    };
+    let date = new Date().toJSON().slice(0, 10).replace(/-/g, '_');
+    const ref = React.createRef();
 
     return (
         <>
@@ -80,7 +62,7 @@ function CreateSummary(props) {
                         )}
                         <SubTitle>{createSubTitle()}</SubTitle>
                         {!isSummaryEmpty() && (
-                            <div id={'capture'}>
+                            <div id={'capture'} ref={ref}>
                                 <ContentTable cellspacing="0" cellpadding="0">
                                     <tbody>
                                         <tr>
@@ -98,14 +80,18 @@ function CreateSummary(props) {
                                 </ContentTable>
                             </div>
                         )}
-                        {/* <Button
-                            big
-                            disabled={isSummaryEmpty() ? true : false}
-                            style={{ marginTop: '30px' }}
-                            onClick={createPDF}
-                        >
-                            {'Pobierz plik pdf'}
-                        </Button> */}
+                        <Pdf targetRef={ref} filename={`raport_${date}.pdf`}>
+                            {({ toPdf }) => (
+                                <Button
+                                    big
+                                    disabled={isSummaryEmpty() ? true : false}
+                                    style={{ marginTop: '30px' }}
+                                    onClick={toPdf}
+                                >
+                                    {'Pobierz plik pdf'}
+                                </Button>
+                            )}
+                        </Pdf>
                     </Content>
                 </ModalContent>
             </ModalBackground>
@@ -122,9 +108,4 @@ function mapStateToProps(state) {
 }
 export default connect(mapStateToProps)(CreateSummary);
 
-const Content = styled.div`
-    .html2canvas-container {
-        width: 3000px !important;
-        height: 3000px !important;
-    }
-`;
+const Content = styled.div``;
