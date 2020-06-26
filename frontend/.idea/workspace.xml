@@ -40,6 +40,7 @@
       <change afterPath="$PROJECT_DIR$/src/views/panel/panel.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/views/panel/student/content/sections.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/views/panel/student/mySetion/mySection.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/panel/student/mySetion/uploadFile/upladFile.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/views/panel/teacher/content/currentSetion/currentSection.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/views/panel/teacher/content/currentSetion/modals/addAttendance/addAttendance.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/views/panel/teacher/content/currentSetion/modals/editMarks/editMarks.js" afterDir="false" />
@@ -79,24 +80,24 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/views/panel/student" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/views/panel/student/mySetion" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/views/panel/student" />
-      <recent name="$PROJECT_DIR$/src/views/panel/teacher/content/currentSetion/modals" />
-      <recent name="$PROJECT_DIR$/src/views/panel/teacher/content" />
-      <recent name="$PROJECT_DIR$/src/components" />
-      <recent name="$PROJECT_DIR$/src/views/panel/teacher/content/currentSetion" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/views/panel" />
       <recent name="$PROJECT_DIR$/src/views/panel/content" />
       <recent name="$PROJECT_DIR$/src/views/panel/content/admin" />
       <recent name="$PROJECT_DIR$/src/images" />
       <recent name="$PROJECT_DIR$/src/views/panel/content/clients/modals" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/views/panel/student/mySetion" />
+      <recent name="$PROJECT_DIR$/src/views/panel/student" />
+      <recent name="$PROJECT_DIR$/src/views/panel/teacher/content/currentSetion/modals" />
+      <recent name="$PROJECT_DIR$/src/views/panel/teacher/content" />
+      <recent name="$PROJECT_DIR$/src/components" />
     </key>
   </component>
   <component name="ServiceViewManager">
@@ -132,7 +133,8 @@
       <workItem from="1592508782904" duration="1941000" />
       <workItem from="1593013805533" duration="11358000" />
       <workItem from="1593080736979" duration="1127000" />
-      <workItem from="1593083305574" duration="4531000" />
+      <workItem from="1593083305574" duration="5790000" />
+      <workItem from="1593171800553" duration="4901000" />
     </task>
     <servers />
   </component>

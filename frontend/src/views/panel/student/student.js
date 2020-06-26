@@ -22,7 +22,8 @@ function Student(props) {
     const [section,setSection] = useState("");
 
     useEffect(() => {
-        dispatch(getAllContexts());
+        console.log(user.id);
+        dispatch(getAllContexts(user.id));
     }, []);
 
     useEffect(() => {
@@ -60,7 +61,7 @@ function Student(props) {
                         {
                             section && section !== "" ?
                                 <>
-                                    <Route path="/panel/my-section/:id" component={() => <MySection data={section}/>} />
+                                    <Route path="/panel/my-section/:id" component={() => <MySection refetch={() => setRefetch(!refetch)} data={section}/>} />
                                     <Route render={() => <Redirect to={`/panel/my-section/${section.section.id}`} />} />
                                 </>
                                 :

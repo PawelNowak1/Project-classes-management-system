@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Select from "../../../../../components/select";
 import {getStateCode, getStateName, sectionStates} from "../sections/sectionStates";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faTimes, faTrash, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faDownload, faTimes, faTrash, faUser} from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../../../components/button";
 import {getCookie} from "../../../../../theme/cookies";
 import axios from "axios";
@@ -140,72 +140,44 @@ function CurrentSection (props) {
                     <div style={{width:'100%',overflowX:'scroll'}}>
                         <ContentTable cellspacing="0" cellpadding="0">
                             <tbody>
-                            {/*<tr>*/}
-                            {/*    <th>Imię i nazwisko</th>*/}
-                            {/*    /!*<th>Załączniki</th>*!/*/}
-                            {/*    /!*<th>Komentarz do załącznika</th>*!/*/}
-                            {/*    /!*<th>Data</th>*!/*/}
-                            {/*    /!*<th></th>*!/*/}
-                            {/*</tr>*/}
-                            {/*{*/}
-                            {/*    students.map(item =>*/}
-                            {/*        <tr>*/}
-                            {/*            <td className="name">*/}
-                            {/*                {item.student.student.firstName} {item.student.student.lastName}*/}
-                            {/*            </td>*/}
-                            {/*        </tr>*/}
-                            {/*    )*/}
-                            {/*}*/}
-                            {/*<tr>*/}
-                            {/*    <td className="name">*/}
-                            {/*        Adam Wolny*/}
-                            {/*    </td>*/}
-                            {/*    <TdLinks>*/}
-                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
-                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
-                            {/*    </TdLinks>*/}
-                            {/*    <Td>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*    </Td>*/}
-                            {/*    <Td>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*    </Td>*/}
-                            {/*    <td className="trash">*/}
-                            {/*        <FontAwesomeIcon*/}
-                            {/*            icon={faTrash}*/}
-                            {/*            // onClick={() =>*/}
-                            {/*            //     onDelete(section.id)*/}
-                            {/*            // }*/}
-                            {/*        />*/}
-                            {/*    </td>*/}
-                            {/*</tr>*/}
-                            {/*<tr>*/}
-                            {/*    <td className="name">*/}
-                            {/*        Adam Wolny*/}
-                            {/*    </td>*/}
-                            {/*    <TdLinks>*/}
-                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
-                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
-                            {/*    </TdLinks>*/}
-                            {/*    <Td>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*    </Td>*/}
-                            {/*    <Td>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*    </Td>*/}
-                            {/*    <td className="trash">*/}
-                            {/*        <FontAwesomeIcon*/}
-                            {/*            icon={faTrash}*/}
-                            {/*            // onClick={() =>*/}
-                            {/*            //     onDelete(section.id)*/}
-                            {/*            // }*/}
-                            {/*        />*/}
-                            {/*    </td>*/}
-                            {/*</tr>*/}
+                            <tr>
+                                <th>Imię i nazwisko</th>
+                                <th>Załączniki</th>
+                                <th>Komentarz do załącznika</th>
+                                <th>Data</th>
+                            </tr>
+                            {
+                                students.map(item =>
+                                    <tr>
+                                        <td className="name">
+                                            {item.student.student.firstName} {item.student.student.lastName}
+                                        </td>
+                                        <Td>
+                                            {
+                                                item.student.attachment.map(file =>
+                                                    <>
+                                                        <a style={{display:'block'}} href={`${API_URL}/file/download/${file.id}`} target="_blank" download> {file.fileName}</a>
+                                                    </>
+                                                )
+                                            }
+                                        </Td>
+                                        <Td>
+                                            {
+                                                item.student.attachment.map(file =>
+                                                    <p>{file.description}</p>
+                                                )
+                                            }
+                                        </Td>
+                                        <Td>
+                                            {
+                                                item.student.attachment.map(file =>
+                                                    <p>{file.insertDate.substring(0,10)}</p>
+                                                )
+                                            }
+                                        </Td>
+                                    </tr>
+                                )
+                            }
                             </tbody>
                         </ContentTable>
                     </div>
@@ -308,13 +280,13 @@ CurrentSection.propTypes = {
 };
 
 const Td = styled.td`
-  p{
+  p,a{
     margin: 5px;
   }
 `;
 
 const TdLinks = styled.td`
-  a{
+  a,p{
     display: block;
     margin: 5px;
   }

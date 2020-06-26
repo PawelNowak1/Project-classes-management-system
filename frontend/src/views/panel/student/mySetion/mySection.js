@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Select from "../../../../components/select";
 import {getStateCode, getStateName, sectionStates} from "../../teacher/content/sections/sectionStates";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faTimes, faTrash, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faDownload, faTimes, faTrash, faUser} from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../../components/button";
 import {getCookie} from "../../../../theme/cookies";
 import axios from "axios";
@@ -12,14 +12,14 @@ import {API_URL} from "../../../../theme/constans";
 import Spinner from "../../../../components/spinner";
 import {useHistory} from "react-router-dom";
 import {connect} from "react-redux";
+import UpladFile from "./uploadFile/upladFile";
 
 function MySection (props) {
-    const {data,user} = props;
+    const {data,user,refetch} = props;
     const history = useHistory();
 
-    const [refetch,setRefetch] = useState(false);
     const [addAttendance,setAddAttendance] = useState(false);
-    const [editMark,setEditMark] = useState(false);
+    const [uploadFile,setUploadFile] = useState(false);
     const [loading,setLoading] = useState(false);
     const [sending,setSending] = useState(false);
     const [section,setSection] = useState({});
@@ -104,74 +104,49 @@ function MySection (props) {
                     <div style={{width:'100%',overflowX:'scroll'}}>
                         <ContentTable cellspacing="0" cellpadding="0">
                             <tbody>
-                            {/*<tr>*/}
-                            {/*    <th>Imię i nazwisko</th>*/}
-                            {/*    <th>Załączniki</th>*/}
-                            {/*    <th>Komentarz do załącznika</th>*/}
-                            {/*    <th>Data</th>*/}
-                            {/*    <th></th>*/}
-                            {/*</tr>*/}
-                            {/*{*/}
-                            {/*    students.map(item =>*/}
-                            {/*        <tr>*/}
-                            {/*            <td className="name">*/}
-                            {/*                {item.student.student.firstName} {item.student.student.lastName}*/}
-                            {/*            </td>*/}
-                            {/*        </tr>*/}
-                            {/*    )*/}
-                            {/*}*/}
-                            {/*<tr>*/}
-                            {/*    <td className="name">*/}
-                            {/*        Adam Wolny*/}
-                            {/*    </td>*/}
-                            {/*    <TdLinks>*/}
-                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
-                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
-                            {/*    </TdLinks>*/}
-                            {/*    <Td>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*    </Td>*/}
-                            {/*    <Td>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*    </Td>*/}
-                            {/*    <td className="trash">*/}
-                            {/*        <FontAwesomeIcon*/}
-                            {/*            icon={faTrash}*/}
-                            {/*            // onClick={() =>*/}
-                            {/*            //     onDelete(section.id)*/}
-                            {/*            // }*/}
-                            {/*        />*/}
-                            {/*    </td>*/}
-                            {/*</tr>*/}
-                            {/*<tr>*/}
-                            {/*    <td className="name">*/}
-                            {/*        Adam Wolny*/}
-                            {/*    </td>*/}
-                            {/*    <TdLinks>*/}
-                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
-                            {/*        <a href="">swxswxwsxwsxw.pdf</a>*/}
-                            {/*    </TdLinks>*/}
-                            {/*    <Td>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*    </Td>*/}
-                            {/*    <Td>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*        <p>wsxxwsxwsxw</p>*/}
-                            {/*    </Td>*/}
-                            {/*    <td className="trash">*/}
-                            {/*        <FontAwesomeIcon*/}
-                            {/*            icon={faTrash}*/}
-                            {/*            // onClick={() =>*/}
-                            {/*            //     onDelete(section.id)*/}
-                            {/*            // }*/}
-                            {/*        />*/}
-                            {/*    </td>*/}
-                            {/*</tr>*/}
+                            <tr>
+                                <th>Imię i nazwisko</th>
+                                <th>Załączniki</th>
+                                <th>Komentarz do załącznika</th>
+                                <th>Data</th>
+                            </tr>
+                            {
+                                students.map(item =>
+                                    <tr>
+                                        <td className="name">
+                                            {item.student.student.firstName} {item.student.student.lastName}
+                                        </td>
+                                        <Td>
+                                            {
+                                                item.student.attachment.map(file =>
+                                                    <>
+                                                        <a style={{display:'block'}} href={`${API_URL}/file/download/${file.id}`} target="_blank" download> {file.fileName}</a>
+                                                    </>
+                                                )
+                                            }
+                                        </Td>
+                                        <Td>
+                                            {
+                                                item.student.attachment.map(file =>
+                                                    <p>{file.description}</p>
+                                                )
+                                            }
+                                        </Td>
+                                        <Td>
+                                            {
+                                                item.student.attachment.map(file =>
+                                                    <p>{file.insertDate.substring(0,10)}</p>
+                                                )
+                                            }
+                                        </Td>
+                                    </tr>
+                                )
+                            }
                             </tbody>
                         </ContentTable>
+                        <Button onClick={() => setUploadFile(true)}>
+                            Dodaj załącznik
+                        </Button>
                     </div>
                     <div>
                         <div style={{display:'flex',marginTop:20}}>
@@ -242,6 +217,15 @@ function MySection (props) {
                 </InfoBody>
             </Content>
         </Wrapper>
+        {
+            uploadFile &&
+                <UpladFile
+                    refetch={refetch}
+                    section={section}
+                    user={user}
+                    onBack={() => setUploadFile(false)}
+                />
+        }
         </>
     )
 };
@@ -257,7 +241,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(MySection);
 
 const Td = styled.td`
-  p{
+  p,a{
     margin: 5px;
   }
 `;

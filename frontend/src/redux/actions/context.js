@@ -24,8 +24,8 @@ export const changeContextFunc = (contextID) => dispatch => {
         dispatch(changeContext(contextID));
 };
 
-export const getAllContexts = () => dispatch => {
-    axios.get(`${API_URL}/semesters/all`, {
+export const getAllContexts = (id) => dispatch => {
+    axios.get(`${API_URL}/semesters/all/${id ? `?studentId=${id}` : ''}`, {
         headers: {
             Authorization: 'Bearer ' + getCookie('token'),
         },
