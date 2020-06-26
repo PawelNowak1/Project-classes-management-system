@@ -11,8 +11,8 @@ import java.util.List;
 public interface SectionService {
     Long createSection(Section section);
     void deleteSection(Long sectionId);
-    Iterable<Section> findAllSections(Long semesterId);
-    Iterable<Section> findAllSections(Long semesterId, String status);
+    Iterable<Section> findAllSections(Long semesterId, Boolean showOnlyNotFull);
+    Iterable<Section> findAllSections(Long semesterId, String status, Boolean showOnlyNotFull);
 
     Section findSection(Long sectionId);
 

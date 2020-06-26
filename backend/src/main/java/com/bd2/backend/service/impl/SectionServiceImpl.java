@@ -45,13 +45,21 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public Iterable<Section> findAllSections(Long semesterId) {
-        return sectionRepository.findAllBySemesterId(semesterId);
+    public Iterable<Section> findAllSections(Long semesterId, Boolean showOnlyNotFull) {
+        List<Section> sections = sectionRepository.findAllBySemesterId(semesterId);
+        if (showOnlyNotFull) {
+            return sections.stream().filter(section -> this.getCurrentStudentsCountInSection(section.getId()) < this.getSectionLimit(section.getId())).collect(Collectors.toList());
+        } else
+            return sections;
     }
 
     @Override
-    public Iterable<Section> findAllSections(Long semesterId, String status) {
-        return sectionRepository.findAllBySemesterIdAndStatus(semesterId, status);
+    public Iterable<Section> findAllSections(Long semesterId, String status, Boolean showOnlyNotFull) {
+        List<Section> sections = sectionRepository.findAllBySemesterIdAndStatus(semesterId, status);
+        if (showOnlyNotFull) {
+            return sections.stream().filter(section -> this.getCurrentStudentsCountInSection(section.getId()) < this.getSectionLimit(section.getId())).collect(Collectors.toList());
+        } else
+            return sections;
     }
 
     @Override
