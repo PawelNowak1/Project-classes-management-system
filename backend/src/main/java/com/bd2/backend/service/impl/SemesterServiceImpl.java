@@ -17,7 +17,9 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    public Iterable<Semester> findAllSemesters() {
+    public Iterable<Semester> findAllSemesters(Long semesterId) {
+        if (semesterId != null)
+            return this.semesterRepository.findAllStudentSemester(semesterId);
         return this.semesterRepository.findAll();
     }
 }

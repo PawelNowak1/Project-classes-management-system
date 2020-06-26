@@ -5,5 +5,5 @@ import com.bd2.backend.entities.Semester;
 import java.util.List;
 
 public interface SemesterService {
-    Iterable<Semester> findAllSemesters();
+    Iterable<Semester> findAllSemesters(Long studentId);
 }
