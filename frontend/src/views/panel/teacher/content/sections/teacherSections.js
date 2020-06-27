@@ -47,7 +47,7 @@ function TeacherSections(props) {
 
         if (Number.isInteger(context.id)) {
             axios
-                .get(`${API_URL}/sections/all/?semesterId=${context.id}`, {
+                .get(`${API_URL}/sections/all/?semesterId=${context.id}&showOnlyNotFull=false`, {
                     headers: {
                         Authorization: 'Bearer ' + getCookie('token'),
                     },
